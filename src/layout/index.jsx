@@ -36,13 +36,13 @@ const Layout = () => {
               </a>
             </li>
             <li>
-              <a href="/">
+              <a href="/search">
                 <i className="fa fa-magnifying-glass" />
                 <span>Search</span>
               </a>
             </li>
             <li>
-              <a href="/">
+              <a href="/setting">
                 <i className="fa fa-gear" />
                 <span>Settings</span>
               </a>

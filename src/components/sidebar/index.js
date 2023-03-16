@@ -1,5 +1,16 @@
 // import React from "react";
+import { NavLink } from "react-router-dom";
 import "../../styles/globalStyles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMagnifyingGlass,
+  faHeadset,
+  faLink,
+  faGear,
+  // faXmark,
+  // faBell,
+  // faUser,
+} from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -73,29 +84,41 @@ const SideBar = () => {
       </form>
       <ul>
         <li>
-          <a href="/" className="active">
-            <i className="fa-sharp fa-solid fa-house" /> Home
-          </a>
+          <NavLink activeclassname="active" to="/">
+            <i className="fa fa-home" /> Home
+          </NavLink>
         </li>
         <li>
-          <a href="/">
-            <i className="fa fa-magnifying-glass" /> Search
-          </a>
+          <NavLink activeclassname="active" to="/Search">
+            <i>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </i>{" "}
+            Search
+          </NavLink>
         </li>
         <li>
-          <a href="/">
-            <i className="fa-solid fa-headset" /> Support
-          </a>
+          <NavLink activeclassname="active" to="/Support">
+            <i>
+              <FontAwesomeIcon icon={faHeadset} />
+            </i>{" "}
+            Support
+          </NavLink>
         </li>
         <li>
-          <a href="/">
-            <i className="fa-sharp fa-solid fa-link" /> Connect
-          </a>
+          <NavLink activeclassname="active" to="/Connect">
+            <i>
+              <FontAwesomeIcon icon={faLink} />
+            </i>{" "}
+            Connect
+          </NavLink>
         </li>
         <li>
-          <a href="/">
-            <i className="fa fa-gear" /> Setting
-          </a>
+          <NavLink activeclassname="active" to="/Setting">
+            <i>
+              <FontAwesomeIcon icon={faGear} />
+            </i>{" "}
+            Setting
+          </NavLink>
         </li>
       </ul>
       <div className="bell-icon bell-icon-mobile">
