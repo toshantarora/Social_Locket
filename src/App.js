@@ -1,4 +1,7 @@
 // import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "owl.carousel/dist/assets/owl.carousel.css";
 import "./styles/globalStyles.css";
 import {
   createBrowserRouter,
@@ -7,9 +10,6 @@ import {
   // Outlet,
   // Navigate,
 } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "owl.carousel/dist/assets/owl.carousel.css";
 import Home from "./pages/home/Home";
 import Layout from "./layout";
 import Login from "./pages/login/Login";
