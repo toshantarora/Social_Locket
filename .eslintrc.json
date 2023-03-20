@@ -23,7 +23,7 @@
     "react/jsx-uses-react": ["off"],
     "react/react-in-jsx-scope": ["off"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "react/jsx-props-no-spreading": ["warn"],
+    "react/jsx-props-no-spreading": ["off"],
     "no-shadow": "off",
     "prettier/prettier": "error",
     "arrow-body-style": "off",

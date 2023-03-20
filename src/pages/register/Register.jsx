@@ -1,11 +1,85 @@
-import { Modal } from "react-bootstrap";
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useContext, useEffect, useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import YupPassword from "yup-password";
 import LogoImage from "../../assets/images/logo-login.png";
 import LoginImage from "../../assets/images/logo-login.webp";
 import Emaillogo from "../../assets/images/emai-icon.png";
 import LeftSidebar from "../../components/leftSideBar/LeftSideBar";
+import { AuthContext } from "../../context/authContext";
+import ModalComponent from "../../components/modalComponent/ModalComponent";
+import UserDetailForm from "./components/UserDetailForm";
+// import { isNumber } from "../../helpers";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+
+YupPassword(yup);
+const eye = <FontAwesomeIcon icon={faEye} />;
+const eyeSlash = <FontAwesomeIcon icon={faEyeSlash} />;
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+
+  password: yup
+    .string()
+    .password()
+    .min(
+      8,
+      "password must contain 8 or more characters with at least one of each: uppercase, lowercase, number and special",
+    )
+    .minLowercase(1, "password must contain at least 1 lower case letter")
+    .minUppercase(1, "password must contain at least 1 upper case letter")
+    .minNumbers(1, "password must contain at least 1 number")
+    .minSymbols(1, "password must contain at least 1 special character"),
+});
 
 const Register = () => {
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const value = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    if (value?.auth?.userId) {
+      setModalShow(true);
+    }
+    // setModalShow(true);
+  }, [value]);
+
+  // const onSubmit = useCallback(
+  //   (data) => {
+  //     value?.register(data);
+  //     if (value?.auth?.userId) {
+  //       setModalShow(true);
+  //     }
+  //   },
+  //   [],
+  // );
+
+  const onSubmit = async (data) => {
+    value?.register(data);
+  };
+
+  console.log("====================================");
+  console.log(value);
+  console.log("====================================");
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
+  };
+
   return (
     <section className="main main-register">
       <div className="container">
@@ -63,13 +137,11 @@ const Register = () => {
                           Reader
                         </label>
                       </div>
-                      {/* {errormsg ? (
+                      {value?.auth?.message ? (
                         <div className="alert alert-danger" role="alert">
-                          {errormsg}
+                          {value?.auth?.message}
                         </div>
-                      ) : (
-                        ""
-                      )} */}
+                      ) : null}
 
                       <div className="mb-4">
                         <div className="form-floating">
@@ -79,8 +151,7 @@ const Register = () => {
                             className="form-control"
                             id="floatingInput"
                             placeholder="name@example.com"
-                            // value={userData.email}
-                            // onChange={validateEmail}
+                            {...register("email")}
                           />
                           <span>
                             <img
@@ -92,47 +163,49 @@ const Register = () => {
                           </span>
                           <label htmlFor="floatingInput">Email ID</label>
                         </div>
-                        {/* <div className="error">{emailError}</div> */}
+                        {errors?.email?.message ? (
+                          <div className="alert alert-danger" role="alert">
+                            {errors?.email?.message}
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
 
-                      {/* <div className="or"><span>or</span></div>
-                                    <div className="register-mobile" >
-                                        <PhoneInput
-                                            className="form-control"
-                                            id="floatingInput"
-                                            name="mobile"
-                                            dropdownstyle={{ height: '200px', width: '480px' }}
-                                            defaultCountry={country}
-                                            value={phone}
-                                            onChange={setPhone} />
-                                        <label htmlFor="floatingInput">Enter your mobile no.</label>
-                                        <span><img src={Keyboard} alt="key" width="14" height="16" /></span> </div>
-                                    {<span style={{ color: 'red' }}>{(phone === undefined) || (phone && isValidPhoneNumber(phone)) ? '' : 'Enter Valid Number'}</span>} */}
                       <div className="mb-4">
                         <div className="form-floating">
                           <input
-                            // type={type}
                             minLength="8"
                             name="password"
                             className="form-control"
                             id="floatingPassword"
                             placeholder="Password"
-                            // value={userData.password}
-                            // onChange={validatePassword}
+                            {...register("password")}
+                            type={passwordShown ? "text" : "password"}
                           />
-                          {/* <span onClick={togglePassword}>{icon}</span> */}
+                          {/* // eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+                          <span
+                            role="button"
+                            onClick={togglePasswordVisibility}
+                          >
+                            {passwordShown ? eye : eyeSlash}
+                          </span>
                           <label htmlFor="floatingPassword">Password</label>
                         </div>
-                        {/* {errorPassword === "" ? null : (
-                          <div className="error">{errorPassword}</div>
-                        )} */}
+                        {errors?.password?.message ? (
+                          <div className="alert alert-danger" role="alert">
+                            {errors?.password?.message}
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
 
                       <div className="mt-3">
                         <button
                           type="button"
                           className="btn btn-common w-100 mb-3"
-                          //   onClick={handle_Click}
+                          onClick={handleSubmit(onSubmit)}
                         >
                           Sign Up
                         </button>
@@ -155,9 +228,17 @@ const Register = () => {
 
           {/* //////////////////////////xxxxx///////////////////////////////// */}
 
-          <Modal
-            // show={isOpen}
-            // onHide={closeModal}
+          <ModalComponent
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            heading="Complete Profile"
+            size="xl"
+          >
+            <UserDetailForm />
+          </ModalComponent>
+          {/* <Modal
+            show={isOpen}
+            onHide={closeModal}
             size="xl"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -168,13 +249,13 @@ const Register = () => {
               </h5>
             </Modal.Header>
             <Modal.Body>
-              {/* <Form
+              <Form
                 email={registerData.email}
                 password={registerData.password}
                 userid={registerData.userid}
-              /> */}
+              />
             </Modal.Body>
-          </Modal>
+          </Modal> */}
         </div>
       </div>
     </section>

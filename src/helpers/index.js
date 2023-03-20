@@ -54,3 +54,16 @@ export const getInitials = (string) => {
     .toUpperCase();
   return initials;
 };
+
+export const isNumber = (num) => {
+  if (
+    (typeof num === "string" &&
+      num?.length > 0 &&
+      !Number.isNaN(Number(num))) ||
+    (typeof num === "number" && !Number.isNaN(num))
+  ) {
+    return true;
+  }
+
+  return false;
+};

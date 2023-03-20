@@ -75,9 +75,9 @@ const Login = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row justify-content-center">
                   <div className="col-lg-10">
-                    {errors.email?.message ? (
+                    {errors?.email?.message ? (
                       <div className="alert alert-danger" role="alert">
-                        {errors.email?.message}
+                        {errors?.email?.message}
                       </div>
                     ) : (
                       ""
@@ -141,7 +141,7 @@ const Login = () => {
                       <label htmlFor="floatingPassword">Password</label>
                       {errors.password?.message ? (
                         <div className="alert alert-danger" role="alert">
-                          {errors.password?.message}
+                          {errors?.password?.message}
                         </div>
                       ) : (
                         ""

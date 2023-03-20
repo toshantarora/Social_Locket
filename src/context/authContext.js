@@ -2,7 +2,7 @@ import { createContext, useMemo, useState } from "react";
 // import { useHistory, useLocation } from "react-router-dom";
 import { isNonEmptyString } from "../helpers";
 import { authService } from "../services/AuthApi";
-import { loadString, remove, saveString } from "../utils/Storage";
+import { loadString, remove, save, saveString } from "../utils/Storage";
 
 export const AuthContext = createContext({});
 
@@ -85,14 +85,19 @@ export const AuthProvider = (props) => {
   const [loading, setLoading] = useState(false);
 
   const [auth, setAuth] = useState(() => {
+    const user = loadString("userDetails");
     const savedToken = loadString("accessToken");
 
     if (savedToken) {
       try {
+        const userDetails = JSON.parse(user);
+        const { email, userid } = userDetails;
         return {
           token: savedToken,
           isAuthenticated: true,
           message: "",
+          userEmail: email,
+          userId: userid,
         };
       } catch (error) {
         console.log(error);
@@ -100,6 +105,8 @@ export const AuthProvider = (props) => {
           token: "",
           isAuthenticated: false,
           message: "",
+          userEmail: "",
+          userId: "",
         };
       }
     }
@@ -107,6 +114,8 @@ export const AuthProvider = (props) => {
       token: "",
       isAuthenticated: false,
       message: "",
+      userEmail: "",
+      userId: "",
     };
   });
 
@@ -126,12 +135,49 @@ export const AuthProvider = (props) => {
         token: response?.data?.accessToken,
         isAuthenticated: true,
         message: "",
+        userEmail: "",
+        userId: "",
       });
     } else {
       setAuth({
         token: "",
         isAuthenticated: false,
         message: response?.data,
+        userEmail: "",
+        userId: "",
+      });
+      remove("accessToken");
+    }
+    setLoading(false);
+    return response;
+  };
+
+  const register = async (data) => {
+    setLoading(true);
+
+    const response = await authService.register(data);
+    console.log(response?.data);
+    if (response && response.data.insertId) {
+      const userDetails = {
+        userEmail: isNonEmptyString(data?.email) ? data?.email : "",
+        userId: response?.data?.insertId ? response?.data?.insertId : "",
+      };
+
+      save("userDetails", userDetails);
+      setAuth({
+        token: "",
+        isAuthenticated: true,
+        message: response?.data?.insertId ? "" : response?.data,
+        userEmail: data?.email,
+        userId: response?.data?.insertId,
+      });
+    } else {
+      setAuth({
+        token: "",
+        isAuthenticated: false,
+        message: response?.data,
+        userEmail: "",
+        userId: "",
       });
       remove("accessToken");
     }
@@ -144,8 +190,11 @@ export const AuthProvider = (props) => {
       token: "",
       isAuthenticated: false,
       message: "",
+      userEmail: "",
+      userId: "",
     });
     remove("accessToken");
+    remove("userDetails");
   };
 
   const value = useMemo(
@@ -153,10 +202,11 @@ export const AuthProvider = (props) => {
       auth,
       setAuth,
       login,
+      register,
       logout,
       loading,
     }),
-    [auth, setAuth, login, logout, loading],
+    [auth, setAuth, login, register, logout, loading],
   );
 
   return (
