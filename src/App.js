@@ -18,6 +18,13 @@ import Search from "./pages/search/Search";
 import Support from "./pages/support/Support";
 import Connect from "./pages/connect/Connect";
 import Setting from "./pages/setting/Setting";
+import PageNotFound from "./pages/pageNotFound/PageNotFound";
+import Notification from "./pages/notification/Notification";
+import Profile from "./pages/profile/Profile";
+import Privacy from "./pages/privacy/Privacy";
+import Inventory from "./pages/inventory/Inventory";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
+import CreatePassword from "./pages/createPassword/CreatePassword";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -45,6 +52,22 @@ const App = () => {
           path: "/setting",
           element: <Setting />,
         },
+        {
+          path: "/notifications",
+          element: <Notification />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
+        {
+          path: "/privacy",
+          element: <Privacy />,
+        },
+        {
+          path: "/inventory",
+          element: <Inventory />,
+        },
         // {
         //   path: "/profile/:id",
         //   element: <Profile />,
@@ -58,6 +81,18 @@ const App = () => {
     {
       path: "/register",
       element: <Register />,
+    },
+    {
+      path: "/forgot-password",
+      element: <ForgotPassword />,
+    },
+    {
+      path: "/create-password",
+      element: <CreatePassword />,
+    },
+    {
+      path: "*",
+      element: <PageNotFound />,
     },
   ]);
   return <RouterProvider router={router} />;

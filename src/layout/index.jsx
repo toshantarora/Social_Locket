@@ -1,10 +1,12 @@
 // import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "../styles/globalStyles.css";
 import Header from "../components/header";
 import SideBar from "../components/sidebar";
 
 const Layout = () => {
+  const location = useLocation();
+  const hideSideBar = location.pathname === "/inventory";
   return (
     <>
       <div className="dashboard nav-fixed">
@@ -12,7 +14,7 @@ const Layout = () => {
         <section>
           <div className="container">
             <div className="" id="layoutSidenav">
-              <SideBar />
+              {!hideSideBar && <SideBar />}
               <Outlet />
             </div>
           </div>

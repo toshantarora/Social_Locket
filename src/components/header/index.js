@@ -43,7 +43,7 @@ const Header = () => {
           </button>
           {/* Navbar Brand */}
           {/* <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="#">Winyway</a> */}
-          <a href="dashboard.html" className="logo navbar-brand">
+          <a href="/" className="logo navbar-brand">
             <picture>
               <source srcSet={Logo} type="image/webp" />
               <source srcSet={LogoImage} type="image/png" />
@@ -73,7 +73,7 @@ const Header = () => {
           {/* Navbar Items */}
           <ul className="navbar-nav align-items-center ms-auto">
             <li className="bell-icon">
-              <a href="/">
+              <a href="/notifications">
                 <i className="fa-solid fa-bell">
                   {/* <FontAwesomeIcon icon={faBell} size="1x" /> */}
                   <span className="badge">2</span>

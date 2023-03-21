@@ -10,7 +10,7 @@ import circle from "../../assets/images/circle.png";
 const LeftSidebar = () => {
   return (
     <div className="col-lg-6 animation">
-      <div className="login main-left">
+      <div className="login main-left align-items-center">
         {/* <h4>SocialLocket</h4> */}
         <div className="container-fluid">
           <OwlCarousel

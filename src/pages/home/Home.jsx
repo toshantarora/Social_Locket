@@ -10,7 +10,7 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
-  console.log(postsData);
+  // console.log(postsData);
   return (
     <main id="layoutSidenav_content">
       <div className="post-message">
