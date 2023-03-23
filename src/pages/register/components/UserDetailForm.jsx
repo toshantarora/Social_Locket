@@ -3,22 +3,24 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Avatar from "react-avatar-edit";
 import { Dialog } from "primereact/dialog";
 import { Multiselect } from "multiselect-react-dropdown";
 import { useMutation, useQueryClient } from "react-query";
-import { AuthContext } from "../../../context/authContext";
+// import { useNavigate } from "react-router-dom";
+// import { AuthContext } from "../../../context/authContext";
 import UserImage from "../../../assets/images/user-img.png";
 import { postsService } from "../../../services/ImageUploadApi";
 import { API } from "../../../services/ApiClient";
+import { CountriesList } from "../../../constants/Countries";
 // import UserWebImage from "../../../assets/images/user-img.webp";
 // import CoverPhoto from "../../../assets/images/cover-photo.jpg";
 
 const options = ["buyer", "seller", "reader", "writter"];
-const UserDetailForm = () => {
-  const value = useContext(AuthContext);
+const UserDetailForm = (props) => {
+  // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
   const [storeImage, setStoreImage] = useState([]);
@@ -26,16 +28,13 @@ const UserDetailForm = () => {
   const [profileImage, setProfileImage] = useState(null);
   const profileImageShow = storeImage.map((item) => item.imageCrop);
   const queryClient = useQueryClient();
-  //   const [src] = useState("");
-  //   const [image, setImage] = useState("");
+  // const navigate = useNavigate();
   const {
     // refineCore: { onFinish, formLoading },
     register,
     handleSubmit,
     control,
     formState: { errors },
-    // setValue,
-    // watch,
   } = useForm();
 
   const onClose = () => {
@@ -43,9 +42,9 @@ const UserDetailForm = () => {
   };
   const onCrop = (view) => {
     setImageCrop(view);
-    // urlToFile(preview);
   };
 
+  // console.log(value);
   const saveCropImage = async () => {
     setStoreImage([...storeImage, { imageCrop }]);
     setDialogs(false);
@@ -62,6 +61,7 @@ const UserDetailForm = () => {
     }
   };
 
+  console.log("passsowed---------------", props);
   const onBeforeFileLoad = (elem) => {
     if (elem.target.files[0].size > 71680) {
       alert("File is too big!");
@@ -72,21 +72,58 @@ const UserDetailForm = () => {
     // console.log(elem.target.files[0]);
   };
 
-  const mutation = useMutation(
+  const userMutation = useMutation(
     (user) => {
-      return API.post("/users-address", user);
+      return API.post("/register", user);
     },
     {
       onSuccess: () => {
         // Invalidate and refetch
-        queryClient.invalidateQueries(["user"]);
+        queryClient.invalidateQueries(["register"]);
       },
     },
   );
 
   const onSave = async (data) => {
+    const userData = {
+      email: props?.emailValue,
+      forename: data?.forename,
+      surname: data.surname,
+      mobile: data?.mobile,
+      password: props?.passwordValue,
+      bio: data?.bio,
+      privacy_policy: "yes",
+      user_session_id: "",
+      title: data.gender === "male" ? "mr" : "Mrs",
+      gender: data.gender,
+      profile_image: profileImage,
+      banner: "no banner upload",
+      dob: data?.dob,
+      stakeholder: data.stakeholder,
+      main_user_type: "seller",
+      seller: "0",
+      buyer: "",
+      finance: "",
+      legal: "",
+      status: "",
+      agent: "",
+      other: "",
+      accountant: "",
+      unit_number: "Some Unit Number",
+      street_number: "Some St Number",
+      address_line_1: data?.addressLine1,
+      address_line_2: data?.addressLine2,
+      city: data?.city,
+      region: "",
+      postal_code: data?.postalCode,
+      country_id: data?.country,
+      address_type: "Personal",
+      // nick_name: "Albania",
+    };
+    console.log(userData);
     // e.preventDefault();
-    mutation.mutate({ ...data, profile_image: profileImage });
+    userMutation.mutate(userData);
+    // navigate("/", { replace: true });
     // setOpenUpdate(false);
     // setCover(null);
     // setProfile(null);
@@ -102,7 +139,7 @@ const UserDetailForm = () => {
       <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">
           <div>
-            <div className="user-profile complete-profile" style={{}}>
+            <div className="user-profile complete-profile">
               <figure>
                 <img
                   style={{
@@ -249,8 +286,9 @@ const UserDetailForm = () => {
                     type="email"
                     className="form-control"
                     id="email"
+                    name="email"
                     placeholder="test@gmail.com"
-                    defaultValue={value?.auth?.userEmail}
+                    defaultValue={props?.emailValue}
                     {...register("email", {
                       //   required: "Required",
                     })}
@@ -348,32 +386,35 @@ const UserDetailForm = () => {
                   {/* <label htmlFor="stakeholder">Stakeholder Type</label> */}
                 </div>
               </div>
-              {/* <div className="col-md-6">
-            <div className="form-floating mb-3">
-              <select
-                className="form-select"
-                id="floatingSelect"
-                aria-label="Floating label select example"
-              >
-                <option selected="">Birmingham</option>
-                <option value={1}>Birmingham</option>
-                <option value={2}>Birmingham</option>
-                <option value={3}>Birmingham</option>
-              </select>
-              <label htmlFor="floatingInput">Country</label>
-            </div>
-          </div> */}
+              <div className="col-md-6">
+                <div className="form-floating mb-3">
+                  <select
+                    className="form-select"
+                    id="country"
+                    aria-label="Floating label select example"
+                    {...register("country")}
+                  >
+                    {CountriesList?.length &&
+                      CountriesList.map((item, idx) => (
+                        <option key={idx} value={item?.id}>
+                          {item?.name}
+                        </option>
+                      ))}
+                  </select>
+                  <label htmlFor="country">Country</label>
+                </div>
+              </div>
               <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <input
                     type="text"
                     className="form-control"
-                    id="address_line_1"
-                    name="address_line_1"
+                    id="addressLine1"
+                    name="addressLine1"
                     placeholder="Address 1"
-                    {...register("address_line_1")}
+                    {...register("addressLine1")}
                   />
-                  <label htmlFor="address_line_1" className="form-label">
+                  <label htmlFor="addressLine1" className="form-label">
                     Address 1
                   </label>
                 </div>
@@ -383,12 +424,12 @@ const UserDetailForm = () => {
                   <input
                     type="text"
                     className="form-control"
-                    id="address_line_2"
+                    id="addressLine2"
                     placeholder="Address 2"
-                    name="address_line_1"
-                    {...register("address_line_2")}
+                    name="addressLine2"
+                    {...register("addressLine2")}
                   />
-                  <label htmlFor="address_line_2" className="form-label">
+                  <label htmlFor="addressLine2" className="form-label">
                     Address 2
                   </label>
                 </div>

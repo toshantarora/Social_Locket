@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -48,34 +48,19 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    if (value?.auth?.userId) {
-      setModalShow(true);
-    }
-    // setModalShow(true);
-  }, [value]);
+  const passwordValue = watch("password");
+  const emailValue = watch("email");
 
-  // const onSubmit = useCallback(
-  //   (data) => {
-  //     value?.register(data);
-  //     if (value?.auth?.userId) {
-  //       setModalShow(true);
-  //     }
-  //   },
-  //   [],
-  // );
-
-  const onSubmit = async (data) => {
-    value?.register(data);
+  const onSubmit = async () => {
+    // value?.register(data);
+    setModalShow(true);
   };
 
-  console.log("====================================");
-  console.log(value);
-  console.log("====================================");
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
   };
@@ -234,7 +219,10 @@ const Register = () => {
             heading="Complete Profile"
             size="xl"
           >
-            <UserDetailForm />
+            <UserDetailForm
+              passwordValue={passwordValue}
+              emailValue={emailValue}
+            />
           </ModalComponent>
           {/* <Modal
             show={isOpen}
