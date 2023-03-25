@@ -1,5 +1,5 @@
 // import React from "react";
-import { NavLink } from "react-router-dom";
+import { json, NavLink } from "react-router-dom";
 import "../../styles/globalStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,8 +13,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
 
 const SideBar = () => {
+
+  const userProfilePic = getUserProfileImage();
+  const userBIO = getUserBio();
+  const UserFullName = getUserFullName();
+  const userProfileText = getUserProfileText();
+  const hasUserData = hasUserDetails();
+ 
+
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
@@ -35,23 +44,23 @@ const SideBar = () => {
           <i className="fa-solid fa-xmark" />
         </a>
       </div>
-      <div className="user-profile">
+      <div className="user-profile" hidden={!hasUserData} >
         <a href="/">
           <figure>
-            <span>LC</span>
-            <picture>
+            <span hidden={userProfilePic} className="text-uppercase">{userProfileText}</span>
+            <picture hidden={!userProfilePic}>
               <source
-                srcSet="../../assets/images/user-img.webp"
+                srcSet={userProfilePic}
                 type="image/webp"
               />
               <source
-                srcSet="../../assets/images/user-img.png"
+                srcSet={userProfilePic}
                 type="image/png"
               />
               <img
                 loading="lazy"
                 src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                data-src="../../assets/images/user-img.png"
+                data-src={userProfilePic}
                 alt="user-img"
                 className="img-fluid"
                 width={70}
@@ -60,8 +69,8 @@ const SideBar = () => {
             </picture>
           </figure>
           <figcaption>
-            <h5 className="mb-0">Lettie Christen</h5>
-            <p className="mb-0">Content Creater</p>
+            <h5 className="mb-0">{UserFullName}</h5>
+            <p className="mb-0">{userBIO}</p>
           </figcaption>
         </a>
       </div>

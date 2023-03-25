@@ -1,14 +1,17 @@
 // import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect,useState } from "react";
 import LogoImage from "../../assets/images/logo-login.png";
 import LoginImage from "../../assets/images/logo-login.webp";
 import Emaillogo from "../../assets/images/emai-icon.png";
 import LeftSidebar from "../../components/leftSideBar/LeftSideBar";
 import { AuthContext } from "../../context/authContext";
+
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -22,6 +25,10 @@ const schema = yup.object({
 });
 
 const Login = () => {
+  const eye = <FontAwesomeIcon icon={faEye} />;
+  const eyeSlash = <FontAwesomeIcon icon={faEyeSlash} />;
+  const [passwordShown, setPasswordShown] = useState(false);
+
   const value = useContext(AuthContext);
   const auth = value?.auth;
   const navigate = useNavigate();
@@ -41,6 +48,10 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     value?.login(data);
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordShown(!passwordShown);
   };
 
   return (
@@ -114,30 +125,18 @@ const Login = () => {
                                   </div> */}
                     <div className="form-floating mb-3">
                       <input
-                        type="password"
+                        type={passwordShown ? "text" : "password"}
                         className="form-control"
                         id="floatingPassword"
                         placeholder="Password"
                         {...register("password")}
                       />
-                      <span>
-                        <img
-                          src="assets/images/eye-icon.png"
-                          className="hide-eye"
-                          alt="eye"
-                          width={16}
-                          height={16}
-                        />
-                      </span>
-                      <span>
-                        <img
-                          src="assets/images/eye.png"
-                          className="show-eye"
-                          alt="eye"
-                          width={16}
-                          height={16}
-                        />
-                      </span>
+                       <span
+                            role="button"
+                            onClick={togglePasswordVisibility}
+                          >
+                            {passwordShown ? eye : eyeSlash}
+                          </span>
                       <label htmlFor="floatingPassword">Password</label>
                       {errors.password?.message ? (
                         <div className="alert alert-danger" role="alert">

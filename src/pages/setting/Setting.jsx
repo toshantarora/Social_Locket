@@ -1,4 +1,21 @@
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText } from "../../utils/Storage";
+import { useNavigate } from 'react-router-dom';
+
 const Setting = () => {
+  const userProfilePic = getUserProfileImage();
+  const userProfileText = getUserProfileText();
+  const userBIO = getUserBio();
+  const userFullName = getUserFullName();
+  const value = useContext(AuthContext);
+  const navigate = useNavigate();
+
+const logOut=()=>{
+  value?.logout();
+  navigate('/login');
+}
+
   return (
     <main id="layoutSidenav_content">
       <div className="box-shadow p-0">
@@ -15,20 +32,20 @@ const Setting = () => {
               <div className="edit-profile">
                 <div className="setting-left">
                   <figure>
-                    <span>LC</span>
-                    <picture>
+                    <span hidden={userProfilePic} className="text-uppercase">{userProfileText}</span>
+                    <picture hidden={!userProfilePic}>
                       <source
-                        srcSet="assets/images/user-img.webp"
+                        srcSet={userProfilePic}
                         type="image/webp"
                       />
                       <source
-                        srcSet="assets/images/user-img.png"
+                        srcSet={userProfilePic}
                         type="image/png"
                       />
                       <img
                         loading="lazy"
                         src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                        data-src="assets/images/user-img.png"
+                        data-src={userProfilePic}
                         alt="user-img"
                         className="img-fluid"
                         width={150}
@@ -38,8 +55,8 @@ const Setting = () => {
                   </figure>
                   <figcaption>
                     <div>
-                      <h4 className="mb-0 mt-2 text-center">Lettie Christen</h4>
-                      <p className="mb-0 text-center">Content Creater</p>
+                      <h4 className="mb-0 mt-2 text-center">{userFullName}</h4>
+                      <p className="mb-0 text-center">{userBIO}</p>
                     </div>
                     <div className="setting-post">
                       <a href="/" className="">
@@ -58,7 +75,7 @@ const Setting = () => {
                   </figcaption>
                 </div>
                 <div className="mt-4">
-                  <button type="button" className="btn btn-common w-100">
+                  <button onClick={logOut} className="btn btn-common w-100">
                     Logout
                   </button>
                 </div>

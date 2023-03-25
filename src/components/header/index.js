@@ -8,8 +8,15 @@ import UserImage from "../../assets/images/user-img.png";
 import Logo from "../../assets/images/logo.webp";
 import LogoImage from "../../assets/images/logo.png";
 import SearchImage from "../../assets/images/search-form.png";
+import { NavLink } from "react-router-dom";
+import { getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
 
 const Header = () => {
+
+  const userProfilePic = getUserProfileImage();
+  const userProfileText = getUserProfileText();
+  const hasUserData = hasUserDetails();
+
   return (
     <header>
       {/* Top-header */}
@@ -86,13 +93,15 @@ const Header = () => {
               icon={["fas", "coffee"]}
               // color={props?.state?.index === 0 ? miscBlue[600] : blueGray[300]}
             /> */}
-            <li className="bell-icon">
-              <a href="/">
-                <i className="fa-solid fa-user" />
-              </a>
+
+           
+            <li className="bell-icon" hidden={hasUserData}>
+              <NavLink className="bell-icon" to="/login" >
+              <i className="fa-solid fa-user" />
+              </NavLink>
             </li>
             {/* User Dropdown */}
-            <li className="nav-item dropdown no-caret dropdown-user">
+            <li className="nav-item dropdown no-caret dropdown-user" hidden={!hasUserData}>
               <a
                 className="btn btn-icon btn-transparent-dark header-profile"
                 id="navbarDropdownUserImage"
@@ -104,20 +113,20 @@ const Header = () => {
                 aria-expanded="false"
               >
                 <figure>
-                  <span>LC</span>
-                  <picture>
+                  <span className="text-uppercase" hidden={userProfilePic}>{userProfileText}</span>
+                  <picture hidden={!userProfilePic}>
                     <source
-                      srcSet="../../assets/images/user-img.webp"
+                      srcSet={userProfilePic}
                       type="image/webp"
                     />
                     <source
-                      srcSet="../../assets/images/user-img.png"
+                      srcSet={userProfilePic}
                       type="image/png"
                     />
                     <img
                       loading="lazy"
                       src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                      data-src={UserImage}
+                      data-src={userProfilePic}
                       alt="user-img"
                       className="img-fluid"
                       width={50}
@@ -132,20 +141,20 @@ const Header = () => {
               >
                 <h6 className="dropdown-header d-flex align-items-center header-profile">
                   <figure>
-                    <span>LC</span>
-                    <picture>
+                    <span className="text-uppercase" hidden={userProfilePic}>{userProfileText}</span>
+                    <picture  hidden={!userProfilePic}>
                       <source
-                        srcSet="../../assets/images/user-img.webp"
+                        srcSet={userProfilePic}
                         type="image/webp"
                       />
                       <source
-                        srcSet="../../assets/images/user-img.png"
+                        srcSet={userProfilePic}
                         type="image/png"
                       />
                       <img
                         loading="lazy"
                         src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                        data-src="../../assets/images/user-img.png"
+                        data-src={userProfilePic}
                         alt="user-img"
                         className="img-fluid"
                         width={50}

@@ -66,3 +66,112 @@ export function clear() {
     console.log(err);
   }
 }
+
+
+/**
+ * Get User bio from storage.
+ *
+ */
+export function hasUserDetails() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+}
+
+/**
+ * Get User Id from storage.
+ *
+ */
+export function getUserId() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      const userData = JSON.parse(user);
+      return userData?.id;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
+/**
+ * Get User Profile Image from storage.
+ *
+ */
+export function getUserProfileImage() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      const userData = JSON.parse(user);
+      return userData?.profile_image;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
+/**
+ * Get User Profile Text from storage.
+ *
+ */
+export function getUserProfileText() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      const userData = JSON.parse(user);
+      return userData?.forename?.chatAt(0) + userData?.surname?.chatAt(0);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
+/**
+ * Get User Full Name from storage.
+ *
+ */
+export function getUserFullName() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      const userData = JSON.parse(user);
+      return userData?.forename + userData?.surname;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+
+/**
+ * Get User bio from storage.
+ *
+ */
+export function getUserBio() {
+  try {
+    const user = loadString('userDetails');
+    if(user)
+    {
+      const userData = JSON.parse(user);
+      return userData?.bio;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}
+

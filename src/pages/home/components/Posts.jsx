@@ -2,9 +2,12 @@ import OwlCarousel from "react-owl-carousel";
 import { formatDate, getInitials, isNonEmptyString } from "../../../helpers";
 // import UserImage from "../../../assets/images/user-icon.png";
 import ShareCommentImage from "../../../assets/images/share-icon.png";
+import { getUserProfileImage, getUserProfileText, hasUserDetails } from "../../../utils/Storage";
 
-const Posts = (props) => {
-  console.log(props.post);
+const Posts = (props) => {  
+  const userProfilePic = getUserProfileImage();
+  const userProfileText = getUserProfileText();
+
   return (
     <div className="post">
       <ul>
@@ -241,20 +244,20 @@ const Posts = (props) => {
             </div>
             <div className="share-comment">
               <figure>
-                <span />
+                <span className="text-uppercase" hidden={userProfilePic}>{userProfileText}</span>
                 <picture>
                   <source
-                    srcSet="../../assets/images/user-img.webp"
+                    srcSet={userProfilePic}
                     type="image/webp"
                   />
                   <source
-                    srcSet="../../assets/images/user-img.png"
+                    srcSet={userProfilePic}
                     type="image/png"
                   />
                   <img
                     loading="lazy"
                     src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                    data-src="../../assets/images/user-img.png"
+                    data-src={userProfilePic}
                     alt="user-img"
                     className="img-fluid"
                     width={50}

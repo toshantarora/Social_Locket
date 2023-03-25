@@ -2,6 +2,7 @@
 // import React from "react";
 import usePosts from "../../hooks/query/Posts/usePosts";
 import "../../styles/globalStyles.css";
+import { getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
 import Posts from "./components/Posts";
 
 const Home = () => {
@@ -10,10 +11,15 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
+
+
+  const userProfilePic = getUserProfileImage();
+  const userProfileText = getUserProfileText();
+  const hasUserData = hasUserDetails();
   // console.log(postsData);
   return (
     <main id="layoutSidenav_content">
-      <div className="post-message">
+      <div className="post-message" hidden={!hasUserData}>
         <div>
           <h5>
             <strong>Post Something</strong>
@@ -21,20 +27,20 @@ const Home = () => {
         </div>
         <div className="post-something">
           <figure>
-            <span />
-            <picture>
+            <span className="text-uppercase" hidden={userProfilePic} >{userProfileText}</span>
+            <picture hidden={!userProfilePic}>
               <source
-                srcSet="../../assets/images/user-img.webp"
+                srcSet={userProfilePic}
                 type="image/webp"
               />
               <source
-                srcSet="../../assets/images/user-img.png"
+                srcSet={userProfilePic}
                 type="image/png"
               />
               <img
                 loading="lazy"
                 src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                data-src="../../assets/images/user-img.png"
+                data-src={userProfilePic}
                 alt="user-img"
                 className="img-fluid"
                 width={50}

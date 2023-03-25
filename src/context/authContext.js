@@ -2,7 +2,8 @@ import { createContext, useMemo, useState } from "react";
 // import { useHistory, useLocation } from "react-router-dom";
 import { isNonEmptyString } from "../helpers";
 import { authService } from "../services/AuthApi";
-import { loadString, remove, save, saveString } from "../utils/Storage";
+import { userService } from "../services/UserService";
+import { getUserId, loadString, remove, save, saveString } from "../utils/Storage";
 
 export const AuthContext = createContext({});
 
@@ -87,6 +88,8 @@ export const AuthProvider = (props) => {
   const [auth, setAuth] = useState(() => {
     const user = loadString("userDetails");
     const savedToken = loadString("accessToken");
+   
+
 
     if (savedToken) {
       try {
@@ -129,14 +132,24 @@ export const AuthProvider = (props) => {
       response?.data &&
       isNonEmptyString(response?.data?.accessToken)
     ) {
+
       saveString("accessToken", response.data.accessToken);
+
+      if(response.data.user_id){
+            const userProfile = await userService.getUserProfile(response.data.user_id);
+            if(userProfile){
+              save("userDetails",userProfile);
+            }else{
+              remove("userDetails",userProfile);
+            }
+      }
 
       setAuth({
         token: response?.data?.accessToken,
         isAuthenticated: true,
         message: "",
         userEmail: "",
-        userId: "",
+        userId: response?.data?.user_id
       });
     } else {
       setAuth({
@@ -195,6 +208,13 @@ export const AuthProvider = (props) => {
     });
     remove("accessToken");
     remove("userDetails");
+    const userId = getUserId();
+    if(userId){
+      const response = await authService.logout(userId);
+      if(response){
+        console.log(response);
+      }
+    }
   };
 
   const value = useMemo(

@@ -1,4 +1,10 @@
+import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText } from "../../utils/Storage";
+
 const Profile = () => {
+  const userProfilePic = getUserProfileImage();
+  const userProfileText = getUserProfileText();
+  const userBIO = getUserBio();
+  const userFullName = getUserFullName();
   return (
     <main id="layoutSidenav_content">
       <div className="box-shadow">
@@ -17,20 +23,20 @@ const Profile = () => {
             </div>
             <div className="edit-profile">
               <figure>
-                <span>LC</span>
-                <picture>
+                <span className="text-uppercase" hidden={userProfilePic}>{userProfileText}</span>
+                <picture hidden={!userProfilePic}>
                   <source
-                    srcSet="assets/images/user-img.webp"
+                    srcSet={userProfilePic}
                     type="image/webp"
                   />
                   <source
-                    srcSet="assets/images/user-img.png"
+                    srcSet={userProfilePic}
                     type="image/png"
                   />
                   <img
                     loading="lazy"
                     src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                    data-src="assets/images/user-img.png"
+                    data-src={userProfilePic}
                     alt="user-img"
                     className="img-fluid"
                     width={120}
@@ -41,9 +47,9 @@ const Profile = () => {
               <i className="fa fa-camera change-img" />
               <figcaption>
                 <div>
-                  <h4 className="mb-0 mt-2">Lettie Christen</h4>
-                  <p className="mb-0">Content Creater</p>
-                  <p className="mb-0">Birmingham, UK</p>
+                  <h4 className="mb-0 mt-2">{userFullName}</h4>
+                  <p className="mb-0">{userBIO}</p>
+                  {/* <p className="mb-0">Birmingham, UK</p> */}
                 </div>
                 <div className="post-count">
                   <div className="post">
