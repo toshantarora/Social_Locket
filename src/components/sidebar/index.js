@@ -1,5 +1,4 @@
-// import React from "react";
-import { json, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../../styles/globalStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,18 +12,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
-import { getUserBio, getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
+import { useContext } from "react";
+import {
+  getUserBio,
+  getUserFullName,
+  getUserProfileImage,
+  hasUserDetails,
+} from "../../utils/Storage";
 import { getInitials } from "../../helpers";
+import { AuthContext } from "../../context/authContext";
 
 const SideBar = () => {
-
   const userProfilePic = getUserProfileImage();
   const userBIO = getUserBio();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
- 
-
+  const { auth } = useContext(AuthContext);
+  // console.log(auth);
+  // console.log(userBIO);
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
@@ -45,19 +51,15 @@ const SideBar = () => {
           <i className="fa-solid fa-xmark" />
         </a>
       </div>
-      <div className="user-profile" hidden={!hasUserData} >
-        <a href="/">
+      <div className="user-profile" hidden={!hasUserData}>
+        <NavLink to={`/profile/${auth?.userId}`}>
           <figure>
-            <span hidden={userProfilePic} className="text-uppercase">{userProfileText}</span>
+            <span hidden={userProfilePic} className="text-uppercase">
+              {userProfileText}
+            </span>
             <picture hidden={!userProfilePic}>
-              <source
-                srcSet={userProfilePic}
-                type="image/webp"
-              />
-              <source
-                srcSet={userProfilePic}
-                type="image/png"
-              />
+              <source srcSet={userProfilePic} type="image/webp" />
+              <source srcSet={userProfilePic} type="image/png" />
               <img
                 loading="lazy"
                 src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
@@ -73,7 +75,7 @@ const SideBar = () => {
             <h5 className="mb-0">{UserFullName}</h5>
             <p className="mb-0">{userBIO}</p>
           </figcaption>
-        </a>
+        </NavLink>
       </div>
       <form
         className="w-100 search-form position-relative mobile-side-form"

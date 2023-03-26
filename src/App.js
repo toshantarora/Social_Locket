@@ -25,6 +25,7 @@ import Privacy from "./pages/privacy/Privacy";
 import Inventory from "./pages/inventory/Inventory";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import CreatePassword from "./pages/createPassword/CreatePassword";
+import CreatePost from "./pages/createPost/CreatePost";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -57,7 +58,7 @@ const App = () => {
           element: <Notification />,
         },
         {
-          path: "/profile",
+          path: "/profile/:id",
           element: <Profile />,
         },
         {
@@ -68,10 +69,10 @@ const App = () => {
           path: "/inventory",
           element: <Inventory />,
         },
-        // {
-        //   path: "/profile/:id",
-        //   element: <Profile />,
-        // },
+        {
+          path: "/create-post",
+          element: <CreatePost />,
+        },
       ],
     },
     {
