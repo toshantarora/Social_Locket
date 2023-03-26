@@ -14,17 +14,18 @@ import { postsService } from "../../../services/ImageUploadApi";
 import { API } from "../../../services/ApiClient";
 import { userTitles } from "../../../constants/UserTitles";
 import { countryService } from "../../../services/CountryService";
+import { useNavigate } from "react-router-dom";
 
 const UserDetailForm = (props) => {
   const options = ["buyer", "seller", "reader", "writter"];
   const [countryList, SetCountryList] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState({ id: 1, name: "AFGHANISTAN", nick_name: "Afghanistan", iso3: "AFG", phone_code: 93 });
   // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
   const [storeImage, setStoreImage] = useState([]);
   const [image, setImage] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-  const profileImageShow = storeImage.map((item) => item.imageCrop);
   const queryClient = useQueryClient();
   // const navigate = useNavigate();
   const {
@@ -86,27 +87,33 @@ const UserDetailForm = (props) => {
       onSuccess: () => {
         // Invalidate and refetch
         queryClient.invalidateQueries(["register"]);
+        useNavigate("/");
       },
     },
   );
 
   const onSave = async (data) => {
+
+    let userTypes = "";
+    if (data?.main_user_type) {
+      userTypes = [...data.main_user_type].join(",");
+    }
+
     const userData = {
       email: props?.emailValue,
       forename: data?.forename,
       surname: data.surname,
-      mobile: data?.mobile,
+      mobile: `+${selectedCountry?.phone_code} ${data?.mobile}`,
       password: props?.passwordValue,
       bio: data?.bio,
       privacy_policy: "yes",
       user_session_id: "",
-      title: data.gender === "male" ? "mr" : "Mrs",
+      title: data?.title,
       gender: data.gender,
       profile_image: profileImage,
       banner: "no banner upload",
       dob: data?.dob,
-      stakeholder: data.stakeholder,
-      main_user_type: "seller",
+      main_user_type: userTypes,
       seller: "0",
       buyer: "",
       finance: "",
@@ -117,22 +124,27 @@ const UserDetailForm = (props) => {
       accountant: "",
       unit_number: "Some Unit Number",
       street_number: "Some St Number",
-      address_line_1: data?.addressLine1,
-      address_line_2: data?.addressLine2,
-      city: data?.city,
+      address_line_1: "",
+      address_line_2: "",
+      city: "",
       region: "",
-      postal_code: data?.postalCode,
-      country_id: data?.country,
+      postal_code: "",
+      country_id: selectedCountry?.id,
       address_type: "Personal",
       // nick_name: "Albania",
     };
-    console.log(userData);
     // e.preventDefault();
     userMutation.mutate(userData);
     // navigate("/", { replace: true });
     // setOpenUpdate(false);
     // setCover(null);
     // setProfile(null);
+  };
+  const handleCountryChange = async (event) => {
+    const selectedCountryData = countryList.filter((x) =>
+      x.id === event.target.value,
+    );
+    setSelectedCountry(selectedCountryData[0]);
   };
 
   return (
@@ -158,7 +170,7 @@ const UserDetailForm = (props) => {
                     // border: "4px solid grey"
                   }}
                   onClick={() => setDialogs(true)}
-                  src={imageCrop ? imageCrop : UserImage}
+                  src={imageCrop || UserImage}
                   alt=""
                 />{" "}
                 <i
@@ -259,7 +271,7 @@ const UserDetailForm = (props) => {
                       }}
                     >
                       {userTitles.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option key={option.value} value={option.label}>
                           {option.label}
                         </option>
                       ))}
@@ -299,7 +311,6 @@ const UserDetailForm = (props) => {
                     height: "48px",
                   }}
                 >
-                  <option selected="">Select Gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
@@ -376,9 +387,10 @@ const UserDetailForm = (props) => {
                           borderBottomRightRadius: "0px",
                           height: "48px",
                         }}
+                        onChange={(e) => handleCountryChange(e)}
                       >
                         {countryList.map((option) => (
-                          <option key={option.id} value={option.phone_code}>
+                          <option key={option.id} value={option.id}>
                             {`${option.iso} +${option.phone_code}`}
                           </option>
                         ))}
@@ -399,7 +411,7 @@ const UserDetailForm = (props) => {
               <div className="col-md-7">
                 <Controller
                   control={control}
-                  name="stakeholder"
+                  name="main_user_type"
                   render={({ field: { value, onChange } }) => (
                     <Multiselect
                       options={options}

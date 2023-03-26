@@ -88,8 +88,6 @@ export const AuthProvider = (props) => {
   const [auth, setAuth] = useState(() => {
     const user = loadString("userDetails");
     const savedToken = loadString("accessToken");
-   
-
 
     if (savedToken) {
       try {
@@ -135,13 +133,13 @@ export const AuthProvider = (props) => {
 
       saveString("accessToken", response.data.accessToken);
 
-      if(response.data.user_id){
-            const userProfile = await userService.getUserProfile(response.data.user_id);
-            if(userProfile){
-              save("userDetails",userProfile);
-            }else{
-              remove("userDetails",userProfile);
-            }
+      if (response.data.user_id) {
+        const userProfile = await userService.getUserProfile(response.data.user_id);
+        if (userProfile) {
+          save("userDetails", userProfile);
+        } else {
+          remove("userDetails", userProfile);
+        }
       }
 
       setAuth({
@@ -159,8 +157,8 @@ export const AuthProvider = (props) => {
         userEmail: "",
         userId: "",
       });
-      remove("accessToken");              
-      remove("userDetails",userProfile);
+      remove("accessToken");
+      remove("userDetails", userProfile);
     }
     setLoading(false);
     return response;
@@ -171,10 +169,22 @@ export const AuthProvider = (props) => {
 
     const response = await authService.register(data);
     console.log(response?.data);
-    if (response && response.data.insertId) {
+    if (response && response.data.user_id) {
+
+      if (response.data.user_id) {
+        const userProfile = await userService.getUserProfile(response.data.user_id);
+        if (userProfile) {
+          save("userDetails", userProfile);
+        } else {
+          remove("userDetails", userProfile);
+        }
+      }
+
+      saveString("accessToken", response.data.accessToken);
+
       const userDetails = {
         userEmail: isNonEmptyString(data?.email) ? data?.email : "",
-        userId: response?.data?.insertId ? response?.data?.insertId : "",
+        userId: response?.data?.user_id ? response?.data?.user_id : "",
       };
 
       save("userDetails", userDetails);
@@ -210,9 +220,9 @@ export const AuthProvider = (props) => {
     remove("accessToken");
     remove("userDetails");
     const userId = getUserId();
-    if(userId){
+    if (userId) {
       const response = await authService.logout(userId);
-      if(response){
+      if (response) {
         console.log(response);
       }
     }
