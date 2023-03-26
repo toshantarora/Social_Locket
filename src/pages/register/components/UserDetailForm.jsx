@@ -3,23 +3,21 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Avatar from "react-avatar-edit";
 import { Dialog } from "primereact/dialog";
 import { Multiselect } from "multiselect-react-dropdown";
 import { useMutation, useQueryClient } from "react-query";
-// import { useNavigate } from "react-router-dom";
-// import { AuthContext } from "../../../context/authContext";
 import UserImage from "../../../assets/images/user-img.png";
 import { postsService } from "../../../services/ImageUploadApi";
 import { API } from "../../../services/ApiClient";
-import { CountriesList } from "../../../constants/Countries";
-// import UserWebImage from "../../../assets/images/user-img.webp";
-// import CoverPhoto from "../../../assets/images/cover-photo.jpg";
-
+import { userTitles } from "../../../constants/UserTitles";
+import { countryService } from "../../../services/CountryService";
 const options = ["buyer", "seller", "reader", "writter"];
 const UserDetailForm = (props) => {
+
+  const [countryList, SetCountryList] = useState([]);
   // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
@@ -36,6 +34,15 @@ const UserDetailForm = (props) => {
     control,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    async function getCounties() {
+      const countryData = await countryService.GetCountryCodes();
+      SetCountryList(countryData);
+    }
+    getCounties();
+  }, []);
+
 
   const onClose = () => {
     setImageCrop(null);
@@ -234,23 +241,39 @@ const UserDetailForm = (props) => {
               </figure>
             </div>
 
-            <form className="row g-3 mt-4">
-              <div className="col-md-3">
-                <div className="form-floating mb-3">
+            <form className="row g-3 mt-4 px-4">
+
+              <div className="col-md-5">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend" style={{ height: '48px' }}>
+                    <select
+                      {...register("title")}
+                      className="form-select"
+                      id="title"
+                      style={{
+                        borderTopRightRadius: '0px',
+                        borderBottomRightRadius: '0px',
+                        height: "48px"
+                      }}
+                    >
+                      {userTitles.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <input
                     type="text"
                     className="form-control"
                     id="forename"
-                    placeholder="Lettie Creator"
+                    placeholder="First Name"
                     name="forename"
                     {...register("forename")}
                   />
-                  <label htmlFor="forename" className="form-label">
-                    First Name
-                  </label>
                 </div>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-4">
                 <div className="form-floating mb-3">
                   <input
                     type="text"
@@ -266,6 +289,25 @@ const UserDetailForm = (props) => {
                 </div>
               </div>
               <div className="col-md-3">
+                <select
+                  {...register("gender")}
+                  className="form-select"
+                  id="gender"
+                  style={{
+                    height: '48px'
+                  }}
+                >
+                  <option selected="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                {errors?.gender?.message ? (
+                  <div style={{ color: "red" }}>{errors?.gender?.message}</div>
+                ) : (
+                  ""
+                )}
+              </div>
+              {/* <div className="col-md-3">
                 <div className="form-floating mb-3">
                   <input
                     type="text"
@@ -279,8 +321,8 @@ const UserDetailForm = (props) => {
                     Bio
                   </label>
                 </div>
-              </div>
-              <div className="col-md-3">
+              </div> */}
+              {/* <div className="col-md-3 d-none">
                 <div className="form-floating mb-3">
                   <input
                     type="email"
@@ -301,27 +343,8 @@ const UserDetailForm = (props) => {
                 ) : (
                   ""
                 )}
-              </div>
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <select
-                    {...register("gender")}
-                    className="form-select"
-                    id="gender"
-                    aria-label="Floating label select example"
-                  >
-                    <option selected="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                  <label htmlFor="floatingInput">Gender</label>
-                </div>
-                {errors?.gender?.message ? (
-                  <div style={{ color: "red" }}>{errors?.gender?.message}</div>
-                ) : (
-                  ""
-                )}
-              </div>
+              </div> */}
+              {/* 
               <div className="col-md-4">
                 <div className="form-floating mb-3">
                   <input
@@ -336,22 +359,37 @@ const UserDetailForm = (props) => {
                     D.O.B
                   </label>
                 </div>
+              </div> */}
+              <div className="col-md-5">
+                {countryList.length > 0 ? (
+
+                  <div className="input-group mb-3">
+                    <div className="input-group-prepend" style={{ height: '48px' }}>
+                      <select className="form-select" style={{
+                        borderTopRightRadius: '0px', borderBottomRightRadius: '0px',
+                        height: '48px'
+                      }}>
+                        {countryList.map(option => (
+                          <option key={option.id} value={option.phone_code}>
+                            {`${option.iso} +${option.phone_code}`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="mobile"
+                      placeholder="Contact number"
+                      {...register("mobile")}
+                    />
+                  </div>
+                ) : (
+                  <p>Loading...</p>
+                )
+                }
               </div>
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="mobile"
-                    placeholder="+92 9887673456"
-                    {...register("mobile")}
-                  />
-                  <label htmlFor="mobile" className="form-label">
-                    Contact Number
-                  </label>
-                </div>
-              </div>
-              <div className="col-md-6">
+              <div className="col-md-7">
                 <Controller
                   control={control}
                   name="stakeholder"
@@ -365,8 +403,8 @@ const UserDetailForm = (props) => {
                       onSelect={onChange}
                       onRemove={onChange}
                       selectedValues={value}
-                      placeholder="Stakeholder"
-                      //   className="form-select"
+                      placeholder="Select User Type"
+                      className="text"
                     />
                   )}
                 />
@@ -384,84 +422,6 @@ const UserDetailForm = (props) => {
                 <option value={3}>Writter</option>
               </select> */}
                   {/* <label htmlFor="stakeholder">Stakeholder Type</label> */}
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-floating mb-3">
-                  <select
-                    className="form-select"
-                    id="country"
-                    aria-label="Floating label select example"
-                    {...register("country")}
-                  >
-                    {CountriesList?.length &&
-                      CountriesList.map((item, idx) => (
-                        <option key={idx} value={item?.id}>
-                          {item?.name}
-                        </option>
-                      ))}
-                  </select>
-                  <label htmlFor="country">Country</label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="addressLine1"
-                    name="addressLine1"
-                    placeholder="Address 1"
-                    {...register("addressLine1")}
-                  />
-                  <label htmlFor="addressLine1" className="form-label">
-                    Address 1
-                  </label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="addressLine2"
-                    placeholder="Address 2"
-                    name="addressLine2"
-                    {...register("addressLine2")}
-                  />
-                  <label htmlFor="addressLine2" className="form-label">
-                    Address 2
-                  </label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="city"
-                    placeholder="Birmingham"
-                    name="city"
-                    {...register("city")}
-                  />
-                  <label htmlFor="city" className="form-label">
-                    City
-                  </label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="postal_code"
-                    placeholder="Birmingham"
-                    name="postal_code"
-                    {...register("postal_code")}
-                  />
-                  <label htmlFor="postal_code" className="form-label">
-                    Postal Code
-                  </label>
                 </div>
               </div>
             </form>
