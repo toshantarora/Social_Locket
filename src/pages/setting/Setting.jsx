@@ -1,20 +1,21 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText } from "../../utils/Storage";
+import { getUserBio, getUserFullName, getUserProfileImage } from "../../utils/Storage";
 import { useNavigate } from 'react-router-dom';
+import { getInitials } from "../../helpers";
 
 const Setting = () => {
   const userProfilePic = getUserProfileImage();
-  const userProfileText = getUserProfileText();
   const userBIO = getUserBio();
   const userFullName = getUserFullName();
+  const userProfileText = getInitials(userFullName);
   const value = useContext(AuthContext);
   const navigate = useNavigate();
 
-const logOut=()=>{
-  value?.logout();
-  navigate('/login');
-}
+  const logOut = () => {
+    value?.logout();
+    navigate('/login');
+  }
 
   return (
     <main id="layoutSidenav_content">

@@ -2,8 +2,9 @@
 // import React from "react";
 import usePosts from "../../hooks/query/Posts/usePosts";
 import "../../styles/globalStyles.css";
-import { getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
+import { getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
 import Posts from "./components/Posts";
+import { getInitials } from "../../helpers";
 
 const Home = () => {
   const {
@@ -14,7 +15,8 @@ const Home = () => {
 
 
   const userProfilePic = getUserProfileImage();
-  const userProfileText = getUserProfileText();
+  const UserFullName = getUserFullName();
+  const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
   // console.log(postsData);
   return (
@@ -27,7 +29,7 @@ const Home = () => {
         </div>
         <div className="post-something">
           <figure>
-            <span className="text-uppercase" hidden={userProfilePic} >{userProfileText}</span>
+            <span className="text-uppercase text-white" hidden={userProfilePic} >{userProfileText}</span>
             <picture hidden={!userProfilePic}>
               <source
                 srcSet={userProfilePic}
@@ -63,8 +65,8 @@ const Home = () => {
       {postsError
         ? "Something went wrong!"
         : postsIsLoading
-        ? "loading"
-        : postsData.map((post) => <Posts post={post} key={post.id} />)}
+          ? "loading"
+          : postsData.map((post) => <Posts post={post} key={post.id} />)}
       {/* <Posts /> */}
     </main>
   );

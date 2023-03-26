@@ -155,11 +155,12 @@ export const AuthProvider = (props) => {
       setAuth({
         token: "",
         isAuthenticated: false,
-        message: response?.data,
+        message: response?.data?.message,
         userEmail: "",
         userId: "",
       });
-      remove("accessToken");
+      remove("accessToken");              
+      remove("userDetails",userProfile);
     }
     setLoading(false);
     return response;

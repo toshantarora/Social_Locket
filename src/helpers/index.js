@@ -46,13 +46,16 @@ export const formatDate = (timestamp) => {
 };
 
 export const getInitials = (string) => {
-  const initials = string
-    .split(" ")
-    .map(([firstLetter]) => firstLetter)
-    .filter((_, index, array) => index === 0 || index === array.length - 1)
-    .join("")
-    .toUpperCase();
-  return initials;
+  if (string) {
+    const initials = string
+      .split(" ")
+      .map(([firstLetter]) => firstLetter)
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .join("")
+      .toUpperCase();
+    return initials;
+  }
+  return null;
 };
 
 export const isNumber = (num) => {

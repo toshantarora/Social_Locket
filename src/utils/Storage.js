@@ -67,16 +67,14 @@ export function clear() {
   }
 }
 
-
 /**
  * Get User bio from storage.
  *
  */
 export function hasUserDetails() {
   try {
-    const user = loadString('userDetails');
-    if(user)
-    {
+    const user = loadString("userDetails");
+    if (user) {
       return true;
     }
   } catch (err) {
@@ -91,9 +89,8 @@ export function hasUserDetails() {
  */
 export function getUserId() {
   try {
-    const user = loadString('userDetails');
-    if(user)
-    {
+    const user = loadString("userDetails");
+    if (user) {
       const userData = JSON.parse(user);
       return userData?.id;
     }
@@ -109,29 +106,10 @@ export function getUserId() {
  */
 export function getUserProfileImage() {
   try {
-    const user = loadString('userDetails');
-    if(user)
-    {
+    const user = loadString("userDetails");
+    if (user) {
       const userData = JSON.parse(user);
       return userData?.profile_image;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-  return null;
-}
-
-/**
- * Get User Profile Text from storage.
- *
- */
-export function getUserProfileText() {
-  try {
-    const user = loadString('userDetails');
-    if(user)
-    {
-      const userData = JSON.parse(user);
-      return userData?.forename?.chatAt(0) + userData?.surname?.chatAt(0);
     }
   } catch (err) {
     console.log(err);
@@ -145,11 +123,10 @@ export function getUserProfileText() {
  */
 export function getUserFullName() {
   try {
-    const user = loadString('userDetails');
-    if(user)
-    {
+    const user = loadString("userDetails");
+    if (user) {
       const userData = JSON.parse(user);
-      return userData?.forename + userData?.surname;
+      return `${userData?.forename} ${userData?.surname}`;
     }
   } catch (err) {
     console.log(err);
@@ -163,9 +140,8 @@ export function getUserFullName() {
  */
 export function getUserBio() {
   try {
-    const user = loadString('userDetails');
-    if(user)
-    {
+    const user = loadString("userDetails");
+    if (user) {
       const userData = JSON.parse(user);
       return userData?.bio;
     }
@@ -174,4 +150,3 @@ export function getUserBio() {
   }
   return null;
 }
-

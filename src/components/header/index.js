@@ -4,18 +4,19 @@ import "../../styles/globalStyles.css";
 // import "font-awesome/6.3.0/css/all.min.css";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBell } from "@fortawesome/free-solid-svg-icons";
-import UserImage from "../../assets/images/user-img.png";
 import Logo from "../../assets/images/logo.webp";
 import LogoImage from "../../assets/images/logo.png";
 import SearchImage from "../../assets/images/search-form.png";
 import { NavLink } from "react-router-dom";
-import { getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
+import { getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
+import { getInitials } from "../../helpers";
 
 const Header = () => {
 
   const userProfilePic = getUserProfileImage();
-  const userProfileText = getUserProfileText();
+  const UserFullName = getUserFullName();
   const hasUserData = hasUserDetails();
+  const userProfileText = getInitials(UserFullName);
 
   return (
     <header>

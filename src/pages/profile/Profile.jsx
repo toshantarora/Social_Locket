@@ -1,10 +1,12 @@
-import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText } from "../../utils/Storage";
+import { getInitials } from "../../helpers";
+import { getUserBio, getUserFullName, getUserProfileImage } from "../../utils/Storage";
 
 const Profile = () => {
   const userProfilePic = getUserProfileImage();
-  const userProfileText = getUserProfileText();
   const userBIO = getUserBio();
   const userFullName = getUserFullName();
+  const userProfileText = getInitials(userFullName);
+
   return (
     <main id="layoutSidenav_content">
       <div className="box-shadow">

@@ -13,14 +13,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
-import { getUserBio, getUserFullName, getUserProfileImage, getUserProfileText, hasUserDetails } from "../../utils/Storage";
+import { getUserBio, getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
+import { getInitials } from "../../helpers";
 
 const SideBar = () => {
 
   const userProfilePic = getUserProfileImage();
   const userBIO = getUserBio();
   const UserFullName = getUserFullName();
-  const userProfileText = getUserProfileText();
+  const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
  
 
