@@ -14,9 +14,9 @@ import { postsService } from "../../../services/ImageUploadApi";
 import { API } from "../../../services/ApiClient";
 import { userTitles } from "../../../constants/UserTitles";
 import { countryService } from "../../../services/CountryService";
-const options = ["buyer", "seller", "reader", "writter"];
-const UserDetailForm = (props) => {
 
+const UserDetailForm = (props) => {
+  const options = ["buyer", "seller", "reader", "writter"];
   const [countryList, SetCountryList] = useState([]);
   // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
@@ -42,7 +42,6 @@ const UserDetailForm = (props) => {
     }
     getCounties();
   }, []);
-
 
   const onClose = () => {
     setImageCrop(null);
@@ -149,6 +148,7 @@ const UserDetailForm = (props) => {
             <div className="user-profile complete-profile">
               <figure>
                 <img
+                  loading="lazy"
                   style={{
                     width: "120px",
                     height: "120px",
@@ -158,7 +158,7 @@ const UserDetailForm = (props) => {
                     // border: "4px solid grey"
                   }}
                   onClick={() => setDialogs(true)}
-                  src={profileImageShow.length ? profileImageShow : UserImage}
+                  src={imageCrop ? imageCrop : UserImage}
                   alt=""
                 />{" "}
                 <i
@@ -242,18 +242,20 @@ const UserDetailForm = (props) => {
             </div>
 
             <form className="row g-3 mt-4 px-4">
-
               <div className="col-md-5">
                 <div className="input-group mb-3">
-                  <div className="input-group-prepend" style={{ height: '48px' }}>
+                  <div
+                    className="input-group-prepend"
+                    style={{ height: "48px" }}
+                  >
                     <select
                       {...register("title")}
                       className="form-select"
                       id="title"
                       style={{
-                        borderTopRightRadius: '0px',
-                        borderBottomRightRadius: '0px',
-                        height: "48px"
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                        height: "48px",
                       }}
                     >
                       {userTitles.map((option) => (
@@ -294,7 +296,7 @@ const UserDetailForm = (props) => {
                   className="form-select"
                   id="gender"
                   style={{
-                    height: '48px'
+                    height: "48px",
                   }}
                 >
                   <option selected="">Select Gender</option>
@@ -362,14 +364,20 @@ const UserDetailForm = (props) => {
               </div> */}
               <div className="col-md-5">
                 {countryList.length > 0 ? (
-
                   <div className="input-group mb-3">
-                    <div className="input-group-prepend" style={{ height: '48px' }}>
-                      <select className="form-select" style={{
-                        borderTopRightRadius: '0px', borderBottomRightRadius: '0px',
-                        height: '48px'
-                      }}>
-                        {countryList.map(option => (
+                    <div
+                      className="input-group-prepend"
+                      style={{ height: "48px" }}
+                    >
+                      <select
+                        className="form-select"
+                        style={{
+                          borderTopRightRadius: "0px",
+                          borderBottomRightRadius: "0px",
+                          height: "48px",
+                        }}
+                      >
+                        {countryList.map((option) => (
                           <option key={option.id} value={option.phone_code}>
                             {`${option.iso} +${option.phone_code}`}
                           </option>
@@ -380,14 +388,13 @@ const UserDetailForm = (props) => {
                       type="text"
                       className="form-control"
                       id="mobile"
-                      placeholder="Contact number"
+                      placeholder="Contact Number"
                       {...register("mobile")}
                     />
                   </div>
                 ) : (
                   <p>Loading...</p>
-                )
-                }
+                )}
               </div>
               <div className="col-md-7">
                 <Controller
