@@ -21,11 +21,11 @@ const Layout = () => {
         </section>
       </div>
       {/* Bottom right-side-sticky */}
-      <div className="bottom-right">
+      {/* <div className="bottom-right">
         <a href="/">
           <i className="fa-sharp fa-solid fa-plus" />
         </a>
-      </div>
+      </div> */}
       {/* Bottom right-side-sticky */}
       {/* Mobile bottom bar */}
       <div className="mobile-bottom">

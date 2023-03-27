@@ -1,4 +1,3 @@
-// import React from "react";
 import { NavLink } from "react-router-dom";
 import "../../styles/globalStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useContext } from "react";
 import {
   getUserBio,
   getUserFullName,
@@ -20,6 +20,7 @@ import {
   hasUserDetails,
 } from "../../utils/Storage";
 import { getInitials } from "../../helpers";
+import { AuthContext } from "../../context/authContext";
 
 const SideBar = () => {
   const userProfilePic = getUserProfileImage();
@@ -27,7 +28,9 @@ const SideBar = () => {
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
-
+  const { auth } = useContext(AuthContext);
+  // console.log(auth);
+  // console.log(userBIO);
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
@@ -49,7 +52,7 @@ const SideBar = () => {
         </a>
       </div>
       <div className="user-profile" hidden={!hasUserData}>
-        <a href="/">
+        <NavLink to={`/profile/${auth?.userId}`}>
           <figure>
             <span hidden={userProfilePic} className="text-uppercase">
               {userProfileText}
@@ -72,7 +75,7 @@ const SideBar = () => {
             <h5 className="mb-0">{UserFullName}</h5>
             <p className="mb-0">{userBIO}</p>
           </figcaption>
-        </a>
+        </NavLink>
       </div>
       <form
         className="w-100 search-form position-relative mobile-side-form"

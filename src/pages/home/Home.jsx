@@ -1,5 +1,7 @@
 /* eslint-disable no-nested-ternary */
 // import React from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import usePosts from "../../hooks/query/Posts/usePosts";
 import "../../styles/globalStyles.css";
 import {
@@ -16,11 +18,12 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
-
+  const [postTitle, setPostTitle] = useState("");
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
+  console.log(postTitle);
   // console.log(postsData);
   return (
     <main id="layoutSidenav_content">
@@ -32,7 +35,7 @@ const Home = () => {
         </div>
         <div className="post-something">
           <figure>
-            <span className="text-uppercase text-white" hidden={userProfilePic}>
+            <span className="text-uppercase" hidden={userProfilePic}>
               {userProfileText}
             </span>
             <picture hidden={!userProfilePic}>
@@ -52,21 +55,28 @@ const Home = () => {
           <div>
             <input
               type="text"
-              name=""
+              name="title"
               placeholder="Whats? your creative mind"
+              value={postTitle}
+              onChange={(e) => setPostTitle(e.target.value)}
             />
-            <a href="/">
+            <Link to="/create-post" state={{ title: postTitle }}>
               <i className="fa-solid fa-pen" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
+
       {postsError
         ? "Something went wrong!"
         : postsIsLoading
         ? "loading"
         : postsData.map((post) => <Posts post={post} key={post.id} />)}
-      {/* <Posts /> */}
+      <div className="bottom-right">
+        <Link to="/create-post">
+          <i className="fa-sharp fa-solid fa-plus" />
+        </Link>
+      </div>
     </main>
   );
 };
