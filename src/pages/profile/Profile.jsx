@@ -1,5 +1,9 @@
 import { getInitials } from "../../helpers";
-import { getUserBio, getUserFullName, getUserProfileImage } from "../../utils/Storage";
+import {
+  getUserBio,
+  getUserFullName,
+  getUserProfileImage,
+} from "../../utils/Storage";
 
 const Profile = () => {
   const userProfilePic = getUserProfileImage();
@@ -25,16 +29,12 @@ const Profile = () => {
             </div>
             <div className="edit-profile">
               <figure>
-                <span className="text-uppercase" hidden={userProfilePic}>{userProfileText}</span>
+                <span className="text-uppercase" hidden={userProfilePic}>
+                  {userProfileText}
+                </span>
                 <picture hidden={!userProfilePic}>
-                  <source
-                    srcSet={userProfilePic}
-                    type="image/webp"
-                  />
-                  <source
-                    srcSet={userProfilePic}
-                    type="image/png"
-                  />
+                  <source srcSet={userProfilePic} type="image/webp" />
+                  <source srcSet={userProfilePic} type="image/png" />
                   <img
                     loading="lazy"
                     src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="

@@ -3,85 +3,16 @@ import { createContext, useMemo, useState } from "react";
 import { isNonEmptyString } from "../helpers";
 import { authService } from "../services/AuthApi";
 import { userService } from "../services/UserService";
-import { getUserId, loadString, remove, save, saveString } from "../utils/Storage";
+import {
+  getUserId,
+  loadString,
+  remove,
+  save,
+  saveString,
+} from "../utils/Storage";
 
 export const AuthContext = createContext({});
 
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState();
-//   const [error, setError] = useState();
-//   const [loading, setLoading] = useState(false);
-//   const [loadingInitial, setLoadingInitial] = useState(true);
-//   const history = useHistory();
-//   const location = useLocation();
-
-//   useEffect(() => {
-//     if (error) setError(null);
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [location.pathname]);
-
-//   useEffect(() => {
-//     usersApi
-//       .getCurrentUser()
-//       .then((newUser) => setUser(newUser))
-//       .catch((_error) => {})
-//       .finally(() => setLoadingInitial(false));
-//   }, []);
-
-//   function login(email, password) {
-//     setLoading(true);
-
-//     sessionsApi
-//       .login({ email, password })
-//       .then((newUser) => {
-//         setUser(newUser);
-//         history.push("/");
-//       })
-//       .catch((newError) => setError(newError))
-//       .finally(() => setLoading(false));
-//   }
-
-//   function signUp(email, name, password) {
-//     setLoading(true);
-
-//     usersApi
-//       .signUp({ email, name, password })
-//       .then((newUser) => {
-//         setUser(newUser);
-//         history.push("/");
-//       })
-//       .catch((newError) => setError(newError))
-//       .finally(() => setLoading(false));
-//   }
-
-//   function logout() {
-//     sessionsApi.logout().then(() => setUser(undefined));
-//   }
-
-//   // Make the provider update only when it should
-//   const memoedValue = useMemo(
-//     () => ({
-//       user,
-//       loading,
-//       error,
-//       login,
-//       signUp,
-//       logout,
-//     }),
-
-//     [user, loading, error],
-//   );
-
-//   return (
-//     <AuthContext.Provider value={memoedValue}>
-//     {!loadingInitial && children}
-//   </AuthContext.Provider>
-//   );
-// };
-
-// export default function useAuth() {
-//   return useContext(AuthContext);
-// }
 export const AuthProvider = (props) => {
   const [loading, setLoading] = useState(false);
 
@@ -92,13 +23,13 @@ export const AuthProvider = (props) => {
     if (savedToken) {
       try {
         const userDetails = JSON.parse(user);
-        const { email, userid } = userDetails;
+        const { email, id } = userDetails;
         return {
           token: savedToken,
           isAuthenticated: true,
           message: "",
           userEmail: email,
-          userId: userid,
+          userId: id,
         };
       } catch (error) {
         console.log(error);
@@ -130,11 +61,12 @@ export const AuthProvider = (props) => {
       response?.data &&
       isNonEmptyString(response?.data?.accessToken)
     ) {
-
       saveString("accessToken", response.data.accessToken);
 
       if (response.data.user_id) {
-        const userProfile = await userService.getUserProfile(response.data.user_id);
+        const userProfile = await userService.getUserProfile(
+          response.data.user_id,
+        );
         if (userProfile) {
           save("userDetails", userProfile);
         } else {
@@ -147,7 +79,7 @@ export const AuthProvider = (props) => {
         isAuthenticated: true,
         message: "",
         userEmail: "",
-        userId: response?.data?.user_id
+        userId: response?.data?.user_id,
       });
     } else {
       setAuth({
@@ -158,7 +90,6 @@ export const AuthProvider = (props) => {
         userId: "",
       });
       remove("accessToken");
-      remove("userDetails", userProfile);
     }
     setLoading(false);
     return response;
@@ -168,23 +99,11 @@ export const AuthProvider = (props) => {
     setLoading(true);
 
     const response = await authService.register(data);
-    console.log(response?.data);
-    if (response && response.data.user_id) {
-
-      if (response.data.user_id) {
-        const userProfile = await userService.getUserProfile(response.data.user_id);
-        if (userProfile) {
-          save("userDetails", userProfile);
-        } else {
-          remove("userDetails", userProfile);
-        }
-      }
-
-      saveString("accessToken", response.data.accessToken);
-
+    // console.log(response?.data);
+    if (response && response.data.insertId) {
       const userDetails = {
         userEmail: isNonEmptyString(data?.email) ? data?.email : "",
-        userId: response?.data?.user_id ? response?.data?.user_id : "",
+        userId: response?.data?.insertId ? response?.data?.insertId : "",
       };
 
       save("userDetails", userDetails);

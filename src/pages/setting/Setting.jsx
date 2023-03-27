@@ -1,7 +1,11 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
-import { getUserBio, getUserFullName, getUserProfileImage } from "../../utils/Storage";
-import { useNavigate } from 'react-router-dom';
+import {
+  getUserBio,
+  getUserFullName,
+  getUserProfileImage,
+} from "../../utils/Storage";
 import { getInitials } from "../../helpers";
 
 const Setting = () => {
@@ -14,8 +18,8 @@ const Setting = () => {
 
   const logOut = () => {
     value?.logout();
-    navigate('/login');
-  }
+    navigate("/login");
+  };
 
   return (
     <main id="layoutSidenav_content">
@@ -33,16 +37,12 @@ const Setting = () => {
               <div className="edit-profile">
                 <div className="setting-left">
                   <figure>
-                    <span hidden={userProfilePic} className="text-uppercase">{userProfileText}</span>
+                    <span hidden={userProfilePic} className="text-uppercase">
+                      {userProfileText}
+                    </span>
                     <picture hidden={!userProfilePic}>
-                      <source
-                        srcSet={userProfilePic}
-                        type="image/webp"
-                      />
-                      <source
-                        srcSet={userProfilePic}
-                        type="image/png"
-                      />
+                      <source srcSet={userProfilePic} type="image/webp" />
+                      <source srcSet={userProfilePic} type="image/png" />
                       <img
                         loading="lazy"
                         src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
@@ -76,7 +76,11 @@ const Setting = () => {
                   </figcaption>
                 </div>
                 <div className="mt-4">
-                  <button onClick={logOut} className="btn btn-common w-100">
+                  <button
+                    type="button"
+                    onClick={logOut}
+                    className="btn btn-common w-100"
+                  >
                     Logout
                   </button>
                 </div>

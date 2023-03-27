@@ -5,13 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useContext, useEffect,useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LogoImage from "../../assets/images/logo-login.png";
 import LoginImage from "../../assets/images/logo-login.webp";
 import Emaillogo from "../../assets/images/emai-icon.png";
 import LeftSidebar from "../../components/leftSideBar/LeftSideBar";
 import { AuthContext } from "../../context/authContext";
-
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -131,12 +130,13 @@ const Login = () => {
                         placeholder="Password"
                         {...register("password")}
                       />
-                       <span
-                            role="button"
-                            onClick={togglePasswordVisibility}
-                          >
-                            {passwordShown ? eye : eyeSlash}
-                          </span>
+                      <span
+                        role="button"
+                        aria-hidden="true"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {passwordShown ? eye : eyeSlash}
+                      </span>
                       <label htmlFor="floatingPassword">Password</label>
                       {errors.password?.message ? (
                         <div className="alert alert-danger" role="alert">

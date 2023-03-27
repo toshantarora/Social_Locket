@@ -245,16 +245,15 @@ const Posts = (props) => {
             </div>
             <div className="share-comment">
               <figure>
-                <span className="text-uppercase  text-white" hidden={userProfilePic}>{userProfileText}</span>
+                <span
+                  className="text-uppercase  text-white"
+                  hidden={userProfilePic}
+                >
+                  {userProfileText}
+                </span>
                 <picture>
-                  <source
-                    srcSet={userProfilePic}
-                    type="image/webp"
-                  />
-                  <source
-                    srcSet={userProfilePic}
-                    type="image/png"
-                  />
+                  <source srcSet={userProfilePic} type="image/webp" />
+                  <source srcSet={userProfilePic} type="image/png" />
                   <img
                     loading="lazy"
                     src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="

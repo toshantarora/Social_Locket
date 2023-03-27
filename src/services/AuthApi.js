@@ -46,5 +46,5 @@ function logout(userId) {
 export const authService = {
   login,
   register,
-  logout
+  logout,
 };

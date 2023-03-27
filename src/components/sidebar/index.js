@@ -1,5 +1,5 @@
 // import React from "react";
-import { json, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../../styles/globalStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,17 +13,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
-import { getUserBio, getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
+import {
+  getUserBio,
+  getUserFullName,
+  getUserProfileImage,
+  hasUserDetails,
+} from "../../utils/Storage";
 import { getInitials } from "../../helpers";
 
 const SideBar = () => {
-
   const userProfilePic = getUserProfileImage();
   const userBIO = getUserBio();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
- 
 
   return (
     <aside id="layoutSidenav_nav">
@@ -45,19 +48,15 @@ const SideBar = () => {
           <i className="fa-solid fa-xmark" />
         </a>
       </div>
-      <div className="user-profile" hidden={!hasUserData} >
+      <div className="user-profile" hidden={!hasUserData}>
         <a href="/">
           <figure>
-            <span hidden={userProfilePic} className="text-uppercase">{userProfileText}</span>
+            <span hidden={userProfilePic} className="text-uppercase">
+              {userProfileText}
+            </span>
             <picture hidden={!userProfilePic}>
-              <source
-                srcSet={userProfilePic}
-                type="image/webp"
-              />
-              <source
-                srcSet={userProfilePic}
-                type="image/png"
-              />
+              <source srcSet={userProfilePic} type="image/webp" />
+              <source srcSet={userProfilePic} type="image/png" />
               <img
                 loading="lazy"
                 src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="

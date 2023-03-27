@@ -23,5 +23,4 @@ function getUserProfile(userId) {
     .catch((error) => error.response);
 }
 
-
-export const userService = { supportRequest,getUserProfile };
+export const userService = { supportRequest, getUserProfile };

@@ -2,7 +2,11 @@
 // import React from "react";
 import usePosts from "../../hooks/query/Posts/usePosts";
 import "../../styles/globalStyles.css";
-import { getUserFullName, getUserProfileImage, hasUserDetails } from "../../utils/Storage";
+import {
+  getUserFullName,
+  getUserProfileImage,
+  hasUserDetails,
+} from "../../utils/Storage";
 import Posts from "./components/Posts";
 import { getInitials } from "../../helpers";
 
@@ -12,7 +16,6 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
-
 
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
@@ -29,16 +32,12 @@ const Home = () => {
         </div>
         <div className="post-something">
           <figure>
-            <span className="text-uppercase text-white" hidden={userProfilePic} >{userProfileText}</span>
+            <span className="text-uppercase text-white" hidden={userProfilePic}>
+              {userProfileText}
+            </span>
             <picture hidden={!userProfilePic}>
-              <source
-                srcSet={userProfilePic}
-                type="image/webp"
-              />
-              <source
-                srcSet={userProfilePic}
-                type="image/png"
-              />
+              <source srcSet={userProfilePic} type="image/webp" />
+              <source srcSet={userProfilePic} type="image/png" />
               <img
                 loading="lazy"
                 src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
@@ -65,8 +64,8 @@ const Home = () => {
       {postsError
         ? "Something went wrong!"
         : postsIsLoading
-          ? "loading"
-          : postsData.map((post) => <Posts post={post} key={post.id} />)}
+        ? "loading"
+        : postsData.map((post) => <Posts post={post} key={post.id} />)}
       {/* <Posts /> */}
     </main>
   );

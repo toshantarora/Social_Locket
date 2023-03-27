@@ -9,17 +9,23 @@ import Avatar from "react-avatar-edit";
 import { Dialog } from "primereact/dialog";
 import { Multiselect } from "multiselect-react-dropdown";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 import UserImage from "../../../assets/images/user-img.png";
 import { postsService } from "../../../services/ImageUploadApi";
 import { API } from "../../../services/ApiClient";
 import { userTitles } from "../../../constants/UserTitles";
 import { countryService } from "../../../services/CountryService";
-import { useNavigate } from "react-router-dom";
 
 const UserDetailForm = (props) => {
   const options = ["buyer", "seller", "reader", "writter"];
   const [countryList, SetCountryList] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState({ id: 1, name: "AFGHANISTAN", nick_name: "Afghanistan", iso3: "AFG", phone_code: 93 });
+  const [selectedCountry, setSelectedCountry] = useState({
+    id: 1,
+    name: "AFGHANISTAN",
+    nick_name: "Afghanistan",
+    iso3: "AFG",
+    phone_code: 93,
+  });
   // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
@@ -93,7 +99,6 @@ const UserDetailForm = (props) => {
   );
 
   const onSave = async (data) => {
-
     let userTypes = "";
     if (data?.main_user_type) {
       userTypes = [...data.main_user_type].join(",");
@@ -141,8 +146,8 @@ const UserDetailForm = (props) => {
     // setProfile(null);
   };
   const handleCountryChange = async (event) => {
-    const selectedCountryData = countryList.filter((x) =>
-      x.id === event.target.value,
+    const selectedCountryData = countryList.filter(
+      (x) => x.id === event.target.value,
     );
     setSelectedCountry(selectedCountryData[0]);
   };
