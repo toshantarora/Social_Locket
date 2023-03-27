@@ -1,8 +1,10 @@
+/* eslint-disable no-return-await */
+/* eslint-disable no-console */
 import axios from "axios";
 import { in200s } from "../helpers";
 
-function uploadProfile(data) {
-  return axios
+async function uploadProfile(data) {
+  return await axios
     .post("https://api.cloudinary.com/v1_1/dzs0eyrnl/image/upload", data)
     .then((response) => {
       console.log("response ***** ", response);

@@ -99,26 +99,37 @@ export const AuthProvider = (props) => {
     setLoading(true);
 
     const response = await authService.register(data);
-    // console.log(response?.data);
-    if (response && response.data.insertId) {
-      const userDetails = {
-        userEmail: isNonEmptyString(data?.email) ? data?.email : "",
-        userId: response?.data?.insertId ? response?.data?.insertId : "",
-      };
+    console.log(response?.data);
+    if (
+      response &&
+      response?.data &&
+      isNonEmptyString(response?.data?.accessToken)
+    ) {
+      saveString("accessToken", response.data.accessToken);
 
-      save("userDetails", userDetails);
+      if (response.data.user_id) {
+        const userProfile = await userService.getUserProfile(
+          response.data.user_id,
+        );
+        if (userProfile) {
+          save("userDetails", userProfile);
+        } else {
+          remove("userDetails", userProfile);
+        }
+      }
+
       setAuth({
-        token: "",
+        token: response?.data?.accessToken,
         isAuthenticated: true,
-        message: response?.data?.insertId ? "" : response?.data,
+        message: response?.data?.message,
         userEmail: data?.email,
-        userId: response?.data?.insertId,
+        userId: response?.data?.user_id,
       });
     } else {
       setAuth({
         token: "",
         isAuthenticated: false,
-        message: response?.data,
+        message: response?.data?.message,
         userEmail: "",
         userId: "",
       });

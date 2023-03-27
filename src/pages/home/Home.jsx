@@ -11,6 +11,7 @@ import {
 } from "../../utils/Storage";
 import Posts from "./components/Posts";
 import { getInitials } from "../../helpers";
+// import useAllUserProfile from "../../hooks/query/AllUserProfile/useAllUserProfile";
 
 const Home = () => {
   const {
@@ -18,12 +19,19 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
+
+  // const {
+  //   // isLoading: allUserIsLoading,
+  //   // error: allUserError,
+  //   data: allUserData,
+  // } = useAllUserProfile();
   const [postTitle, setPostTitle] = useState("");
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
-  console.log(postTitle);
+  // console.log(postTitle);
+
   // console.log(postsData);
   return (
     <main id="layoutSidenav_content">

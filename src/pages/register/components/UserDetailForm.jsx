@@ -3,18 +3,17 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Avatar from "react-avatar-edit";
 import { Dialog } from "primereact/dialog";
 import { Multiselect } from "multiselect-react-dropdown";
-import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../../assets/images/user-img.png";
 import { postsService } from "../../../services/ImageUploadApi";
-import { API } from "../../../services/ApiClient";
 import { userTitles } from "../../../constants/UserTitles";
 import { countryService } from "../../../services/CountryService";
+import { AuthContext } from "../../../context/authContext";
 
 const UserDetailForm = (props) => {
   const options = ["buyer", "seller", "reader", "writter"];
@@ -26,14 +25,14 @@ const UserDetailForm = (props) => {
     iso3: "AFG",
     phone_code: 93,
   });
+  const value = useContext(AuthContext);
   // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
   const [storeImage, setStoreImage] = useState([]);
   const [image, setImage] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-  const queryClient = useQueryClient();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const {
     // refineCore: { onFinish, formLoading },
     register,
@@ -74,9 +73,8 @@ const UserDetailForm = (props) => {
     }
   };
 
-  console.log("passsowed---------------", props);
   const onBeforeFileLoad = (elem) => {
-    if (elem.target.files[0].size > 71680) {
+    if (elem.target.files[0].size > 3500000) {
       alert("File is too big!");
       // eslint-disable-next-line no-param-reassign
       elem.target.value = "";
@@ -84,19 +82,6 @@ const UserDetailForm = (props) => {
     setImage(elem.target.files[0]);
     // console.log(elem.target.files[0]);
   };
-
-  const userMutation = useMutation(
-    (user) => {
-      return API.post("/register", user);
-    },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(["register"]);
-        useNavigate("/");
-      },
-    },
-  );
 
   const onSave = async (data) => {
     let userTypes = "";
@@ -127,8 +112,8 @@ const UserDetailForm = (props) => {
       agent: "",
       other: "",
       accountant: "",
-      unit_number: "Some Unit Number",
-      street_number: "Some St Number",
+      unit_number: "",
+      street_number: "",
       address_line_1: "",
       address_line_2: "",
       city: "",
@@ -139,11 +124,12 @@ const UserDetailForm = (props) => {
       // nick_name: "Albania",
     };
     // e.preventDefault();
-    userMutation.mutate(userData);
-    // navigate("/", { replace: true });
-    // setOpenUpdate(false);
-    // setCover(null);
-    // setProfile(null);
+    try {
+      await value.register(userData);
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.log(err);
+    }
   };
   const handleCountryChange = async (event) => {
     const selectedCountryData = countryList.filter(

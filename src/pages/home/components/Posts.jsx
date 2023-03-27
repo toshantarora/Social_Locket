@@ -17,7 +17,7 @@ const Posts = (props) => {
             <div className="user-post">
               <a href="/" className="post-profile">
                 <figure>
-                  {!isNonEmptyString(props?.post?.profile_image) ? (
+                  {isNonEmptyString(props?.post?.profile_image) ? (
                     <picture>
                       <source
                         srcSet={props?.post?.profile_image}
@@ -29,7 +29,7 @@ const Posts = (props) => {
                       />
                       <img
                         loading="lazy"
-                        src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                        src={props?.post?.profile_image}
                         data-src={props?.post?.profile_image}
                         alt="user-img"
                         className="img-fluid"
@@ -39,16 +39,20 @@ const Posts = (props) => {
                     </picture>
                   ) : (
                     <span>
-                      {isNonEmptyString(props?.post?.name)
-                        ? getInitials(props?.post?.name)
+                      {isNonEmptyString(props?.post?.forename) &&
+                      isNonEmptyString(props?.post?.surname)
+                        ? getInitials(
+                            `${props?.post?.forename}  ${props?.post?.surname}`,
+                          )
                         : ""}
                     </span>
                   )}
                 </figure>
                 <figcaption>
                   <h5 className="mb-0">
-                    {isNonEmptyString(props?.post?.name)
-                      ? props?.post?.name
+                    {isNonEmptyString(props?.post?.forename) &&
+                    isNonEmptyString(props?.post?.surname)
+                      ? `${props?.post?.forename}  ${props?.post?.surname}`
                       : "User"}
                   </h5>
                   <span>
@@ -77,7 +81,7 @@ const Posts = (props) => {
             <div className="post-image">
               <div className="post-title">
                 <h5>
-                  <a href="/">{props?.post?.description}</a>
+                  <a href="/">{props?.post?.title}</a>
                   ...
                 </h5>
 
