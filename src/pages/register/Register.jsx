@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ import LogoImage from "../../assets/images/logo-login.png";
 import LoginImage from "../../assets/images/logo-login.webp";
 import Emaillogo from "../../assets/images/emai-icon.png";
 import LeftSidebar from "../../components/leftSideBar/LeftSideBar";
-import { AuthContext } from "../../context/authContext";
+// import { AuthContext } from "../../context/authContext";
 import ModalComponent from "../../components/modalComponent/ModalComponent";
 import UserDetailForm from "./components/UserDetailForm";
 // import { isNumber } from "../../helpers";
@@ -43,7 +43,7 @@ const schema = yup.object({
 const Register = () => {
   const [passwordShown, setPasswordShown] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const value = useContext(AuthContext);
+  // const value = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -122,11 +122,11 @@ const Register = () => {
                           Reader
                         </label>
                       </div>
-                      {value?.auth?.message ? (
+                      {/* {value?.auth?.message ? (
                         <div className="alert alert-danger" role="alert">
                           {value?.auth?.message}
                         </div>
-                      ) : null}
+                      ) : null} */}
 
                       <div className="mb-4">
                         <div className="form-floating">

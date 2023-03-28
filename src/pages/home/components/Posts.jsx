@@ -212,7 +212,7 @@ const Posts = (props) => {
               </button>
             </div>
           </div>
-          <div className="comment-section">
+          <div className="comment-section" style={{ display: "none" }}>
             <div className="comment-posted">
               <figure>
                 <span>DR</span>

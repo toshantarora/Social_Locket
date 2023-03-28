@@ -99,7 +99,7 @@ export const AuthProvider = (props) => {
     setLoading(true);
 
     const response = await authService.register(data);
-    console.log(response?.data);
+    console.log("responseeee---", response?.data);
     if (
       response &&
       response?.data &&

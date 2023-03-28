@@ -7,6 +7,8 @@ import { useContext, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Avatar from "react-avatar-edit";
 import { Dialog } from "primereact/dialog";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { Multiselect } from "multiselect-react-dropdown";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../../assets/images/user-img.png";
@@ -15,8 +17,21 @@ import { userTitles } from "../../../constants/UserTitles";
 import { countryService } from "../../../services/CountryService";
 import { AuthContext } from "../../../context/authContext";
 
+const schema = yup.object().shape({
+  forename: yup.string().required("First Name is required"),
+  surname: yup.string().required("Last Name is required"),
+});
+
 const UserDetailForm = (props) => {
-  const options = ["buyer", "seller", "reader", "writter"];
+  const options = [
+    "buyer",
+    "seller",
+    "finance",
+    "legal",
+    "agent",
+    "accountant",
+    "other",
+  ];
   const [countryList, SetCountryList] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState({
     id: 1,
@@ -25,8 +40,8 @@ const UserDetailForm = (props) => {
     iso3: "AFG",
     phone_code: 93,
   });
+  const [selectedFile, setSelectedFile] = useState(null);
   const value = useContext(AuthContext);
-  // const value = useContext(AuthContext);
   const [dialogs, setDialogs] = useState(false);
   const [imageCrop, setImageCrop] = useState(false);
   const [storeImage, setStoreImage] = useState([]);
@@ -38,8 +53,10 @@ const UserDetailForm = (props) => {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
+  const UserType = watch("user_type");
 
   useEffect(() => {
     async function getCounties() {
@@ -49,6 +66,15 @@ const UserDetailForm = (props) => {
     getCounties();
   }, []);
 
+  useEffect(() => {
+    if (value?.auth?.isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [value?.auth?.isAuthenticated]);
+  const handleFileInput = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+  console.log(profileImage);
   const onClose = () => {
     setImageCrop(null);
   };
@@ -56,7 +82,6 @@ const UserDetailForm = (props) => {
     setImageCrop(view);
   };
 
-  // console.log(value);
   const saveCropImage = async () => {
     setStoreImage([...storeImage, { imageCrop }]);
     setDialogs(false);
@@ -73,6 +98,7 @@ const UserDetailForm = (props) => {
     }
   };
 
+  console.log(value);
   const onBeforeFileLoad = (elem) => {
     if (elem.target.files[0].size > 3500000) {
       alert("File is too big!");
@@ -82,12 +108,13 @@ const UserDetailForm = (props) => {
     setImage(elem.target.files[0]);
     // console.log(elem.target.files[0]);
   };
+  // console.log(selectedFile);
 
   const onSave = async (data) => {
-    let userTypes = "";
-    if (data?.main_user_type) {
-      userTypes = [...data.main_user_type].join(",");
-    }
+    // let user_Types = "";
+    // if (data?.user_type) {
+    //   user_Types = [...data.user_type].join(",");
+    // }
 
     const userData = {
       email: props?.emailValue,
@@ -100,18 +127,19 @@ const UserDetailForm = (props) => {
       user_session_id: "",
       title: data?.title,
       gender: data.gender,
-      profile_image: profileImage,
+      // profile_image: profileImage,
+      profile_image: selectedFile?.name,
       banner: "no banner upload",
       dob: data?.dob,
-      main_user_type: userTypes,
-      seller: "0",
-      buyer: "",
-      finance: "",
-      legal: "",
+      main_user_type: data?.main_user_type,
+      seller: UserType && UserType.includes("seller") ? "1" : "0",
+      buyer: UserType && UserType.includes("buyer") ? "1" : "0",
+      finance: UserType && UserType.includes("finance") ? "1" : "0",
+      legal: UserType && UserType.includes("legal") ? "1" : "0",
       status: "",
-      agent: "",
-      other: "",
-      accountant: "",
+      agent: UserType && UserType.includes("agent") ? "1" : "0",
+      other: UserType && UserType.includes("other") ? "1" : "0",
+      accountant: UserType && UserType.includes("accountant") ? "1" : "0",
       unit_number: "",
       street_number: "",
       address_line_1: "",
@@ -126,7 +154,6 @@ const UserDetailForm = (props) => {
     // e.preventDefault();
     try {
       await value.register(userData);
-      navigate("/", { replace: true });
     } catch (err) {
       console.log(err);
     }
@@ -148,6 +175,15 @@ const UserDetailForm = (props) => {
       <div className="modal-dialog modal-dialog-centered modal-xl">
         <div className="modal-content">
           <div>
+            {value?.auth?.message ? (
+              <div
+                className="alert alert-danger"
+                style={{ textAlign: "center" }}
+                role="alert"
+              >
+                {value?.auth?.message}
+              </div>
+            ) : null}
             <div className="user-profile complete-profile">
               <figure>
                 <img
@@ -268,6 +304,14 @@ const UserDetailForm = (props) => {
                       ))}
                     </select>
                   </div>
+                  <input type="file" name="file" onChange={handleFileInput} />
+                  {/* <button
+                    type="button"
+                    onClick={() => uploadFile(selectedFile)}
+                  >
+                    {" "}
+                    Upload to S3
+                  </button> */}
                   <input
                     type="text"
                     className="form-control"
@@ -277,6 +321,13 @@ const UserDetailForm = (props) => {
                     {...register("forename")}
                   />
                 </div>
+                {errors?.forename?.message ? (
+                  <div style={{ color: "red" }}>
+                    {errors?.forename?.message}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="col-md-4">
                 <div className="form-floating mb-3">
@@ -292,6 +343,11 @@ const UserDetailForm = (props) => {
                     Last Name
                   </label>
                 </div>
+                {errors?.surname?.message ? (
+                  <div style={{ color: "red" }}>{errors?.surname?.message}</div>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="col-md-3">
                 <select
@@ -302,8 +358,10 @@ const UserDetailForm = (props) => {
                     height: "48px",
                   }}
                 >
+                  <option value="">Select a gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
+                  <option value="others">Others</option>
                 </select>
                 {errors?.gender?.message ? (
                   <div style={{ color: "red" }}>{errors?.gender?.message}</div>
@@ -365,7 +423,7 @@ const UserDetailForm = (props) => {
                 </div>
               </div> */}
               <div className="col-md-5">
-                {countryList.length > 0 ? (
+                {countryList?.length > 0 ? (
                   <div className="input-group mb-3">
                     <div
                       className="input-group-prepend"
@@ -380,11 +438,13 @@ const UserDetailForm = (props) => {
                         }}
                         onChange={(e) => handleCountryChange(e)}
                       >
-                        {countryList.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {`${option.iso} +${option.phone_code}`}
-                          </option>
-                        ))}
+                        {countryList
+                          ? countryList.map((option) => (
+                              <option key={option.id} value={option.id}>
+                                {`${option.iso} +${option.phone_code}`}
+                              </option>
+                            ))
+                          : null}
                       </select>
                     </div>
                     <input
@@ -402,7 +462,7 @@ const UserDetailForm = (props) => {
               <div className="col-md-7">
                 <Controller
                   control={control}
-                  name="main_user_type"
+                  name="user_type"
                   render={({ field: { value, onChange } }) => (
                     <Multiselect
                       options={options}
@@ -418,6 +478,32 @@ const UserDetailForm = (props) => {
                     />
                   )}
                 />
+                <div className="col-md-3">
+                  <select
+                    {...register("main_user_type")}
+                    className="form-select"
+                    id="main_user_type"
+                    style={{
+                      height: "48px",
+                    }}
+                  >
+                    <option value="">Select a type</option>
+                    {UserType
+                      ? UserType.map((item, idx) => (
+                          <option key={idx} value={item}>
+                            {item}
+                          </option>
+                        ))
+                      : ""}
+                  </select>
+                  {errors?.main_user_type?.message ? (
+                    <div style={{ color: "red" }}>
+                      {errors?.main_user_type?.message}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
                 <div className="form-floating mb-3">
                   {/* <select
                 className="form-select"
@@ -442,6 +528,7 @@ const UserDetailForm = (props) => {
               type="button"
               className="btn btn-common"
               onClick={handleSubmit(onSave)}
+              // disabled={value?.loading}
             >
               Save
             </button>
