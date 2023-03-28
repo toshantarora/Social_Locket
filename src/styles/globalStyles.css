@@ -858,7 +858,7 @@ picture {
 }
 
 .post-section {
-    padding: 2rem 1.5rem .5rem;
+    padding: 2rem 1.5rem;
 }
 
 .post-profile figure {
@@ -2653,3 +2653,7 @@ div#fill-tab-example-tabpane-List_View {
 }
 
 /* puneet */
+
+/* Rishabh */
+.fade.show{ margin: 0px;}
+/* Rishabh */

@@ -217,7 +217,7 @@ const Register = () => {
             show={modalShow}
             onHide={() => setModalShow(false)}
             heading="Complete Profile"
-            size="xl"
+            size="xs"
           >
             <UserDetailForm
               passwordValue={passwordValue}

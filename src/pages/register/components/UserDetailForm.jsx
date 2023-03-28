@@ -172,8 +172,8 @@ const UserDetailForm = (props) => {
       aria-labelledby="complete_profileModalLabel"
       aria-hidden="true"
     >
-      <div className="modal-dialog modal-dialog-centered modal-xl">
-        <div className="modal-content">
+      <div className="">
+        <div className="modal-content border-0">
           <div>
             {value?.auth?.message ? (
               <div
@@ -280,38 +280,36 @@ const UserDetailForm = (props) => {
               </figure>
             </div>
 
-            <form className="row g-3 mt-4 px-4">
-              <div className="col-md-5">
+            <form className="row g-3 mt-4">
+              <div className="col-md-12">
                 <div className="input-group mb-3">
-                  <div
-                    className="input-group-prepend"
-                    style={{ height: "48px" }}
-                  >
-                    <select
-                      {...register("title")}
-                      className="form-select"
-                      id="title"
-                      style={{
-                        borderTopRightRadius: "0px",
-                        borderBottomRightRadius: "0px",
-                        height: "48px",
-                      }}
-                    >
-                      {userTitles.map((option) => (
-                        <option key={option.value} value={option.label}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                   <input type="file" name="file" onChange={handleFileInput} />
-                  {/* <button
-                    type="button"
-                    onClick={() => uploadFile(selectedFile)}
+                </div>
+                {errors?.forename?.message ? (
+                  <div style={{ color: "red" }}>
+                    {errors?.forename?.message}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="col-md-6 col-sm-12 mb-2">
+                <label htmlFor="title" className="form-label">
+                  First Name
+                </label>
+                <div className="input-group">
+                  <select
+                    {...register("title")}
+                    className="form-select"
+                    id="title"
                   >
-                    {" "}
-                    Upload to S3
-                  </button> */}
+                    {userTitles.map((option) => (
+                      <option key={option.value} value={option.label}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {/* <input type="file" name="file" onChange={handleFileInput} /> */}
                   <input
                     type="text"
                     className="form-control"
@@ -329,34 +327,32 @@ const UserDetailForm = (props) => {
                   ""
                 )}
               </div>
-              <div className="col-md-4">
-                <div className="form-floating mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="surname"
-                    placeholder="Christen Creator"
-                    name="surname"
-                    {...register("surname")}
-                  />
-                  <label htmlFor="surname" className="form-label">
-                    Last Name
-                  </label>
-                </div>
+              <div className="col-md-6 col-sm-12 mb-2">
+                <label htmlFor="surname" className="form-label">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="surname"
+                  placeholder="Christen Creator"
+                  name="surname"
+                  {...register("surname")}
+                />
                 {errors?.surname?.message ? (
                   <div style={{ color: "red" }}>{errors?.surname?.message}</div>
                 ) : (
                   ""
                 )}
               </div>
-              <div className="col-md-3">
+              <div className="mb-2">
+                <label htmlFor="gender" className="form-label">
+                  Select a Gender
+                </label>
                 <select
                   {...register("gender")}
                   className="form-select"
                   id="gender"
-                  style={{
-                    height: "48px",
-                  }}
                 >
                   <option value="">Select a gender</option>
                   <option value="male">Male</option>
@@ -422,31 +418,24 @@ const UserDetailForm = (props) => {
                   </label>
                 </div>
               </div> */}
-              <div className="col-md-5">
+              <div className="col-md-12 mb-2">
+                <label htmlFor="mobile" className="form-label">
+                  Enter Your Phone Number
+                </label>
                 {countryList?.length > 0 ? (
-                  <div className="input-group mb-3">
-                    <div
-                      className="input-group-prepend"
-                      style={{ height: "48px" }}
+                  <div className="input-group">
+                    <select
+                      className="form-select"
+                      onChange={(e) => handleCountryChange(e)}
                     >
-                      <select
-                        className="form-select"
-                        style={{
-                          borderTopRightRadius: "0px",
-                          borderBottomRightRadius: "0px",
-                          height: "48px",
-                        }}
-                        onChange={(e) => handleCountryChange(e)}
-                      >
-                        {countryList
-                          ? countryList.map((option) => (
-                              <option key={option.id} value={option.id}>
-                                {`${option.iso} +${option.phone_code}`}
-                              </option>
-                            ))
-                          : null}
-                      </select>
-                    </div>
+                      {countryList
+                        ? countryList.map((option) => (
+                            <option key={option.id} value={option.id}>
+                              {`${option.iso} +${option.phone_code}`}
+                            </option>
+                          ))
+                        : null}
+                    </select>
                     <input
                       type="text"
                       className="form-control"
@@ -459,7 +448,11 @@ const UserDetailForm = (props) => {
                   <p>Loading...</p>
                 )}
               </div>
-              <div className="col-md-7">
+
+              <div className="mb-2">
+                <label htmlFor="search_input" className="form-label">
+                  Select User Types
+                </label>
                 <Controller
                   control={control}
                   name="user_type"
@@ -478,7 +471,54 @@ const UserDetailForm = (props) => {
                     />
                   )}
                 />
-                <div className="col-md-3">
+                {/* <div className="col-md-12">
+                  <select
+                    {...register("main_user_type")}
+                    className="form-select"
+                    id="main_user_type"
+                    style={{
+                      height: "48px",
+                    }}
+                  >
+                    <option value="">Select a type</option>
+                    {UserType
+                      ? UserType.map((item, idx) => (
+                          <option key={idx} value={item}>
+                            {item}
+                          </option>
+                        ))
+                      : ""}
+                  </select>
+                  {errors?.main_user_type?.message ? (
+                    <div style={{ color: "red" }}>
+                      {errors?.main_user_type?.message}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div> */}
+                {/* <div className="form-floating mb-3">
+                  <select
+                    className="form-select"
+                    id="stakeholder"
+                    multiple
+                    aria-label="Floating label select example"
+                    {...register("stakeholder")}
+                  >
+                    <option selected="">Buyer</option>
+                    <option value={1}>Seller</option>
+                    <option value={2}>Reader</option>
+                    <option value={3}>Writter</option>
+                  </select>
+                  <label htmlFor="stakeholder">Stakeholder Type</label>
+                </div> */}
+              </div>
+
+              <div className="mb-2">
+                <label htmlFor="main_user_type" className="form-label">
+                  Select Main User Type
+                </label>
+                <div className="col-md-12">
                   <select
                     {...register("main_user_type")}
                     className="form-select"
@@ -504,21 +544,6 @@ const UserDetailForm = (props) => {
                     ""
                   )}
                 </div>
-                <div className="form-floating mb-3">
-                  {/* <select
-                className="form-select"
-                id="stakeholder"
-                multiple
-                aria-label="Floating label select example"
-                {...register("stakeholder")}
-              >
-                <option selected="">Buyer</option>
-                <option value={1}>Seller</option>
-                <option value={2}>Reader</option>
-                <option value={3}>Writter</option>
-              </select> */}
-                  {/* <label htmlFor="stakeholder">Stakeholder Type</label> */}
-                </div>
               </div>
             </form>
           </div>
@@ -526,7 +551,7 @@ const UserDetailForm = (props) => {
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-common"
+              className="btn btn-common w-100 mb-3"
               onClick={handleSubmit(onSave)}
               // disabled={value?.loading}
             >
