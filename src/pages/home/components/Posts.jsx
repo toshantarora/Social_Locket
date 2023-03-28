@@ -1,8 +1,13 @@
+/* eslint-disable react/no-danger */
 import OwlCarousel from "react-owl-carousel";
+import parse from "html-react-parser";
+import { Link } from "react-router-dom";
 import { formatDate, getInitials, isNonEmptyString } from "../../../helpers";
 // import UserImage from "../../../assets/images/user-icon.png";
 import ShareCommentImage from "../../../assets/images/share-icon.png";
 import { getUserFullName, getUserProfileImage } from "../../../utils/Storage";
+
+const MAX_LENGTH = 60;
 
 const Posts = (props) => {
   const userProfilePic = getUserProfileImage();
@@ -82,10 +87,35 @@ const Posts = (props) => {
               <div className="post-title">
                 <h5>
                   <a href="/">{props?.post?.title}</a>
-                  ...
                 </h5>
 
-                <a href="/">Read this article</a>
+                {props?.post?.description.length > MAX_LENGTH ? (
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: `${props?.post?.description.substring(
+                        0,
+                        MAX_LENGTH,
+                      )}...`,
+                    }}
+                  />
+                ) : (
+                  <p>{parse(props?.post?.description)}</p>
+                )}
+
+                {/* {props?.post?.description.length > MAX_LENGTH ? (
+                  <div>
+                    {`${parse(props?.post?.description).substring(
+                      0,
+                      MAX_LENGTH,
+                    )}...`}
+                    <a href="/">Read more</a>
+                  </div>
+                ) : (
+                  <p>{parse(props?.post?.description)}</p>
+                )} */}
+                <Link to={`/postDetails/${props?.post?.id}`}>
+                  Read this article
+                </Link>
               </div>
               <div className="owl-carousel owl-theme post-slider">
                 {/* <div className="item">
@@ -186,14 +216,13 @@ const Posts = (props) => {
             <div className="like-comment-count">
               <button type="button">
                 <span className="like-count">
-                  <a href="/" className="like-button">
-                    <i className="fa-solid fa-thumbs-up" />{" "}
-                  </a>
+                  {/* <a href="/" className="like-button"> */}
+                  <i className="fa-solid fa-thumbs-up" /> {/* </a> */}
                   {/* <span>36k Likes</span> */}
                   <span>
-                    {props?.post.totalLikes == null
+                    {props?.post.total_likes == null
                       ? 0
-                      : props?.post.totalLikes}{" "}
+                      : props?.post.total_likes}{" "}
                     Likes
                   </span>
                 </span>
@@ -203,10 +232,10 @@ const Posts = (props) => {
                   <i className="fa fa-message" />
                   {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{" "}
                   {/* <span>12k Comments</span> */}
-                  {props?.post?.totalComments == null ? (
+                  {props?.post?.total_comments == null ? (
                     "Be First to Comment"
                   ) : (
-                    <span>{props?.post?.totalComments} Comments</span>
+                    <span>{props?.post?.total_comments} Comments</span>
                   )}
                 </span>
               </button>

@@ -26,6 +26,7 @@ import Inventory from "./pages/inventory/Inventory";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import CreatePassword from "./pages/createPassword/CreatePassword";
 import CreatePost from "./pages/createPost/CreatePost";
+import PostDetails from "./pages/postDetails/PostDetails";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const App = () => {
         {
           path: "/create-post",
           element: <CreatePost />,
+        },
+        {
+          path: "/postDetails/:id",
+          element: <PostDetails />,
         },
       ],
     },
