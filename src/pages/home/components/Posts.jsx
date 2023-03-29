@@ -2,8 +2,12 @@
 import OwlCarousel from "react-owl-carousel";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
-import { formatDate, getInitials, isNonEmptyString } from "../../../helpers";
-// import UserImage from "../../../assets/images/user-icon.png";
+import {
+  formatDate,
+  getInitials,
+  isNonEmptyString,
+  parseStringArray,
+} from "../../../helpers";
 import ShareCommentImage from "../../../assets/images/share-icon.png";
 import { getUserFullName, getUserProfileImage } from "../../../utils/Storage";
 
@@ -72,16 +76,6 @@ const Posts = (props) => {
                   Buy This Post
                 </button>
               </div>
-              {/* <div class="flex-shrink-0 dropdown">
-                                      <a href="#" class="d-block link-dark text-decoration-none header-profile" data-bs-toggle="dropdown" aria-expanded="false">
-                                          <span><i class="fa-solid fa-ellipsis fs-3"></i></span>
-                                      </a>
-                                      <ul class="dropdown-menu text-small shadow">
-                                        <li><a class="dropdown-item" href="#">Edit Post</a></li>
-                                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                                        <li><a class="dropdown-item" href="#">Unfollow</a></li>
-                                      </ul>
-                                    </div> */}
             </div>
             <div className="post-image">
               <div className="post-title">
@@ -99,67 +93,20 @@ const Posts = (props) => {
                     }}
                   />
                 ) : (
-                  <p>{parse(props?.post?.description)}</p>
+                  <p>
+                    {props?.post?.description
+                      ? parse(props?.post?.description)
+                      : ""}
+                  </p>
                 )}
-
-                {/* {props?.post?.description.length > MAX_LENGTH ? (
-                  <div>
-                    {`${parse(props?.post?.description).substring(
-                      0,
-                      MAX_LENGTH,
-                    )}...`}
-                    <a href="/">Read more</a>
-                  </div>
-                ) : (
-                  <p>{parse(props?.post?.description)}</p>
-                )} */}
-                <Link to={`/postDetails/${props?.post?.id}`}>
+                <Link
+                  to={`postDetails/${props?.post?.title}`}
+                  state={{ id: props?.post?.id }}
+                >
                   Read this article
                 </Link>
               </div>
               <div className="owl-carousel owl-theme post-slider">
-                {/* <div className="item">
-                  <picture>
-                    <source
-                      srcSet="../../assets/images/post-image.webp"
-                      type="image/webp"
-                    />
-                    <source
-                      srcSet="../../assets/images/post-image.png"
-                      type="image/png"
-                    />
-                    <img
-                      loading="lazy"
-                      src="../../assets/images/post-image.png"
-                      data-src="../../assets/images/post-image.png"
-                      alt="post"
-                      className="img-fluid"
-                      width={670}
-                      height={440}
-                    />
-                  </picture>
-                </div>
-                <div className="item">
-                  <picture>
-                    <source
-                      srcSet="../../assets/images/post-image.webp"
-                      type="image/webp"
-                    />
-                    <source
-                      srcSet="../../assets/images/post-image.png"
-                      type="image/png"
-                    />
-                    <img
-                      loading="lazy"
-                      src="../../assets/images/post-image.png"
-                      data-src="../../assets/images/post-image.png"
-                      alt="post"
-                      className="img-fluid"
-                      width={670}
-                      height={440}
-                    />
-                  </picture>
-                </div> */}
                 {props?.post.images !== null ? (
                   <OwlCarousel
                     items={1}
@@ -168,44 +115,23 @@ const Posts = (props) => {
                     className="owl-carousel owl-theme post-slider"
                     loop
                   >
-                    {Array.isArray(props?.post?.images) ? (
-                      props?.post?.images?.array?.forEach((vimage) => {
-                        <div className="item">
+                    {parseStringArray(props?.post.images).map(
+                      (imgItem, idx) => (
+                        <div key={idx} className="item">
                           <picture>
-                            <source srcSet={vimage} type="image/webp" />
-                            <source srcSet={vimage} type="image/png" />
+                            <source srcSet={imgItem} type="image/webp" />
+                            <source srcSet={imgItem} type="image/png" />
                             <img
                               loading="lazy"
-                              srcSet={vimage}
+                              srcSet={imgItem}
                               alt="post"
                               className="img-fluid"
                               width="670"
                               height="440"
                             />
                           </picture>
-                        </div>;
-                      })
-                    ) : (
-                      <div className="item">
-                        <picture>
-                          <source
-                            srcSet={props?.post.images}
-                            type="image/webp"
-                          />
-                          <source
-                            srcSet={props?.post.images}
-                            type="image/png"
-                          />
-                          <img
-                            loading="lazy"
-                            srcSet={props?.post.images}
-                            alt="post"
-                            className="img-fluid"
-                            width="670"
-                            height="440"
-                          />
-                        </picture>
-                      </div>
+                        </div>
+                      ),
                     )}
                   </OwlCarousel>
                 ) : (

@@ -7,6 +7,8 @@ import SideBar from "../components/sidebar";
 const Layout = () => {
   const location = useLocation();
   const hideSideBar = location.pathname === "/inventory";
+
+  console.log("--------", location);
   return (
     <>
       <div className="dashboard nav-fixed">

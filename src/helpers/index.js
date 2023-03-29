@@ -45,6 +45,18 @@ export const formatDate = (timestamp) => {
   }).format(empDate);
 };
 
+export const formatOnlyDate = (timestamp) => {
+  const localZone = Intl.DateTimeFormat().resolvedOptions();
+  const empDate = new Date(timestamp);
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: localZone.timeZone,
+    hourCycle: "h12",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(empDate);
+};
+
 export const getInitials = (string) => {
   if (string) {
     const initials = string
@@ -69,4 +81,16 @@ export const isNumber = (num) => {
   }
 
   return false;
+};
+
+export const parseStringArray = (arr) => {
+  let convertedArr = [];
+  if (arr) {
+    convertedArr = arr.replace(/'/g, '"');
+    convertedArr = JSON.parse(convertedArr);
+    return convertedArr;
+  }
+  return null;
+  // services = services.replace(/'/g, '"'); //replacing all ' with "
+  // services = JSON.parse(services);
 };

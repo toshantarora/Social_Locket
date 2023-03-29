@@ -79,7 +79,9 @@ const Home = () => {
         ? "Something went wrong!"
         : postsIsLoading
         ? "loading"
-        : postsData.map((post) => <Posts post={post} key={post.id} />)}
+        : postsData
+        ? postsData.map((post) => <Posts post={post} key={post.id} />)
+        : null}
       <div className="bottom-right">
         <Link to="/create-post">
           <i className="fa-sharp fa-solid fa-plus" />

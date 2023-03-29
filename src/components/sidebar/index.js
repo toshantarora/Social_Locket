@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "../../styles/globalStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,12 +6,8 @@ import {
   faHeadset,
   faLink,
   faGear,
-  // faXmark,
-  // faBell,
-  // faUser,
 } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faMagnifyingGlass, faHeadset, faLink, faGear, faXmark, faBell, faUser } from "@fortawesome/free-solid-svg-icons";
+
 import { useContext } from "react";
 import {
   getUserBio,
@@ -19,8 +15,14 @@ import {
   getUserProfileImage,
   hasUserDetails,
 } from "../../utils/Storage";
-import { getInitials } from "../../helpers";
+import {
+  formatOnlyDate,
+  getInitials,
+  isNonEmptyArray,
+  parseStringArray,
+} from "../../helpers";
 import { AuthContext } from "../../context/authContext";
+import usePostsById from "../../hooks/query/Posts/usePostsById";
 
 const SideBar = () => {
   const userProfilePic = getUserProfileImage();
@@ -29,8 +31,11 @@ const SideBar = () => {
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
   const { auth } = useContext(AuthContext);
-  // console.log(auth);
-  // console.log(userBIO);
+
+  const { state } = useLocation();
+
+  const { data: postsDetailsData } = usePostsById(state?.id);
+
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
@@ -94,45 +99,93 @@ const SideBar = () => {
           height={24}
         />
       </form>
-      <ul>
-        <li>
-          <NavLink activeclassname="active" to="/">
-            <i className="fa fa-home" /> Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeclassname="active" to="/Search">
-            <i>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </i>{" "}
-            Search
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeclassname="active" to="/Support">
-            <i>
-              <FontAwesomeIcon icon={faHeadset} />
-            </i>{" "}
-            Support
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeclassname="active" to="/Connect">
-            <i>
-              <FontAwesomeIcon icon={faLink} />
-            </i>{" "}
-            Connect
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeclassname="active" to="/Setting">
-            <i>
-              <FontAwesomeIcon icon={faGear} />
-            </i>{" "}
-            Setting
-          </NavLink>
-        </li>
-      </ul>
+      {isNonEmptyArray(postsDetailsData) ? (
+        postsDetailsData.map((item, idx) => {
+          return (
+            <div key={idx} className="post-details-list py-3">
+              <ul className="d-flex flex-column">
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Address</h5>
+                  <span>{item?.location ? item?.location : ""}</span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Type</h5>
+                  <span>{item?.type ? item?.type : ""}</span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Pages</h5>
+                  <span>{item?.pages ? item?.pages : ""}</span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Price</h5>
+                  <span>{item?.price ? `$${item?.price}` : ""}</span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Available</h5>
+                  <span>
+                    {item?.created ? formatOnlyDate(item?.created) : ""}
+                  </span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>keywords</h5>
+                  <span>
+                    {item?.keywords
+                      ? parseStringArray(item?.keywords).map((tag) => (
+                          <span className="badge bg-primary me-1">{tag}</span>
+                        ))
+                      : ""}
+                  </span>
+                </li>
+                <li className="d-flex flex-column border-bottom py-3 px-2">
+                  <h5>Status</h5>
+                  <span>{item?.status ? item?.status : "Available"}</span>
+                </li>
+              </ul>
+            </div>
+          );
+        })
+      ) : (
+        <ul>
+          <li>
+            <NavLink activeclassname="active" to="/">
+              <i className="fa fa-home" /> Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeclassname="active" to="/Search">
+              <i>
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </i>{" "}
+              Search
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeclassname="active" to="/Support">
+              <i>
+                <FontAwesomeIcon icon={faHeadset} />
+              </i>{" "}
+              Support
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeclassname="active" to="/Connect">
+              <i>
+                <FontAwesomeIcon icon={faLink} />
+              </i>{" "}
+              Connect
+            </NavLink>
+          </li>
+          <li>
+            <NavLink activeclassname="active" to="/Setting">
+              <i>
+                <FontAwesomeIcon icon={faGear} />
+              </i>{" "}
+              Setting
+            </NavLink>
+          </li>
+        </ul>
+      )}
+
       <div className="bell-icon bell-icon-mobile">
         <a href="/">
           <i className="fa-solid fa-bell">

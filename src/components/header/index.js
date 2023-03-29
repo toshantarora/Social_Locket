@@ -106,7 +106,7 @@ const Header = () => {
               </NavLink>
             </li>
             {/* User Dropdown */}
-            <li
+            {/* <li
               className="nav-item dropdown no-caret dropdown-user"
               hidden={!hasUserData}
             >
@@ -214,7 +214,7 @@ const Header = () => {
                   Logout
                 </a>
               </div>
-            </li>
+            </li> */}
 
             <Dropdown>
               <Dropdown.Toggle

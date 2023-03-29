@@ -1,20 +1,28 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import OwlCarousel from "react-owl-carousel";
 import usePostsById from "../../hooks/query/Posts/usePostsById";
 import ShareCommentImage from "../../assets/images/share-icon.png";
 import { getUserProfileImage, getUserFullName } from "../../utils/Storage";
-import { getInitials } from "../../helpers";
+import {
+  formatDate,
+  getInitials,
+  isNonEmptyString,
+  parseStringArray,
+} from "../../helpers";
 import "../../styles/globalStyles.css";
 
 const PostDetails = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const { state } = useLocation();
+  console.log(params, state);
+  //   const userId = parseInt(useLocation().pathname.split("/")[2]);
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,
     data: postsDetailsData,
-  } = usePostsById(id);
+  } = usePostsById(state?.id);
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
@@ -29,22 +37,22 @@ const PostDetails = () => {
                   <li>
                     <div className="post-section">
                       <div className="user-post">
-                        {/* <a href="/" className="post-profile">
+                        <a href="/" className="post-profile">
                           <figure>
-                            {isNonEmptyString(props?.post?.profile_image) ? (
+                            {isNonEmptyString(item?.profile_image) ? (
                               <picture>
                                 <source
-                                  srcSet={props?.post?.profile_image}
+                                  srcSet={item?.profile_image}
                                   type="image/webp"
                                 />
                                 <source
-                                  srcSet={props?.post?.profile_image}
+                                  srcSet={item?.profile_image}
                                   type="image/png"
                                 />
                                 <img
                                   loading="lazy"
-                                  src={props?.post?.profile_image}
-                                  data-src={props?.post?.profile_image}
+                                  src={item?.profile_image}
+                                  data-src={item?.profile_image}
                                   alt="user-img"
                                   className="img-fluid"
                                   width={50}
@@ -53,10 +61,10 @@ const PostDetails = () => {
                               </picture>
                             ) : (
                               <span>
-                                {isNonEmptyString(props?.post?.forename) &&
-                                isNonEmptyString(props?.post?.surname)
+                                {isNonEmptyString(item?.forename) &&
+                                isNonEmptyString(item?.surname)
                                   ? getInitials(
-                                      `${props?.post?.forename}  ${props?.post?.surname}`,
+                                      `${item?.forename}  ${item?.surname}`,
                                     )
                                   : ""}
                               </span>
@@ -64,18 +72,18 @@ const PostDetails = () => {
                           </figure>
                           <figcaption>
                             <h5 className="mb-0">
-                              {isNonEmptyString(props?.post?.forename) &&
-                              isNonEmptyString(props?.post?.surname)
-                                ? `${props?.post?.forename}  ${props?.post?.surname}`
+                              {isNonEmptyString(item?.forename) &&
+                              isNonEmptyString(item?.surname)
+                                ? `${item?.forename}  ${item?.surname}`
                                 : "User"}
                             </h5>
                             <span>
-                              {isNonEmptyString(props?.post?.created)
-                                ? formatDate(props?.post?.created)
+                              {isNonEmptyString(item?.created)
+                                ? formatDate(item?.created)
                                 : ""}
                             </span>
                           </figcaption>
-                        </a> */}
+                        </a>
                         <div className="price-btn">
                           <button
                             type="button"
@@ -98,67 +106,8 @@ const PostDetails = () => {
                       <div className="post-image">
                         <div className="post-title">
                           <h2>{item?.title}</h2>
-
-                          <div>{parse(item?.description)}</div>
-
-                          {/* {props?.post?.description.length > MAX_LENGTH ? (
-                    <div>
-                      {`${parse(props?.post?.description).substring(
-                        0,
-                        MAX_LENGTH,
-                      )}...`}
-                      <a href="/">Read more</a>
-                    </div>
-                  ) : (
-                    <p>{parse(props?.post?.description)}</p>
-                  )} */}
-                          {/* <Link to={`/postDetails/${props?.post?.id}`}>
-                            Read this article
-                          </Link> */}
                         </div>
                         <div className="owl-carousel owl-theme post-slider">
-                          {/* <div className="item">
-                    <picture>
-                      <source
-                        srcSet="../../assets/images/post-image.webp"
-                        type="image/webp"
-                      />
-                      <source
-                        srcSet="../../assets/images/post-image.png"
-                        type="image/png"
-                      />
-                      <img
-                        loading="lazy"
-                        src="../../assets/images/post-image.png"
-                        data-src="../../assets/images/post-image.png"
-                        alt="post"
-                        className="img-fluid"
-                        width={670}
-                        height={440}
-                      />
-                    </picture>
-                  </div>
-                  <div className="item">
-                    <picture>
-                      <source
-                        srcSet="../../assets/images/post-image.webp"
-                        type="image/webp"
-                      />
-                      <source
-                        srcSet="../../assets/images/post-image.png"
-                        type="image/png"
-                      />
-                      <img
-                        loading="lazy"
-                        src="../../assets/images/post-image.png"
-                        data-src="../../assets/images/post-image.png"
-                        alt="post"
-                        className="img-fluid"
-                        width={670}
-                        height={440}
-                      />
-                    </picture>
-                  </div> */}
                           {item?.images !== null ? (
                             <OwlCarousel
                               items={1}
@@ -167,56 +116,36 @@ const PostDetails = () => {
                               className="owl-carousel owl-theme post-slider"
                               loop
                             >
-                              {Array.isArray(item?.images) ? (
-                                item?.images?.array?.forEach((vimage) => {
-                                  <div className="item">
+                              {parseStringArray(item.images).map(
+                                (imgItem, idx) => (
+                                  <div key={idx} className="item">
                                     <picture>
                                       <source
-                                        srcSet={vimage}
+                                        srcSet={imgItem}
                                         type="image/webp"
                                       />
                                       <source
-                                        srcSet={vimage}
+                                        srcSet={imgItem}
                                         type="image/png"
                                       />
                                       <img
                                         loading="lazy"
-                                        srcSet={vimage}
+                                        srcSet={imgItem}
                                         alt="post"
                                         className="img-fluid"
                                         width="670"
                                         height="440"
                                       />
                                     </picture>
-                                  </div>;
-                                })
-                              ) : (
-                                <div className="item">
-                                  <picture>
-                                    <source
-                                      srcSet={item?.images}
-                                      type="image/webp"
-                                    />
-                                    <source
-                                      srcSet={item?.images}
-                                      type="image/png"
-                                    />
-                                    <img
-                                      loading="lazy"
-                                      srcSet={item?.images}
-                                      alt="post"
-                                      className="img-fluid"
-                                      width="670"
-                                      height="440"
-                                    />
-                                  </picture>
-                                </div>
+                                  </div>
+                                ),
                               )}
                             </OwlCarousel>
                           ) : (
                             ""
                           )}
                         </div>
+                        <div>{parse(item?.description)}</div>
                       </div>
                       <div className="like-comment-count">
                         <button type="button">

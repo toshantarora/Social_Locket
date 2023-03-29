@@ -51,7 +51,7 @@ const CreatePost = () => {
   useEffect(() => {
     register("description");
   });
-  console.log(watch(["title", "description"]));
+
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
 

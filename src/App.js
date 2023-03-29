@@ -75,7 +75,7 @@ const App = () => {
           element: <CreatePost />,
         },
         {
-          path: "/postDetails/:id",
+          path: "/postDetails/:title",
           element: <PostDetails />,
         },
       ],

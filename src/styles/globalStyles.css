@@ -2661,3 +2661,49 @@ header .dropdown.show, header .dropdown button.show{ padding: 0px; margin: 0px;}
 header .dropdown button.show{ padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);}
 header .dropdown button, header .dropdown button:focus{ border:none;}
 /* Rishabh */
+table {
+    --bs-table-bg: transparent;
+    --bs-table-accent-bg: transparent;
+    --bs-table-striped-color: #212529;
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.05);
+    --bs-table-active-color: #212529;
+    --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+    --bs-table-hover-color: #212529;
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    vertical-align: top;
+    border-color: #dee2e6;
+}
+table>tbody>tr:nth-of-type(odd) {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: var(--bs-table-striped-color);
+}
+table>:not(caption)>*>* {
+    padding: 0.5rem 0.5rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+table>:not(caption)>* {
+    border-width: 1px 0;
+}
+table>:not(caption)>*>* {
+    border-width: 0 1px;
+}
+
+.post-section img{ width:100%;}
+.post-something figure span {
+    background-color: var(--brand-color);
+    color: var(--white);
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 70px;
+    height: 70px;
+    font-size: 22px;
+}
