@@ -1,5 +1,7 @@
 // import React from "react";
 import "../../styles/globalStyles.css";
+
+import Dropdown from "react-bootstrap/Dropdown";
 // import 'font-awesome/css/font-awesome.min.css';
 // import "font-awesome/6.3.0/css/all.min.css";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -213,6 +215,104 @@ const Header = () => {
                 </a>
               </div>
             </li>
+
+            <Dropdown>
+              <Dropdown.Toggle
+                id="Profile-dropdown-button"
+                variant="white"
+                className="header-profile"
+              >
+                <figure>
+                  <span className="text-uppercase" hidden={userProfilePic}>
+                    {userProfileText}
+                  </span>
+                  <picture hidden={!userProfilePic}>
+                    <source srcSet={userProfilePic} type="image/webp" />
+                    <source srcSet={userProfilePic} type="image/png" />
+                    <img
+                      loading="lazy"
+                      src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                      data-src={userProfilePic}
+                      alt="user-img"
+                      className="img-fluid"
+                      width={50}
+                      height={50}
+                    />
+                  </picture>
+                </figure>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu variant="light" className="p-0 m-0">
+                <Dropdown.Item href="#!" className="py-3 px-2">
+                  <h6 className="dropdown-header d-flex align-items-center header-profile p-0">
+                    <figure className="me-3">
+                      <span className="text-uppercase" hidden={userProfilePic}>
+                        {userProfileText}
+                      </span>
+                      <picture hidden={!userProfilePic}>
+                        <source srcSet={userProfilePic} type="image/webp" />
+                        <source srcSet={userProfilePic} type="image/png" />
+                        <img
+                          loading="lazy"
+                          src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                          data-src={userProfilePic}
+                          alt="user-img"
+                          className="img-fluid"
+                          width={50}
+                          height={50}
+                        />
+                      </picture>
+                    </figure>
+                    <div className="dropdown-user-details">
+                      <div className="dropdown-user-details-name">
+                        Valerie Luna
+                      </div>
+                      <div className="dropdown-user-details-email">
+                        vluna@aol.com
+                      </div>
+                    </div>
+                  </h6>
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item href="#!" className="py-2 px-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-settings"
+                  >
+                    <circle cx={12} cy={12} r={3} />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                  <span>Account</span>
+                </Dropdown.Item>
+                <Dropdown.Item href="#!" className="py-2 px-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-log-out"
+                  >
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1={21} y1={12} x2={9} y2={12} />
+                  </svg>
+                  <span>Logout</span>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </ul>
         </nav>
       </div>

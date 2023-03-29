@@ -68,8 +68,8 @@ const Posts = (props) => {
                 </figcaption>
               </a>
               <div className="price-btn">
-                <button type="button" className="btn btn_price">
-                  Buy Post
+                <button type="button" className="btn btn-outline-success">
+                  Buy This Post
                 </button>
               </div>
               {/* <div class="flex-shrink-0 dropdown">

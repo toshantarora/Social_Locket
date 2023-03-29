@@ -2656,4 +2656,8 @@ div#fill-tab-example-tabpane-List_View {
 
 /* Rishabh */
 .fade.show{ margin: 0px;}
+header .dropdown button:after{ display: none; }
+header .dropdown.show, header .dropdown button.show{ padding: 0px; margin: 0px;}
+header .dropdown button.show{ padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);}
+header .dropdown button, header .dropdown button:focus{ border:none;}
 /* Rishabh */
