@@ -7,6 +7,7 @@ import {
   getInitials,
   isNonEmptyString,
   parseStringArray,
+  removeWhitespaces,
 } from "../../../helpers";
 import ShareCommentImage from "../../../assets/images/share-icon.png";
 import { getUserFullName, getUserProfileImage } from "../../../utils/Storage";
@@ -17,6 +18,17 @@ const Posts = (props) => {
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
+  const postId = props?.post?.id ? props?.post?.id.toString() : "";
+  const userId = props?.post?.user_id ? props?.post?.user_id.toString() : "";
+  // user_id
+  const userTitle = props?.post?.title ? props?.post?.title : "";
+  const titleLink = postId.concat("_", userTitle);
+  const FullName =
+    isNonEmptyString(props?.post?.forename) &&
+    isNonEmptyString(props?.post?.surname)
+      ? `${props?.post?.forename}  ${props?.post?.surname}`
+      : "";
+  const userProfileUrl = FullName.concat("_", userId);
 
   return (
     <div className="post">
@@ -24,7 +36,10 @@ const Posts = (props) => {
         <li>
           <div className="post-section">
             <div className="user-post">
-              <a href="/" className="post-profile">
+              <Link
+                to={`/profile/${removeWhitespaces(userProfileUrl)}`}
+                className="post-profile"
+              >
                 <figure>
                   {isNonEmptyString(props?.post?.profile_image) ? (
                     <picture>
@@ -70,7 +85,7 @@ const Posts = (props) => {
                       : ""}
                   </span>
                 </figcaption>
-              </a>
+              </Link>
               <div className="price-btn">
                 <button type="button" className="btn btn-outline-success">
                   Buy This Post
@@ -100,7 +115,7 @@ const Posts = (props) => {
                   </p>
                 )}
                 <Link
-                  to={`postDetails/${props?.post?.title}`}
+                  to={`postDetails/${removeWhitespaces(titleLink)}`}
                   state={{ id: props?.post?.id }}
                 >
                   Read this article

@@ -59,7 +59,7 @@ const App = () => {
           element: <Notification />,
         },
         {
-          path: "/profile/:id",
+          path: "/profile/:username",
           element: <Profile />,
         },
         {

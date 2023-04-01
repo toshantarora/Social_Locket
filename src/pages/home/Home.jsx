@@ -20,19 +20,12 @@ const Home = () => {
     data: postsData,
   } = usePosts();
 
-  // const {
-  //   // isLoading: allUserIsLoading,
-  //   // error: allUserError,
-  //   data: allUserData,
-  // } = useAllUserProfile();
   const [postTitle, setPostTitle] = useState("");
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
-  // console.log(postTitle);
 
-  // console.log(postsData);
   return (
     <main id="layoutSidenav_content">
       <div className="post-message" hidden={!hasUserData}>

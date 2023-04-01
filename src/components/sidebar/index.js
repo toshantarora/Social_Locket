@@ -19,7 +19,8 @@ import {
   formatOnlyDate,
   getInitials,
   isNonEmptyArray,
-  parseStringArray,
+  removeWhitespaces,
+  // parseStringArray,
 } from "../../helpers";
 import { AuthContext } from "../../context/authContext";
 import usePostsById from "../../hooks/query/Posts/usePostsById";
@@ -31,7 +32,8 @@ const SideBar = () => {
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
   const { auth } = useContext(AuthContext);
-
+  const userId = auth?.userId ? auth?.userId.toString() : "";
+  const userProfileUrl = UserFullName.concat("_", userId);
   const { state } = useLocation();
 
   const { data: postsDetailsData } = usePostsById(state?.id);
@@ -57,7 +59,7 @@ const SideBar = () => {
         </a>
       </div>
       <div className="user-profile" hidden={!hasUserData}>
-        <NavLink to={`/profile/${auth?.userId}`}>
+        <NavLink to={`/profile/${removeWhitespaces(userProfileUrl)}`}>
           <figure>
             <span hidden={userProfilePic} className="text-uppercase">
               {userProfileText}
@@ -129,11 +131,11 @@ const SideBar = () => {
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>keywords</h5>
                   <span>
-                    {item?.keywords
+                    {/* {item?.keywords
                       ? parseStringArray(item?.keywords).map((tag) => (
                           <span className="badge bg-primary me-1">{tag}</span>
                         ))
-                      : ""}
+                      : ""} */}
                   </span>
                 </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">

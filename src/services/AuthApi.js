@@ -18,7 +18,6 @@ function login(data) {
 function register(data) {
   return API.post("register", data)
     .then((response) => {
-      console.log("response ***** ", response);
       if (in200s(response.status)) {
         // console.log(response.data);
         return response;

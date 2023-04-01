@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import OwlCarousel from "react-owl-carousel";
 import usePostsById from "../../hooks/query/Posts/usePostsById";
@@ -7,6 +7,7 @@ import ShareCommentImage from "../../assets/images/share-icon.png";
 import { getUserProfileImage, getUserFullName } from "../../utils/Storage";
 import {
   formatDate,
+  getIdValue,
   getInitials,
   isNonEmptyString,
   parseStringArray,
@@ -15,14 +16,12 @@ import "../../styles/globalStyles.css";
 
 const PostDetails = () => {
   const params = useParams();
-  const { state } = useLocation();
-  console.log(params, state);
-  //   const userId = parseInt(useLocation().pathname.split("/")[2]);
+  const id = getIdValue(params);
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,
     data: postsDetailsData,
-  } = usePostsById(state?.id);
+  } = usePostsById(id);
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);

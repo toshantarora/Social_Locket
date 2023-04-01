@@ -1,16 +1,27 @@
-import { getInitials } from "../../helpers";
+import { useContext } from "react";
+import { Link, useParams } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 import {
-  getUserBio,
-  getUserFullName,
-  getUserProfileImage,
-} from "../../utils/Storage";
+  getAfterUnderScoreValue,
+  getInitials,
+  isNonEmptyString,
+} from "../../helpers";
+import useUsersById from "../../hooks/query/AllUserProfile/useUserById";
+import { getUserProfileImage } from "../../utils/Storage";
 
 const Profile = () => {
-  const userProfilePic = getUserProfileImage();
-  const userBIO = getUserBio();
-  const userFullName = getUserFullName();
-  const userProfileText = getInitials(userFullName);
+  const params = useParams();
+  const id = getAfterUnderScoreValue(params);
+  const { auth } = useContext(AuthContext);
 
+  const userProfilePic = getUserProfileImage();
+
+  const {
+    isLoading: isUserDetailsLoading,
+    error: userDetailsError,
+    data: userDetailsData,
+  } = useUsersById(id);
+  console.log(isUserDetailsLoading, userDetailsError, userDetailsData);
   return (
     <main id="layoutSidenav_content">
       <div className="box-shadow">
@@ -30,7 +41,12 @@ const Profile = () => {
             <div className="edit-profile">
               <figure>
                 <span className="text-uppercase" hidden={userProfilePic}>
-                  {userProfileText}
+                  {isNonEmptyString(userDetailsData?.forename) &&
+                  isNonEmptyString(userDetailsData?.surname)
+                    ? getInitials(
+                        `${userDetailsData?.forename}  ${userDetailsData?.surname}`,
+                      )
+                    : ""}
                 </span>
                 <picture hidden={!userProfilePic}>
                   <source srcSet={userProfilePic} type="image/webp" />
@@ -49,8 +65,19 @@ const Profile = () => {
               <i className="fa fa-camera change-img" />
               <figcaption>
                 <div>
-                  <h4 className="mb-0 mt-2">{userFullName}</h4>
-                  <p className="mb-0">{userBIO}</p>
+                  <h4 className="mb-0 mt-2">
+                    {userDetailsData &&
+                    isNonEmptyString(userDetailsData?.forename) &&
+                    isNonEmptyString(userDetailsData?.surname)
+                      ? `${userDetailsData?.forename}  ${userDetailsData?.surname}`
+                      : ""}
+                  </h4>
+                  <p className="mb-0">
+                    {" "}
+                    {isNonEmptyString(userDetailsData?.bio)
+                      ? `${userDetailsData?.bio}`
+                      : ""}
+                  </p>
                   {/* <p className="mb-0">Birmingham, UK</p> */}
                 </div>
                 <div className="post-count">
@@ -68,9 +95,12 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="edit-btn">
-                  <a href="setting.html" className="btn btn-common px-3">
-                    Edit profile
-                  </a>
+                  {auth?.userId === userDetailsData?.id ? (
+                    <Link to="/setting" className="btn btn-common px-3">
+                      Edit profile
+                    </Link>
+                  ) : null}
+
                   <button
                     type="button"
                     className="btn btn-common btn-follow px-3 "
@@ -132,27 +162,55 @@ const Profile = () => {
                     <tbody>
                       <tr>
                         <td>First Name</td>
-                        <td>Lettie Christen</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.forename)
+                            ? `${userDetailsData?.forename}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Bio</td>
-                        <td>Content Creator</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.bio)
+                            ? `${userDetailsData?.bio}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Email Id</td>
-                        <td>christen@gmail.com</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.email)
+                            ? `${userDetailsData?.email}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Gender</td>
-                        <td>Male</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.gender)
+                            ? `${userDetailsData?.gender}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Age</td>
-                        <td>35</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.age)
+                            ? `${userDetailsData?.age}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Contant No.</td>
-                        <td>+92 9887673456</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.mobile)
+                            ? `${userDetailsData?.mobile}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Stakeholder Type</td>
@@ -160,19 +218,36 @@ const Profile = () => {
                       </tr>
                       <tr>
                         <td>Country</td>
-                        <td>Birmingham</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.country)
+                            ? `${userDetailsData?.country}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Address</td>
-                        <td>Birmingham</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.address)
+                            ? `${userDetailsData?.address}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>City</td>
-                        <td>Birmingham</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.city)
+                            ? `${userDetailsData?.city}`
+                            : ""}
+                        </td>
                       </tr>
                       <tr>
                         <td>Postal Code</td>
-                        <td>12345</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.postal_code)
+                            ? `${userDetailsData?.postal_code}`
+                            : ""}
+                        </td>
                       </tr>
                     </tbody>
                   </table>

@@ -3,7 +3,7 @@ import { userService } from "../../../services/UserService";
 
 const getUserProfile = async () => {
   const res = await userService.getAllUserProfile();
-  console.log(res);
+  // console.log(res);
   if (res) {
     return res;
   }

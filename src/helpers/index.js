@@ -94,3 +94,31 @@ export const parseStringArray = (arr) => {
   // services = services.replace(/'/g, '"'); //replacing all ' with "
   // services = JSON.parse(services);
 };
+
+export const removeWhitespaces = (str) => {
+  return str
+    .replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1);
+    })
+    .replace(/\s/g, "");
+};
+
+export function getIdValue(str) {
+  if (str) {
+    const val = Object.values(str);
+    const index = val[0].indexOf("");
+    const result = val[0].substr(index);
+    return result.charAt(0);
+  }
+  return "";
+}
+
+export function getAfterUnderScoreValue(str) {
+  if (str) {
+    const val = Object.values(str);
+    const index = val[0].lastIndexOf("_");
+    const result = val[0].substr(index + 1);
+    return result;
+  }
+  return "";
+}
