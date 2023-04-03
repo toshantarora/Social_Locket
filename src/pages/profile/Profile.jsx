@@ -85,18 +85,22 @@ const Profile = () => {
                     <strong>121</strong>
                     <span>Posts</span>
                   </div>
-                  <div className="follower">
+                  {/* <div className="follower">
                     <strong>123</strong>
                     <span>Followers</span>
                   </div>
                   <div className="following">
                     <strong>134</strong>
                     <span>Following</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="edit-btn">
                   {auth?.userId === userDetailsData?.id ? (
-                    <Link to="/setting" className="btn btn-common px-3">
+                    <Link
+                      to="/setting"
+                      state={userDetailsData || null}
+                      className="btn btn-common px-3"
+                    >
                       Edit profile
                     </Link>
                   ) : null}
@@ -169,6 +173,14 @@ const Profile = () => {
                         </td>
                       </tr>
                       <tr>
+                        <td>Last Name</td>
+                        <td>
+                          {isNonEmptyString(userDetailsData?.surname)
+                            ? `${userDetailsData?.surname}`
+                            : ""}
+                        </td>
+                      </tr>
+                      <tr>
                         <td>Bio</td>
                         <td>
                           {" "}
@@ -213,9 +225,18 @@ const Profile = () => {
                         </td>
                       </tr>
                       <tr>
+                        <td>Main User Type</td>
+                        <td>
+                          {" "}
+                          {isNonEmptyString(userDetailsData?.main_user_type)
+                            ? `${userDetailsData?.main_user_type}`
+                            : ""}
+                        </td>
+                      </tr>
+                      {/* <tr>
                         <td>Stakeholder Type</td>
                         <td>Reader</td>
-                      </tr>
+                      </tr> */}
                       <tr>
                         <td>Country</td>
                         <td>

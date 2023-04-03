@@ -33,7 +33,7 @@ const SideBar = () => {
   const hasUserData = hasUserDetails();
   const { auth } = useContext(AuthContext);
   const userId = auth?.userId ? auth?.userId.toString() : "";
-  const userProfileUrl = UserFullName.concat("_", userId);
+  const userProfileUrl = UserFullName ? UserFullName.concat("_", userId) : "";
   const { state } = useLocation();
 
   const { data: postsDetailsData } = usePostsById(state?.id);

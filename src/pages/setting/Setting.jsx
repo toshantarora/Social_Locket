@@ -1,12 +1,15 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+// import Select from "react-select";
 import { AuthContext } from "../../context/authContext";
 import {
   getUserBio,
   getUserFullName,
   getUserProfileImage,
 } from "../../utils/Storage";
-import { getInitials } from "../../helpers";
+import { getInitials, isNonEmptyString } from "../../helpers";
+import useUsersById from "../../hooks/query/AllUserProfile/useUserById";
+import DetailsForm from "./components/DetailsForm";
 
 const Setting = () => {
   const userProfilePic = getUserProfileImage();
@@ -14,12 +17,23 @@ const Setting = () => {
   const userFullName = getUserFullName();
   const userProfileText = getInitials(userFullName);
   const value = useContext(AuthContext);
+  // const Id = value?.auth?.userId;
   const navigate = useNavigate();
-
   const logOut = () => {
     value?.logout();
     navigate("/login");
   };
+  console.log(value);
+  const {
+    isLoading: isUserDetailsLoading,
+    error: userDetailsError,
+    data: userDetailsData,
+  } = useUsersById(value?.auth?.userId);
+  console.log({
+    userDetailsError,
+    userDetailsData,
+    isUserDetailsLoading,
+  });
 
   return (
     <main id="layoutSidenav_content">
@@ -56,7 +70,12 @@ const Setting = () => {
                   </figure>
                   <figcaption>
                     <div>
-                      <h4 className="mb-0 mt-2 text-center">{userFullName}</h4>
+                      <h4 className="mb-0 mt-2 text-center">
+                        {isNonEmptyString(userDetailsData?.forename) &&
+                        isNonEmptyString(userDetailsData?.surname)
+                          ? `${userDetailsData?.forename}  ${userDetailsData?.surname}`
+                          : ""}
+                      </h4>
                       <p className="mb-0 text-center">{userBIO}</p>
                     </div>
                     <div className="setting-post">
@@ -64,14 +83,14 @@ const Setting = () => {
                         <span>Posts</span>
                         <strong>121</strong>
                       </a>
-                      <a href="/" className="">
+                      {/* <a href="/" className="">
                         <span>Followers</span>
                         <strong>123</strong>
                       </a>
                       <a href="/" className="">
                         <span>Following</span>
                         <strong>134</strong>
-                      </a>
+                      </a> */}
                     </div>
                   </figcaption>
                 </div>
@@ -120,111 +139,7 @@ const Setting = () => {
                     role="tabpanel"
                     aria-labelledby="home-tab"
                   >
-                    <div className="details">
-                      <form className="row g-3">
-                        <div className="col-md-6">
-                          <label htmlFor="first_name" className="form-label">
-                            First Name
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="first_name"
-                            placeholder="Lettie"
-                            defaultValue="Lettie"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <label htmlFor="last_name" className="form-label">
-                            Last Name
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="last_name"
-                            placeholder="Christen"
-                            defaultValue="Christen"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <label htmlFor="bio" className="form-label">
-                            Bio
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="bio"
-                            placeholder="Content Creator"
-                            defaultValue="Content Creator"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <label htmlFor="gender" className="form-label">
-                            Gender
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="gender"
-                            placeholder="Male"
-                            defaultValue="Male"
-                          />
-                        </div>
-                        <div className="col-md-6 ">
-                          <label htmlFor="age" className="form-label">
-                            Age
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="age"
-                            placeholder={24}
-                            defaultValue={24}
-                          />
-                        </div>
-                        <div className="col-md-6 ">
-                          <label htmlFor="number" className="form-label">
-                            Contact Number
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="number"
-                            placeholder="+92 9887673456"
-                            defaultValue="+92 9887673456"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <label htmlFor="email" className="form-label">
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            placeholder="christen@gmail.com"
-                            defaultValue="christen@gmail.com"
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <label htmlFor="city" className="form-label">
-                            City
-                          </label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="city"
-                            placeholder="Birmingham"
-                            defaultValue="Birmingham"
-                          />
-                        </div>
-                        <div className="text-end">
-                          <button type="button" className="btn btn-common">
-                            Update
-                          </button>
-                        </div>
-                      </form>
-                    </div>
+                    <DetailsForm preloadedValues={userDetailsData} />
                   </div>
                   <div
                     className="tab-pane fade"

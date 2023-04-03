@@ -74,7 +74,7 @@ const PostDetails = () => {
                               {isNonEmptyString(item?.forename) &&
                               isNonEmptyString(item?.surname)
                                 ? `${item?.forename}  ${item?.surname}`
-                                : "User"}
+                                : ""}
                             </h5>
                             <span>
                               {isNonEmptyString(item?.created)
@@ -88,7 +88,7 @@ const PostDetails = () => {
                             type="button"
                             className="btn btn-outline-success"
                           >
-                            Buy Post
+                            {item?.price ? item.price : ""}
                           </button>
                         </div>
                         {/* <div class="flex-shrink-0 dropdown">
