@@ -2,6 +2,9 @@
 import OwlCarousel from "react-owl-carousel";
 import parse from "html-react-parser";
 import { Link } from "react-router-dom";
+// import { useQuery } from "react-query";
+import { useContext, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   formatDate,
   getInitials,
@@ -11,6 +14,8 @@ import {
 } from "../../../helpers";
 import ShareCommentImage from "../../../assets/images/share-icon.png";
 import { getUserFullName, getUserProfileImage } from "../../../utils/Storage";
+import { API } from "../../../services/ApiClient";
+import { AuthContext } from "../../../context/authContext";
 
 const MAX_LENGTH = 60;
 
@@ -20,6 +25,8 @@ const Posts = (props) => {
   const userProfileText = getInitials(UserFullName);
   const postId = props?.post?.id ? props?.post?.id.toString() : "";
   const userId = props?.post?.user_id ? props?.post?.user_id.toString() : "";
+  const { auth } = useContext(AuthContext);
+  const [isLiked, setIsLiked] = useState(false);
   // user_id
   const userTitle = props?.post?.title ? props?.post?.title : "";
   const titleLink = postId.concat("_", userTitle);
@@ -29,6 +36,172 @@ const Posts = (props) => {
       ? `${props?.post?.forename}  ${props?.post?.surname}`
       : "";
   const userProfileUrl = FullName.concat("_", userId);
+  const queryClient = useQueryClient();
+  // const { data: PostLikes } = useQuery(["likes", props?.post?.id], () =>
+  //   API.get(`post-likes/${props?.post?.id}`).then((res) => {
+  //     return res.data;
+  //   }),
+  // );
+  // // const [likes] = PostLikes;
+  // const { data } = useQuery(["post-likes"], () =>
+  //   API.get(`post-likes`).then((res) => {
+  //     return res.data.result;
+  //   }),
+  // );
+  // const [likes] = PostLikes;
+  // useEffect(() => {
+  //   if (PostLikes) {
+  //     const userLiked = likes.some(
+  //       (like) =>
+  //         like.post_id === auth.userId && like.post_id === props?.post.id,
+  //     );
+  //     setIsLiked(userLiked);
+  //   }
+  // }, [likes, auth.userId, props?.post?.id]);
+  // console.log("isLiked----------------", isLiked, data);
+  // // console.log(PostLikes, "PostLikes");
+  // // const { isLoading, error, data } = useQuery(["post-likes"], () =>
+  // //   API.get(`post-likes`).then((res) => {
+  // //     return res.data.result;
+  // //   }),
+  // // );
+  // // console.log({ isLoading, error, data });
+
+  // // const mutation = useMutation(
+  // //   (liked) => {
+  // //     console.log(liked);
+  // //     if (liked) return API.delete(`post-likes/${props?.post.id}`);
+  // //     return API.post("post-likes", { postId: post.id });
+  // //   },
+  // //   {
+  // //     onSuccess: () => {
+  // //       // Invalidate and refetch
+  // //       queryClient.invalidateQueries(["likes"]);
+  // //     },
+  // //   },
+  // // );
+
+  // // const deleteMutation = useMutation(
+  // //   (postId) => {
+  // //     return API.delete(`posts/${postId}`);
+  // //   },
+  // //   {
+  // //     onSuccess: () => {
+  // //       // Invalidate and refetch
+  // //       queryClient.invalidateQueries(["posts"]);
+  // //     },
+  // //   },
+  // // );
+  // console.log("like", auth?.userId);
+  // const handleLike = () => {
+  //   console.log("like", auth?.userId);
+  //   // const isLiked = data.filter((item) => item?.user_id === auth?.userId);
+  //   // console.log(isLiked);
+
+  //   // const isLiked = props?.post?.id.includes(props?.post?.id);
+  //   // console.log("isLiked", isLiked);
+  //   // mutation.mutate(data.includes(currentUser.id));
+  // };
+
+  // // /posts/:id/comments
+
+  // const mutation = useMutation(
+  //   (liked) => {
+  //     console.log(liked);
+  //     // if (liked) return API.delete(`post-likes/${props?.post.id}`);
+  //     return API.post("post-likes", { postId: post.id });
+  //   },
+  //   {
+  //     onSuccess: () => {
+  //       // Invalidate and refetch
+  //       queryClient.invalidateQueries(["likes"]);
+  //     },
+  //   },
+  // );
+  // const { data: PostLikes } = useQuery(["likes", props?.post?.id], () =>
+  //   API.get(`post-likes/${props?.post?.id}`).then((res) => {
+  //     return res.data.result;
+  //   }),
+  // );
+  const { data } = useQuery(["post-likes"], () =>
+    API.get(`post-likes`).then((res) => {
+      return res.data.result;
+    }),
+  );
+  console.log("data", data);
+  // console.log("PostLikes", PostLikes);
+  const { mutate: likePost, isLoading: isLikePostLoading } = useMutation(
+    async (payload) => {
+      console.log("payload", payload);
+      // if (payload.newIsLiked)
+      return API.post("post-likes", {
+        user_id: payload?.user_id,
+        post_id: payload?.post_id,
+        likes: "1",
+      });
+    },
+    {
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries(["posts"]);
+        }
+      },
+    },
+  );
+
+  useEffect(() => {
+    const userLiked =
+      data &&
+      data.some(
+        (like) =>
+          like.user_id === auth?.userId && like.post_id === props?.post?.id,
+      );
+    console.log("userLiked", userLiked);
+    setIsLiked(userLiked);
+  }, [data, auth.userId, props.post.id, props?.post?.total_likes]);
+  console.log("isLiked---", isLiked);
+  console.log("isLikePostLoading", isLikePostLoading);
+  console.log("auth?.userId", auth?.userId);
+
+  const { mutate: disLikePost } = useMutation(
+    async (payload) => {
+      console.log("payload", payload);
+      return API.delete(`post-likes/${payload?.post_id}`, {
+        user_id: payload?.user_id,
+        post_id: payload?.post_id,
+      });
+    },
+    {
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries(["posts"]);
+        }
+      },
+    },
+  );
+  const handleLike = (postId) => {
+    console.log("props?.postId", postId);
+    // const userLiked =
+    //   data &&
+    //   data.some(
+    //     (like) => like.user_id === auth?.userId && like.post_id === props?.post?.id,
+    //   );
+
+    const newIsLiked = !isLiked;
+    setIsLiked(newIsLiked);
+    const payloadData = {
+      user_id: auth?.userId,
+      post_id: postId,
+      // likes: "1",
+      // newIsLiked,
+    };
+    if (newIsLiked) {
+      likePost(payloadData);
+    } else if (newIsLiked === false) {
+      disLikePost(payloadData);
+    }
+    // setIsLiked(!isLiked);
+  };
 
   return (
     <div className="post">
@@ -155,7 +328,7 @@ const Posts = (props) => {
               </div>
             </div>
             <div className="like-comment-count">
-              <button type="button">
+              <button onClick={() => handleLike(props?.post?.id)} type="button">
                 <span className="like-count">
                   {/* <a href="/" className="like-button"> */}
                   <i className="fa-solid fa-thumbs-up" /> {/* </a> */}
@@ -164,7 +337,7 @@ const Posts = (props) => {
                     {props?.post.total_likes == null
                       ? 0
                       : props?.post.total_likes}{" "}
-                    Likes
+                    {isLiked ? "Unlike" : "Likes"}
                   </span>
                 </span>
               </button>

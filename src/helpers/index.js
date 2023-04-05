@@ -122,3 +122,27 @@ export function getAfterUnderScoreValue(str) {
   }
   return "";
 }
+
+export function getSelectedValues(objectWithOnes) {
+  // const keysWithOnes = [];
+  // Object.keys(objectWithOnes).forEach((k) => {
+  //   if (objectWithOnes[k] === "1") keysWithOnes.push(k);
+  // });
+  // for (const key in objectWithOnes) {
+  //   if (objectWithOnes[key] === "1") {
+  //     keysWithOnes.push(key);
+  //   }
+  // }
+  const keysWithOnes = [];
+  // const obj = Object.keys(objectWithOnes);
+  for (const key of Object.keys(objectWithOnes)) {
+    if (objectWithOnes[key] === "1") {
+      keysWithOnes.push(key);
+    }
+  }
+  return keysWithOnes;
+  // if (keysWithOnes.length > 0) {
+  //   return keysWithOnes;
+  // }
+  // return null;
+}

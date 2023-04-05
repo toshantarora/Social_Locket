@@ -47,6 +47,7 @@
   }],
   "react/prop-types":"off",
   "react/destructuring-assignment": "off",
-  "eslint no-nested-ternary": "off"
+  "eslint no-nested-ternary": "off",
+  "no-restricted-syntax": ["off"]
   }
 }

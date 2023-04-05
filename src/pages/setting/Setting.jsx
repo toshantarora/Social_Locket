@@ -10,6 +10,7 @@ import {
 import { getInitials, isNonEmptyString } from "../../helpers";
 import useUsersById from "../../hooks/query/AllUserProfile/useUserById";
 import DetailsForm from "./components/DetailsForm";
+import useSelectedTypesBy from "../../hooks/query/AllUserProfile/useSelectedUserTypes";
 
 const Setting = () => {
   const userProfilePic = getUserProfileImage();
@@ -29,10 +30,14 @@ const Setting = () => {
     error: userDetailsError,
     data: userDetailsData,
   } = useUsersById(value?.auth?.userId);
+  const { data: userSelectedTypesData } = useSelectedTypesBy(
+    value?.auth?.userId,
+  );
   console.log({
     userDetailsError,
     userDetailsData,
     isUserDetailsLoading,
+    userSelectedTypesData,
   });
 
   return (
@@ -139,7 +144,10 @@ const Setting = () => {
                     role="tabpanel"
                     aria-labelledby="home-tab"
                   >
-                    <DetailsForm preloadedValues={userDetailsData} />
+                    <DetailsForm
+                      preloadedValues={userDetailsData}
+                      userSelectedTypesData={userSelectedTypesData}
+                    />
                   </div>
                   <div
                     className="tab-pane fade"

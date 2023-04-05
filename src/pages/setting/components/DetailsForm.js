@@ -2,34 +2,28 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import { Multiselect } from "multiselect-react-dropdown";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { Controller, useForm } from "react-hook-form";
-import Select from "react-select";
 import { useMutation, useQueryClient } from "react-query";
-import { isNonEmptyString } from "../../../helpers";
+import { getSelectedValues, isNonEmptyString } from "../../../helpers";
 import { API } from "../../../services/ApiClient";
-
-const genderOptions = [
-  {
-    value: "male",
-    label: "Male",
-  },
-  {
-    value: "female",
-    label: "Female",
-  },
-  {
-    value: "others",
-    label: "Others",
-  },
-];
 
 const schema = yup.object().shape({
   forename: yup.string().required("First Name is required"),
   surname: yup.string().required("Last Name is required"),
 });
-const DetailsForm = ({ preloadedValues }) => {
+const options = [
+  "buyer",
+  "seller",
+  "finance",
+  "legal",
+  "agent",
+  "accountant",
+  "other",
+];
+const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   const [user, setUser] = useState(null);
 
   const {
@@ -37,10 +31,18 @@ const DetailsForm = ({ preloadedValues }) => {
     handleSubmit,
     control,
     reset,
+    watch,
     // formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const UserType = watch("user_type");
+  console.log("preloadedValues", preloadedValues);
+  const objectWithOnes = userSelectedTypesData ? userSelectedTypesData[0] : {}; // we assume that we have only one object in this array.
+
+  const selectedOptions = getSelectedValues(objectWithOnes);
+  console.log("selectedOptions---", selectedOptions);
+
   useEffect(() => {
     // simulate async api call with set timeout
     setTimeout(
@@ -53,12 +55,15 @@ const DetailsForm = ({ preloadedValues }) => {
           mobile: preloadedValues?.mobile,
           gender: preloadedValues?.gender,
           city: preloadedValues?.city,
-          dob: preloadedValues?.dob,
+          main_user_type: preloadedValues?.main_user_type,
+          user_type: selectedOptions,
+
+          // dob: preloadedValues?.dob,
         }),
       100,
     );
   }, [preloadedValues]);
-
+  console.log("userSelectedTypesData", userSelectedTypesData);
   // effect runs when user state is updated
   useEffect(() => {
     // reset form with user data
@@ -70,7 +75,7 @@ const DetailsForm = ({ preloadedValues }) => {
   const { mutate: updateDetails } = useMutation(
     async (payload) => {
       const res = await API.put(`users/${preloadedValues?.id}`, payload);
-      console.log(res);
+      // console.log(res);
       //   if (res) {
       //     return res;
       //   }
@@ -100,17 +105,29 @@ const DetailsForm = ({ preloadedValues }) => {
   const onSubmit = (data, event) => {
     event.preventDefault();
     console.log(data);
+
     updateDetails({
       id: preloadedValues?.id,
       forename: data?.forename,
       surname: data.surname,
       dob: data.dob,
       bio: data?.bio,
-      gender: data?.gender?.value,
+      gender: data?.gender,
       mobile: data?.mobile,
+      email: data?.email,
+      main_user_type: data?.main_user_type,
+      seller: UserType && UserType.includes("seller") ? "1" : "0",
+      buyer: UserType && UserType.includes("buyer") ? "1" : "0",
+      finance: UserType && UserType.includes("finance") ? "1" : "0",
+      legal: UserType && UserType.includes("legal") ? "1" : "0",
+      status: "",
+      agent: UserType && UserType.includes("agent") ? "1" : "0",
+      other: UserType && UserType.includes("other") ? "1" : "0",
+      accountant: UserType && UserType.includes("accountant") ? "1" : "0",
     });
   };
 
+  console.log("userType", UserType);
   return (
     <div className="details">
       <form className="row g-3">
@@ -157,23 +174,16 @@ const DetailsForm = ({ preloadedValues }) => {
           <label htmlFor="gender" className="form-label">
             Gender
           </label>
-
-          {preloadedValues?.gender && (
-            <Controller
-              name="gender"
-              control={control}
-              render={({ field, value }) => (
-                <Select
-                  {...field}
-                  options={genderOptions}
-                  value={genderOptions.find((c) => c.value === value)}
-                  defaultValue={genderOptions.find(
-                    (c) => c.value === preloadedValues?.gender,
-                  )}
-                />
-              )}
-            />
-          )}
+          <select
+            className="form-control"
+            name="gender"
+            {...register("gender")}
+          >
+            <option value=""> Select a gender </option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="others">Others</option>
+          </select>
         </div>
         <div className="col-md-6 ">
           <label htmlFor="dob" className="form-label">
@@ -232,6 +242,54 @@ const DetailsForm = ({ preloadedValues }) => {
             placeholder="Birmingham"
             {...register("city")}
           />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="search_input" className="form-label">
+            Select User Types
+          </label>
+          <Controller
+            control={control}
+            name="user_type"
+            render={({ field: { value, onChange } }) => (
+              <Multiselect
+                options={options}
+                isObject={false}
+                showCheckbox
+                hidePlaceholder
+                closeOnSelect={false}
+                onSelect={onChange}
+                onRemove={onChange}
+                selectedValues={value}
+                placeholder="Select User Type"
+                className="text"
+              />
+            )}
+          />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="main_user_type" className="form-label">
+            Select Main User Type
+          </label>
+          <div className="col-md-12">
+            <select
+              {...register("main_user_type")}
+              className="form-select"
+              id="main_user_type"
+              name="main_user_type"
+              style={{
+                height: "48px",
+              }}
+            >
+              <option value="">Select a type</option>
+              {UserType
+                ? UserType.map((item, idx) => (
+                    <option key={idx} value={item}>
+                      {item}
+                    </option>
+                  ))
+                : ""}
+            </select>
+          </div>
         </div>
         <div className="text-end">
           <button

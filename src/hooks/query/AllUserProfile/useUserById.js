@@ -10,7 +10,7 @@ const getUserById = async (userId) => {
   return null;
 };
 
-export default function useUsersById(id) {
+export default function useSelectedTypesBy(id) {
   const result = useQuery(["users", id], () => getUserById(id));
   return result;
 }
