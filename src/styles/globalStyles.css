@@ -1308,12 +1308,17 @@ picture {
     font-weight: 600;
     z-index: 999;
     background-color: var(--white);
+    
 }
 
 .common-tab .nav-tabs {
     border-bottom: none;
     justify-content: center;
 }
+ .common-tab .nav-tabs {
+        display: flex !important;
+         justify-content: center !important;
+    }
 
 .common-tab .nav-tabs .nav-link:focus,
 .common-tab .nav-tabs .nav-link:hover {

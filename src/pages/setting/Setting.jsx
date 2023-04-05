@@ -24,7 +24,7 @@ const Setting = () => {
     value?.logout();
     navigate("/login");
   };
-  console.log(value);
+  // console.log(value);
   const {
     isLoading: isUserDetailsLoading,
     error: userDetailsError,
