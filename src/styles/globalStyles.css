@@ -1064,7 +1064,7 @@ picture {
 .cover-photo {
     position: relative;
     width: 100%;
-    height: 200px;
+    height: 350px;
     border-radius: 10px 10px 0 0;
     background-position: center center;
     background-size: cover;
@@ -1096,7 +1096,6 @@ picture {
     margin: auto;
     margin-top: -3.5rem;
     margin-left: 1rem;
-    border: 4px solid var(--white);
 }
 
 .change-img {
@@ -1181,10 +1180,6 @@ picture {
 
 .user-profile figcaption p {
     color: var(--bs-gray);
-}
-
-.profile-bio table tr td {
-    padding: 0.75rem 0;
 }
 
 /*post grid view*/
@@ -1308,6 +1303,7 @@ picture {
     font-weight: 600;
     z-index: 999;
     background-color: var(--white);
+    cursor: pointer;
     
 }
 
@@ -1421,7 +1417,7 @@ picture {
 }
 
 div#listview {
-    padding: 125px 20px 20px;
+    padding: 80px 20px 20px;
 }
 
 .map-view .post-profile {
@@ -1557,6 +1553,8 @@ div#listview {
     flex: 0 250px;
     max-width: 250px;
     height: 100%;
+    position: sticky;
+    top: 150px;
 }
 
 .setting-right {
@@ -1564,7 +1562,6 @@ div#listview {
     margin-left: 1rem;
     border: 1px solid var(--border-color);
     border-radius: .25rem;
-    padding: 1rem;
 }
 
 .setting-post {
@@ -1585,7 +1582,11 @@ div#listview {
 
 .setting-right .nav-tabs {
     border: 0;
-    margin-bottom: 2rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1rem;
 }
 
 .setting-right .nav-tabs .nav-item.show .nav-link,
@@ -1593,14 +1594,14 @@ div#listview {
 .setting-right .nav-tabs .nav-link:hover {
     color: var(--brand-color);
     border: 0;
-    border-bottom: 2px solid var(--brand-color);
+    border-bottom: 4px solid var(--brand-color);
 }
 
 .setting-right .nav-tabs .nav-link {
-    padding: 0 0 0.5rem 0;
+    padding: 1rem 2rem;
     border: 0;
-    margin: 0 1.5rem 0 0;
-    border-bottom: 2px solid transparent;
+    margin: 0 0.5rem;
+    border-bottom: 4px solid transparent;
     font-size: 18px;
     color: var(--black);
 }
@@ -2712,3 +2713,40 @@ table>:not(caption)>*>* {
     height: 70px;
     font-size: 22px;
 }
+
+.edit-profile figure img{ object-fit: cover; }
+
+.react-tabs .react-tabs__tab-list{
+    border-bottom: 1px solid #aaa;
+    margin: 0px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    border: 0px;
+    margin-bottom: 2rem;
+}
+.react-tabs .react-tabs__tab-list li{ 
+    color: var(--black);
+    padding: 0.75rem 5rem;
+    font-size: 1.2rem;
+    border: 1px solid var(--brand-color);
+    font-weight: 600;
+    background-color: var(--white);
+    border-radius: 40px;
+    bottom: 0px;
+    margin: 0 1rem;
+    cursor: pointer;
+ }
+ 
+ .react-tabs .react-tabs__tab-list li.react-tabs__tab--selected{
+    color: var(--white);
+    background-color: var(--brand-color);
+    border-color: var(--brand-color);
+ }
+
+ .cover-photo{ position: relative;}
+ .cover-photo:after{ content: ""; width: 100%; height: 100%; display: flex; background: url(../assets/images/profile-banner.jpg);}
+
+
+/* no-need */
+.post-section .post-image p{ display: none; }

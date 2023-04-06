@@ -149,6 +149,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
 
   return (
     <div className="details">
+      <h3 className="mb-4">Update Your Profile</h3>
       <form className="row g-3">
         <div className="col-md-6">
           <label htmlFor="forename" className="form-label">
@@ -318,6 +319,94 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             // disabled={isUpdateDetailsLoading}
           >
             Update
+          </button>
+        </div>
+      </form>
+      <hr />
+      <h3 className="mb-4">Update Address</h3>
+      <form className="row g-3">
+        <div className="col-md-6">
+          <label htmlFor="unit_number" className="form-label">
+            Unit Number
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="unit_number"
+            name="unit_number"
+            placeholder="Unit Number"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="street_number" className="form-label">
+            Street Number
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="street_number"
+            name="street_number"
+            placeholder="Street Number"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="address_line_1" className="form-label">
+            Address Line 1
+          </label>
+          <textarea
+            rows={4}
+            type="text"
+            className="form-control"
+            id="address_line_1"
+            name="address_line_1"
+            placeholder="Address Line 1"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="address_line_2" className="form-label">
+            Address Line 1
+          </label>
+          <textarea
+            rows={4}
+            type="text"
+            className="form-control"
+            id="address_line_2"
+            name="address_line_2"
+            placeholder="Address Line 2"
+          />
+        </div>
+        <div className="col-md-6 ">
+          <label htmlFor="city" className="form-label">
+            City
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="city"
+            name="city"
+            placeholder="City"
+          />
+        </div>
+        <div className="col-md-6 ">
+          <label htmlFor="region" className="form-label">
+            Region
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="region"
+            name="region"
+            placeholder="Region"
+          />
+        </div>
+        <div className="text-end">
+          <button
+            onClick={handleSubmit(onSubmit)}
+            type="button"
+            className="btn btn-common"
+            // disabled={isUpdateDetailsLoading}
+          >
+            Update Address
           </button>
         </div>
       </form>

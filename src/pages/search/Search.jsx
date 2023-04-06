@@ -8,8 +8,9 @@ const Search = () => {
     <main id="layoutSidenav_content">
       <Tabs>
         <TabList>
-          <Tab>Users</Tab>
-          <Tab>Posts</Tab>
+          <Tab>Search Users</Tab>
+          <Tab>Search Posts</Tab>
+          <Tab>Search Filter</Tab>
         </TabList>
         <TabPanel>
           <Users />

@@ -8,6 +8,7 @@ import {
   getUserProfileImage,
 } from "../../utils/Storage";
 import { getInitials, isNonEmptyString } from "../../helpers";
+import ProfileBannerImage from "../../assets/images/profile-banner.jpg";
 import useUsersById from "../../hooks/query/AllUserProfile/useUserById";
 import DetailsForm from "./components/DetailsForm";
 import useSelectedTypesBy from "../../hooks/query/AllUserProfile/useSelectedUserTypes";
@@ -47,10 +48,7 @@ const Setting = () => {
           <div className="cover-profile">
             <div
               className="cover-photo"
-              style={{
-                backgroundImage: 'url("assets/images/cover-photo.jpg")',
-                backgroundRepeat: "no-repeat",
-              }}
+              style={{ backgroundImage: `url(${ProfileBannerImage})` }}
             />
             <div className="setting-profile">
               <div className="edit-profile">
