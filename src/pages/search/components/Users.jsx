@@ -1,24 +1,24 @@
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useEffect, useState } from "react";
 import SearchImage from "../../../assets/images/search-form.png";
+import React, { useEffect, useState } from "react";
 import { searchService } from "../../../services/SearchService";
 import { getInitials } from "../../../helpers";
 import { Link } from "react-router-dom";
 
+
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    searchService
-      .GetUsers()
+    searchService.GetUsers()
       .then((data) => {
         setUsers(data);
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   }, []);
 
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = users.filter(user => {
     return (
       user.forename.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.surname.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,7 +36,7 @@ const Users = () => {
             placeholder="eg. 'Birmingham' "
             aria-label="Search"
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={event => setSearchTerm(event.target.value)}
           />
           <img src={SearchImage} alt="search" width={24} height={24} />
         </form>
@@ -105,14 +105,10 @@ const Users = () => {
         </div>
       </div>
       <div className="box-shadow p-0">
-        <Tabs className="search common-tab" defaultIndex={1}>
-          <TabList className="nav nav-tabs">
-            <Tab className="nav-link" selectedClassName="active">
-              Map View
-            </Tab>
-            <Tab className="nav-link" selectedClassName="active">
-              List View
-            </Tab>
+        <Tabs className={'search common-tab'} defaultIndex={1}>
+          <TabList className={'nav nav-tabs'}>
+            <Tab className={'nav-link'} selectedClassName="active">Map View</Tab>
+            <Tab className={'nav-link'} selectedClassName="active">List View</Tab>
           </TabList>
           <TabPanel>
             <div
@@ -212,157 +208,8 @@ const Users = () => {
                 </div>
               </div>
             </div>
-<<<<<<< HEAD
-            <div className="box-shadow p-0">
-                <Tabs className={'search common-tab'} defaultIndex={1}>
-                    <TabList className={'nav nav-tabs'}>
-                        <Tab className={'nav-link'} selectedClassName="active">Map View</Tab>
-                        <Tab className={'nav-link'} selectedClassName="active">List View</Tab>
-                    </TabList>
-                    <TabPanel>
-                        <div
-                            className="tab-pane fade"
-                            id="maplist"
-                            role="tabpanel"
-                            aria-labelledby="maplist-tab"
-                        >
-                            <div className="map-view">
-                                <iframe
-                                    style={{ height: "100vh" }}
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d310918.2090576783!2d-2.3452549153972435!3d52.49636149776565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870942d1b417173%3A0xca81fef0aeee7998!2sBirmingham%2C%20UK!5e0!3m2!1sen!2sin!4v1671098987512!5m2!1sen!2sin"
-                                    width="100%"
-                                    height="500px"
-                                    allowFullScreen=""
-                                    loading="lazy"
-                                    title="google Maps"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                />
-                                <div className="post-profile" style={{ left: 140, top: 200 }}>
-                                    <figure>
-                                        <a href="/">
-                                            <span>RJ</span>
-                                            <picture>
-                                                <source
-                                                    srcSet="assets/images/user-img.webp"
-                                                    type="image/webp"
-                                                />
-                                                <source
-                                                    srcSet="assets/images/user-img.png"
-                                                    type="image/png"
-                                                />
-                                                <img
-                                                    loading="lazy"
-                                                    src="assets/images/user-img.png"
-                                                    data-src="assets/images/user-img.png"
-                                                    alt="user-img"
-                                                    className="img-fluid"
-                                                    width={70}
-                                                    height={70}
-                                                />
-                                            </picture>
-                                        </a>
-                                    </figure>
-                                </div>
-                                <div className="post-profile" style={{ left: 250, top: 300 }}>
-                                    <figure>
-                                        <a href="/">
-                                            <span>RJ</span>
-                                            <picture>
-                                                <source
-                                                    srcSet="assets/images/user-img.webp"
-                                                    type="image/webp"
-                                                />
-                                                <source
-                                                    srcSet="assets/images/user-img.png"
-                                                    type="image/png"
-                                                />
-                                                <img
-                                                    loading="lazy"
-                                                    src="assets/images/user-img.png"
-                                                    data-src="assets/images/user-img.png"
-                                                    alt="user-img"
-                                                    className="img-fluid"
-                                                    width={70}
-                                                    height={70}
-                                                />
-                                            </picture>
-                                        </a>
-                                    </figure>
-                                </div>
-                                <div className="post-profile" style={{ left: 200, top: 150 }}>
-                                    <figure>
-                                        <a href="/">
-                                            <span>RJ</span>
-                                            <picture>
-                                                <source
-                                                    srcSet="assets/images/user-img.webp"
-                                                    type="image/webp"
-                                                />
-                                                <source
-                                                    srcSet="assets/images/user-img.png"
-                                                    type="image/png"
-                                                />
-                                                <img
-                                                    loading="lazy"
-                                                    src="assets/images/user-img.png"
-                                                    data-src="assets/images/user-img.png"
-                                                    alt="user-img"
-                                                    className="img-fluid"
-                                                    width={70}
-                                                    height={70}
-                                                />
-                                            </picture>
-                                        </a>
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel className={'tab-content'}>
-                        <div
-                            className="tab-pane fade show active"
-                            id="listview"
-                            role="tabpanel"
-                            aria-labelledby="listview-tab"
-                        >
-                            <ul>
-                                {filteredUsers.map(user => (
-                                    <li>
-                                        <div className="user-post search-user">
-                                            <div className="post-profile">
-                                                <figure>
-                                                    <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>
-                                                        <span hidden={user.profile_image}>{getInitials(`${user.forename} ${user.surname}`)}</span>
-                                                        <picture hidden={!user.profile_image}>
-                                                            <source
-                                                                srcSet={user.profile_image}
-                                                                type="image/webp"
-                                                            />
-                                                            <source
-                                                                srcSet={user.profile_image}
-                                                                type="image/png"
-                                                            />
-                                                            <img
-                                                                loading="lazy"
-                                                                src="assets/images/user-img.png"
-                                                                data-src="assets/images/user-img.png"
-                                                                alt="user-img"
-                                                                className="img-fluid"
-                                                                width={70}
-                                                                height={70}
-                                                            />
-                                                        </picture>
-                                                    </Link>
-                                                </figure>
-                                                <figcaption>
-                                                    <h5 className="mb-0">
-                                                        <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>{`${user.forename} ${user.surname}`}</Link>
-                                                    </h5>
-                                                    <span>{user.bio}</span>
-                                                    {/* <span>
-=======
           </TabPanel>
-          <TabPanel className="tab-content">
+          <TabPanel className={'tab-content'}>
             <div
               className="tab-pane fade show active"
               id="listview"
@@ -370,17 +217,13 @@ const Users = () => {
               aria-labelledby="listview-tab"
             >
               <ul>
-                {filteredUsers.map((user) => (
+                {filteredUsers.map(user => (
                   <li>
                     <div className="user-post search-user">
                       <div className="post-profile">
                         <figure>
-                          <a
-                            href={`/profile/${user.forename}${user.surname}_${user.id}`}
-                          >
-                            <span hidden={user.profile_image}>
-                              {getInitials(`${user.forename} ${user.surname}`)}
-                            </span>
+                          <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>
+                            <span hidden={user.profile_image}>{getInitials(`${user.forename} ${user.surname}`)}</span>
                             <picture hidden={!user.profile_image}>
                               <source
                                 srcSet={user.profile_image}
@@ -400,17 +243,14 @@ const Users = () => {
                                 height={70}
                               />
                             </picture>
-                          </a>
+                          </Link>
                         </figure>
                         <figcaption>
                           <h5 className="mb-0">
-                            <a
-                              href={`/profile/${user.forename}${user.surname}_${user.id}`}
-                            >{`${user.forename} ${user.surname}`}</a>
+                            <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>{`${user.forename} ${user.surname}`}</Link>
                           </h5>
                           <span>{user.bio}</span>
                           {/* <span>
->>>>>>> fba6aa46baa928203615bea9461b3e0accc8a251
                                                         <i className="fa fa-users" /> 200 followers
                                                     </span> */}
                         </figcaption>
