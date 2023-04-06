@@ -218,7 +218,7 @@ const Users = () => {
             >
               <ul>
                 {filteredUsers.map(user => (
-                  <li>
+                  <li key={user.id}>
                     <div className="user-post search-user">
                       <div className="post-profile">
                         <figure>

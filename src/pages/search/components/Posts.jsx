@@ -8,26 +8,92 @@ import { Link } from 'react-router-dom';
 import SearchImage from '../../../assets/images/search-form.png';
 import { searchService } from '../../../services/SearchService';
 import { removeWhitespaces } from '../../../helpers';
+import { GoogleMap, Marker } from "@react-google-maps/api";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [markers, setMarkers] = useState([]);
+
+  const handleTabClick = (index) => {
+    if (index == 0) {
+      fetchData(filteredPosts);
+    }
+  };
 
   useEffect(() => {
-    searchService
-      .GetPosts()
+    searchService.GetPosts()
       .then((data) => {
         setPosts(data);
+        setFilteredPosts(data);
+        fetchData(data);
       })
       .catch((error) => console.error(error));
   }, []);
 
-  const filteredPosts = posts.filter((post) => {
-    return (
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
-      || post.location.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const fetchData = async (posts) => {
+    setMarkers([]);
+    const newMarkers = await Promise.all(
+      posts.map(async post => {
+        const { lat, lng } = await fetchLatLng(post.location);
+        return {
+          lat,
+          lng,
+          title: `${post.title}`,
+          description: post.location,
+        };
+      })
     );
-  });
+    setMarkers(newMarkers);
+    console.log("Markets", newMarkers);
+  };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const newMarkers = await Promise.all(
+  //       filteredPosts.map(async post => {
+  //         const { lat, lng } = await fetchLatLng(post.location);
+  //         return {
+  //           lat,
+  //           lng,
+  //           title: `${post.title}`,
+  //           description: post.location,
+  //         };
+  //       })
+  //     );
+  //     setMarkers(newMarkers);
+  //     console.log("Markets", newMarkers);
+  //   };
+  //   fetchData();
+  // }, [filteredPosts]);
+
+  const handleFilterChange = (event) => {
+    const { value } = event.target;
+    const filtered = posts.filter(
+      (post) =>
+        post.title.toLowerCase().includes(value.toLowerCase()) ||
+        post.location.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredPosts(filtered);
+    fetchData(filtered);
+  };
+
+  async function fetchLatLng(address) {
+    const encodedAddress = encodeURIComponent(
+      `${address}`
+    );
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=AIzaSyCNvROXqDQ9kDgUF5ErbXREjLXkJFUcC54`;
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.status === 'OK') {
+      return data.results[0].geometry.location;
+    } else {
+      throw new Error(`Error fetching latitude and longitude for address: ${address}`);
+    }
+  }
+
 
   return (
     <>
@@ -38,8 +104,7 @@ const Posts = () => {
             className="form-control"
             placeholder="eg. 'Birmingham' "
             aria-label="Search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onKeyUp={handleFilterChange}
           />
           <img src={SearchImage} alt="search" width={24} height={24} />
         </form>
@@ -108,7 +173,7 @@ const Posts = () => {
         </div>
       </div>
       <div className="box-shadow p-0">
-        <Tabs className="search common-tab" defaultIndex={1}>
+        <Tabs onSelect={handleTabClick} className="search common-tab" >
           <TabList className="nav nav-tabs">
             <Tab className="nav-link" selectedClassName="active">
               Map View
@@ -118,102 +183,16 @@ const Posts = () => {
             </Tab>
           </TabList>
           <TabPanel>
-            <div
-              className="tab-pane fade"
-              id="maplist"
-              role="tabpanel"
-              aria-labelledby="maplist-tab"
-            >
-              <div className="map-view">
-                <iframe
-                  style={{ height: '100vh' }}
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d310918.2090576783!2d-2.3452549153972435!3d52.49636149776565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870942d1b417173%3A0xca81fef0aeee7998!2sBirmingham%2C%20UK!5e0!3m2!1sen!2sin!4v1671098987512!5m2!1sen!2sin"
-                  width="100%"
-                  height="500px"
-                  allowFullScreen=""
-                  loading="lazy"
-                  title="google Maps"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-                <div className="post-profile" style={{ left: 140, top: 200 }}>
-                  <figure>
-                    <a href="/">
-                      <span>RJ</span>
-                      <picture>
-                        <source
-                          srcSet="assets/images/user-img.webp"
-                          type="image/webp"
-                        />
-                        <source
-                          srcSet="assets/images/user-img.png"
-                          type="image/png"
-                        />
-                        <img
-                          loading="lazy"
-                          src="assets/images/user-img.png"
-                          data-src="assets/images/user-img.png"
-                          alt="user-img"
-                          className="img-fluid"
-                          width={70}
-                          height={70}
-                        />
-                      </picture>
-                    </a>
-                  </figure>
-                </div>
-                <div className="post-profile" style={{ left: 250, top: 300 }}>
-                  <figure>
-                    <a href="/">
-                      <span>RJ</span>
-                      <picture>
-                        <source
-                          srcSet="assets/images/user-img.webp"
-                          type="image/webp"
-                        />
-                        <source
-                          srcSet="assets/images/user-img.png"
-                          type="image/png"
-                        />
-                        <img
-                          loading="lazy"
-                          src="assets/images/user-img.png"
-                          data-src="assets/images/user-img.png"
-                          alt="user-img"
-                          className="img-fluid"
-                          width={70}
-                          height={70}
-                        />
-                      </picture>
-                    </a>
-                  </figure>
-                </div>
-                <div className="post-profile" style={{ left: 200, top: 150 }}>
-                  <figure>
-                    <a href="/">
-                      <span>RJ</span>
-                      <picture>
-                        <source
-                          srcSet="assets/images/user-img.webp"
-                          type="image/webp"
-                        />
-                        <source
-                          srcSet="assets/images/user-img.png"
-                          type="image/png"
-                        />
-                        <img
-                          loading="lazy"
-                          src="assets/images/user-img.png"
-                          data-src="assets/images/user-img.png"
-                          alt="user-img"
-                          className="img-fluid"
-                          width={70}
-                          height={70}
-                        />
-                      </picture>
-                    </a>
-                  </figure>
-                </div>
-              </div>
+            <div className="map-view pt-5">
+              <GoogleMap
+                mapContainerStyle={{ width: "100%", height: "420px" }}
+                center={center}
+                zoom={2}
+              >
+                {markers.map(({ lat, lng, title }) => (
+                  <Marker key={title} position={{ lat, lng }} title={title} />
+                ))}
+              </GoogleMap>
             </div>
           </TabPanel>
           <TabPanel className="tab-content">
@@ -225,7 +204,7 @@ const Posts = () => {
             >
               <ul>
                 {filteredPosts.map((post) => (
-                  <li>
+                  <li key={post.id}>
                     <div className="user-post search-user">
                       <div className="post-profile">
                         <figcaption>

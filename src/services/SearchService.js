@@ -23,8 +23,8 @@ function GetUserAddress() {
     .catch((error) => error.response);
 }
 
-function GetPosts() {
-  return API.get('search/tabs/posts')
+async function GetPosts() {
+  return await API.get('search/tabs/posts')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;
