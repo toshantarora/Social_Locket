@@ -3,6 +3,7 @@ import SearchImage from "../../../assets/images/search-form.png";
 import React, { useEffect, useState } from "react";
 import { searchService } from "../../../services/SearchService";
 import { getInitials } from "../../../helpers";
+import { Link } from "react-router-dom";
 
 
 const Users = () => {
@@ -221,7 +222,7 @@ const Users = () => {
                                         <div className="user-post search-user">
                                             <div className="post-profile">
                                                 <figure>
-                                                    <a href={`/profile/${user.forename}${user.surname}_${user.id}`}>
+                                                    <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>
                                                         <span hidden={user.profile_image}>{getInitials(`${user.forename} ${user.surname}`)}</span>
                                                         <picture hidden={!user.profile_image}>
                                                             <source
@@ -242,11 +243,11 @@ const Users = () => {
                                                                 height={70}
                                                             />
                                                         </picture>
-                                                    </a>
+                                                    </Link>
                                                 </figure>
                                                 <figcaption>
                                                     <h5 className="mb-0">
-                                                        <a href={`/profile/${user.forename}${user.surname}_${user.id}`}>{`${user.forename} ${user.surname}`}</a>
+                                                        <Link to={`/profile/${user.forename}${user.surname}_${user.id}`}>{`${user.forename} ${user.surname}`}</Link>
                                                     </h5>
                                                     <span>{user.bio}</span>
                                                     {/* <span>

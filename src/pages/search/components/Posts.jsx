@@ -2,9 +2,10 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import SearchImage from "../../../assets/images/search-form.png";
 import React, { useEffect, useState } from "react";
 import { searchService } from "../../../services/SearchService";
-import { getInitials } from "../../../helpers";
+import { getInitials, removeWhitespaces } from "../../../helpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 
 const Posts = () => {
@@ -224,7 +225,7 @@ const Posts = () => {
 
                                                 <figcaption>
                                                     <h5 className="mb-0">
-                                                        <a href={`/profile/`}>{post.title}</a>
+                                                        <Link to={`/postDetails/${post.id}_${removeWhitespaces(post.title)}`}>{post.title}</Link>
                                                     </h5>
                                                     <span><FontAwesomeIcon icon={faMapMarkerAlt} /> {post.location}</span>
                                                     {/* <span>
