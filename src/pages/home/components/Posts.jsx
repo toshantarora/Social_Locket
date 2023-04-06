@@ -301,6 +301,7 @@ const Posts = (props) => {
                     margin={8}
                     autoplay
                     className="owl-carousel owl-theme post-slider"
+                    dots={false}
                     loop
                   >
                     {parseStringArray(props?.post.images).map(

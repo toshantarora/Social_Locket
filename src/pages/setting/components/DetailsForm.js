@@ -1,14 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { Multiselect } from "multiselect-react-dropdown";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
-import { getSelectedValues, isNonEmptyString } from "../../../helpers";
+import { getSelectedValues } from "../../../helpers";
 import { API } from "../../../services/ApiClient";
+import { AuthContext } from "../../../context/authContext";
 
 const schema = yup.object().shape({
   forename: yup.string().required("First Name is required"),
@@ -25,23 +26,16 @@ const options = [
 ];
 const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   const [user, setUser] = useState(null);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    watch,
-    // formState: { errors },
-  } = useForm({
+  const { auth } = useContext(AuthContext);
+  const { register, handleSubmit, control, reset, watch } = useForm({
     resolver: yupResolver(schema),
   });
   const UserType = watch("user_type");
-  console.log("preloadedValues", preloadedValues);
-  const objectWithOnes = userSelectedTypesData ? userSelectedTypesData[0] : {}; // we assume that we have only one object in this array.
+  // console.log("preloadedValues", preloadedValues);
+  const objectWithOnes = userSelectedTypesData ? userSelectedTypesData[0] : {};
 
   const selectedOptions = getSelectedValues(objectWithOnes);
-  console.log("selectedOptions---", selectedOptions);
+  // console.log("selectedOptions---", selectedOptions);
 
   useEffect(() => {
     // simulate async api call with set timeout
@@ -57,13 +51,12 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
           city: preloadedValues?.city,
           main_user_type: preloadedValues?.main_user_type,
           user_type: selectedOptions,
-
           // dob: preloadedValues?.dob,
         }),
       100,
     );
   }, [preloadedValues]);
-  console.log("userSelectedTypesData", userSelectedTypesData);
+  // console.log("userSelectedTypesData", userSelectedTypesData);
   // effect runs when user state is updated
   useEffect(() => {
     // reset form with user data
@@ -71,26 +64,31 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   }, [user]);
 
   const queryClient = useQueryClient();
-
-  const { mutate: updateDetails } = useMutation(
+  const updateDetails = useMutation(
     async (payload) => {
-      const res = await API.put(`users/${preloadedValues?.id}`, payload);
+      const res = API.put(`users/${preloadedValues?.id}`, payload);
       // console.log(res);
-      //   if (res) {
-      //     return res;
-      //   }
+      if (res) {
+        return res;
+      }
 
-      if (isNonEmptyString(res?.data?.message)) {
-        Swal.fire({
-          title: "Success",
-          text: res?.data?.message,
-          icon: "success",
-          confirmButtonText: "Ok",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            //   navigate("/");
-          }
-        });
+      return null;
+    },
+    {
+      onSuccess: (data) => {
+        if (data) {
+          queryClient.invalidateQueries(["users-types"]);
+        }
+      },
+    },
+  );
+
+  const updateUserTypes = useMutation(
+    async (payload) => {
+      const res = await API.put(`user-types/${preloadedValues?.id}`, payload);
+      // console.log(res);
+      if (res) {
+        return res;
       }
       return null;
     },
@@ -102,15 +100,24 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
       },
     },
   );
-  const onSubmit = (data, event) => {
-    event.preventDefault();
-    console.log(data);
 
-    updateDetails({
+  useEffect(() => {
+    if (updateDetails.isSuccess && updateUserTypes.isSuccess) {
+      Swal.fire({
+        title: "Success",
+        text: "Updated Successfully",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
+    }
+  }, [updateDetails.isSuccess, updateUserTypes.isSuccess]);
+  const onSubmit = async (data, event) => {
+    event.preventDefault();
+    const userDetails = {
       id: preloadedValues?.id,
       forename: data?.forename,
       surname: data.surname,
-      dob: data.dob,
+      dob: data.date,
       bio: data?.bio,
       gender: data?.gender,
       mobile: data?.mobile,
@@ -124,12 +131,25 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
       agent: UserType && UserType.includes("agent") ? "1" : "0",
       other: UserType && UserType.includes("other") ? "1" : "0",
       accountant: UserType && UserType.includes("accountant") ? "1" : "0",
-    });
+    };
+    const userTypesUpdateData = {
+      id: preloadedValues?.id,
+      user_id: auth?.userId,
+      seller: UserType && UserType.includes("seller") ? "1" : "0",
+      buyer: UserType && UserType.includes("buyer") ? "1" : "0",
+      finance: UserType && UserType.includes("finance") ? "1" : "0",
+      legal: UserType && UserType.includes("legal") ? "1" : "0",
+      agent: UserType && UserType.includes("agent") ? "1" : "0",
+      other: UserType && UserType.includes("other") ? "1" : "0",
+      accountant: UserType && UserType.includes("accountant") ? "1" : "0",
+    };
+    await updateDetails.mutateAsync(userDetails);
+    await updateUserTypes.mutateAsync(userTypesUpdateData);
   };
 
-  console.log("userType", UserType);
   return (
     <div className="details">
+      <h3 className="mb-4">Update Your Profile</h3>
       <form className="row g-3">
         <div className="col-md-6">
           <label htmlFor="forename" className="form-label">
@@ -299,6 +319,94 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             // disabled={isUpdateDetailsLoading}
           >
             Update
+          </button>
+        </div>
+      </form>
+      <hr />
+      <h3 className="mb-4">Update Address</h3>
+      <form className="row g-3">
+        <div className="col-md-6">
+          <label htmlFor="unit_number" className="form-label">
+            Unit Number
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="unit_number"
+            name="unit_number"
+            placeholder="Unit Number"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="street_number" className="form-label">
+            Street Number
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="street_number"
+            name="street_number"
+            placeholder="Street Number"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="address_line_1" className="form-label">
+            Address Line 1
+          </label>
+          <textarea
+            rows={4}
+            type="text"
+            className="form-control"
+            id="address_line_1"
+            name="address_line_1"
+            placeholder="Address Line 1"
+          />
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="address_line_2" className="form-label">
+            Address Line 1
+          </label>
+          <textarea
+            rows={4}
+            type="text"
+            className="form-control"
+            id="address_line_2"
+            name="address_line_2"
+            placeholder="Address Line 2"
+          />
+        </div>
+        <div className="col-md-6 ">
+          <label htmlFor="city" className="form-label">
+            City
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="city"
+            name="city"
+            placeholder="City"
+          />
+        </div>
+        <div className="col-md-6 ">
+          <label htmlFor="region" className="form-label">
+            Region
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="region"
+            name="region"
+            placeholder="Region"
+          />
+        </div>
+        <div className="text-end">
+          <button
+            onClick={handleSubmit(onSubmit)}
+            type="button"
+            className="btn btn-common"
+            // disabled={isUpdateDetailsLoading}
+          >
+            Update Address
           </button>
         </div>
       </form>
