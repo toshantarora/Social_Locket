@@ -1,11 +1,11 @@
-import Modal from "react-bootstrap/Modal";
+import Modal from 'react-bootstrap/Modal';
 
 const ModalComponent = (props) => {
   return (
     <Modal
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-      size={props?.size ? props?.size : "xl"}
+      size={props?.size ? props?.size : 'xl'}
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >

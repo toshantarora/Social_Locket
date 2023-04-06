@@ -1,15 +1,15 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from 'react';
 // import { useHistory, useLocation } from "react-router-dom";
-import { isNonEmptyString } from "../helpers";
-import { authService } from "../services/AuthApi";
-import { userService } from "../services/UserService";
+import { isNonEmptyString } from '../helpers';
+import { authService } from '../services/AuthApi';
+import { userService } from '../services/UserService';
 import {
   getUserId,
   loadString,
   remove,
   save,
   saveString,
-} from "../utils/Storage";
+} from '../utils/Storage';
 
 export const AuthContext = createContext({});
 
@@ -17,8 +17,8 @@ export const AuthProvider = (props) => {
   const [loading, setLoading] = useState(false);
 
   const [auth, setAuth] = useState(() => {
-    const user = loadString("userDetails");
-    const savedToken = loadString("accessToken");
+    const user = loadString('userDetails');
+    const savedToken = loadString('accessToken');
 
     if (savedToken) {
       try {
@@ -27,27 +27,27 @@ export const AuthProvider = (props) => {
         return {
           token: savedToken,
           isAuthenticated: true,
-          message: "",
+          message: '',
           userEmail: email,
           userId: id,
         };
       } catch (error) {
         console.log(error);
         return {
-          token: "",
+          token: '',
           isAuthenticated: false,
-          message: "",
-          userEmail: "",
-          userId: "",
+          message: '',
+          userEmail: '',
+          userId: '',
         };
       }
     }
     return {
-      token: "",
+      token: '',
       isAuthenticated: false,
-      message: "",
-      userEmail: "",
-      userId: "",
+      message: '',
+      userEmail: '',
+      userId: '',
     };
   });
 
@@ -57,39 +57,39 @@ export const AuthProvider = (props) => {
     const response = await authService.login(data);
     console.log(response?.data);
     if (
-      response &&
-      response?.data &&
-      isNonEmptyString(response?.data?.accessToken)
+      response
+      && response?.data
+      && isNonEmptyString(response?.data?.accessToken)
     ) {
-      saveString("accessToken", response.data.accessToken);
+      saveString('accessToken', response.data.accessToken);
 
       if (response.data.user_id) {
         const userProfile = await userService.getUserProfile(
           response.data.user_id,
         );
         if (userProfile) {
-          save("userDetails", userProfile);
+          save('userDetails', userProfile);
         } else {
-          remove("userDetails", userProfile);
+          remove('userDetails', userProfile);
         }
       }
 
       setAuth({
         token: response?.data?.accessToken,
         isAuthenticated: true,
-        message: "",
-        userEmail: "",
+        message: '',
+        userEmail: '',
         userId: response?.data?.user_id,
       });
     } else {
       setAuth({
-        token: "",
+        token: '',
         isAuthenticated: false,
         message: response?.data?.message,
-        userEmail: "",
-        userId: "",
+        userEmail: '',
+        userId: '',
       });
-      remove("accessToken");
+      remove('accessToken');
     }
     setLoading(false);
     return response;
@@ -99,22 +99,22 @@ export const AuthProvider = (props) => {
     setLoading(true);
 
     const response = await authService.register(data);
-    console.log("responseeee---", response?.data);
+    console.log('responseeee---', response?.data);
     if (
-      response &&
-      response?.data &&
-      isNonEmptyString(response?.data?.accessToken)
+      response
+      && response?.data
+      && isNonEmptyString(response?.data?.accessToken)
     ) {
-      saveString("accessToken", response.data.accessToken);
+      saveString('accessToken', response.data.accessToken);
 
       if (response.data.user_id) {
         const userProfile = await userService.getUserProfile(
           response.data.user_id,
         );
         if (userProfile) {
-          save("userDetails", userProfile);
+          save('userDetails', userProfile);
         } else {
-          remove("userDetails", userProfile);
+          remove('userDetails', userProfile);
         }
       }
 
@@ -127,13 +127,13 @@ export const AuthProvider = (props) => {
       });
     } else {
       setAuth({
-        token: "",
+        token: '',
         isAuthenticated: false,
         message: response?.data?.message,
-        userEmail: "",
-        userId: "",
+        userEmail: '',
+        userId: '',
       });
-      remove("accessToken");
+      remove('accessToken');
     }
     setLoading(false);
     return response;
@@ -141,14 +141,14 @@ export const AuthProvider = (props) => {
 
   const logout = async () => {
     setAuth({
-      token: "",
+      token: '',
       isAuthenticated: false,
-      message: "",
-      userEmail: "",
-      userId: "",
+      message: '',
+      userEmail: '',
+      userId: '',
     });
-    remove("accessToken");
-    remove("userDetails");
+    remove('accessToken');
+    remove('userDetails');
     const userId = getUserId();
     if (userId) {
       const response = await authService.logout(userId);

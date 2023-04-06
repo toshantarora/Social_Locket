@@ -1,8 +1,8 @@
-import { in200s } from "../helpers";
-import { API } from "./ApiClient";
+import { in200s } from '../helpers';
+import { API } from './ApiClient';
 
 function login(data) {
-  return API.post("login", data)
+  return API.post('login', data)
     .then((response) => {
       // console.log("response ***** ", response);
       if (in200s(response.status)) {
@@ -16,7 +16,7 @@ function login(data) {
 }
 
 function register(data) {
-  return API.post("register", data)
+  return API.post('register', data)
     .then((response) => {
       if (in200s(response.status)) {
         // console.log(response.data);
@@ -31,7 +31,7 @@ function register(data) {
 function logout(userId) {
   return API.delete(`logout/${userId}`)
     .then((response) => {
-      console.log("response ***** ", response);
+      console.log('response ***** ', response);
       if (in200s(response.status)) {
         // console.log(response.data);
         return response;

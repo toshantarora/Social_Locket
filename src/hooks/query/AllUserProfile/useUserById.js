@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import { userService } from "../../../services/UserService";
+import { useQuery } from 'react-query';
+import { userService } from '../../../services/UserService';
 
 const getUserById = async (userId) => {
   const res = await userService.getUserProfile(userId);
@@ -11,6 +11,6 @@ const getUserById = async (userId) => {
 };
 
 export default function useSelectedTypesBy(id) {
-  const result = useQuery(["users", id], () => getUserById(id));
+  const result = useQuery(['users', id], () => getUserById(id));
   return result;
 }

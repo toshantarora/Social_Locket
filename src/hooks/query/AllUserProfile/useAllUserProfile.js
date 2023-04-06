@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import { userService } from "../../../services/UserService";
+import { useQuery } from 'react-query';
+import { userService } from '../../../services/UserService';
 
 const getUserProfile = async () => {
   const res = await userService.getAllUserProfile();
@@ -11,5 +11,5 @@ const getUserProfile = async () => {
 };
 
 export default function useAllUserProfile(options = {}) {
-  return useQuery("users", getUserProfile, options);
+  return useQuery('users', getUserProfile, options);
 }

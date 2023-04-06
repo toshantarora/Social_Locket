@@ -1,8 +1,8 @@
-import { in200s } from "../helpers";
-import { API } from "./ApiClient";
+import { in200s } from '../helpers';
+import { API } from './ApiClient';
 
 function GetUsers() {
-  return API.get(`search/tabs/users`)
+  return API.get('search/tabs/users')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;
@@ -13,7 +13,7 @@ function GetUsers() {
 }
 
 function GetUserAddress() {
-  return API.get(`search/tabs/users`)
+  return API.get('search/tabs/users')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;
@@ -24,7 +24,7 @@ function GetUserAddress() {
 }
 
 function GetPosts() {
-  return API.get("search/tabs/posts")
+  return API.get('search/tabs/posts')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;
@@ -37,4 +37,5 @@ function GetPosts() {
 export const searchService = {
   GetUsers,
   GetPosts,
+  GetUserAddress,
 };

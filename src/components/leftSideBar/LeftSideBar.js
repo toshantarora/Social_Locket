@@ -1,11 +1,11 @@
-import OwlCarousel from "react-owl-carousel";
-import slide1 from "../../assets/images/login-banner.webp";
-import slide2 from "../../assets/images/login-banner.png";
-import slide3 from "../../assets/images/register-slider.png";
-import slide4 from "../../assets/images/register-slider.webp";
-import Line from "../../assets/images/lines.png";
-import Triangle from "../../assets/images/tringle.png";
-import circle from "../../assets/images/circle.png";
+import OwlCarousel from 'react-owl-carousel';
+import slide1 from '../../assets/images/login-banner.webp';
+import slide2 from '../../assets/images/login-banner.png';
+import slide3 from '../../assets/images/register-slider.png';
+import slide4 from '../../assets/images/register-slider.webp';
+import Line from '../../assets/images/lines.png';
+import Triangle from '../../assets/images/tringle.png';
+import circle from '../../assets/images/circle.png';
 
 const LeftSidebar = () => {
   return (
@@ -36,7 +36,7 @@ const LeftSidebar = () => {
               </picture>
             </div>
             <div className="item">
-              {" "}
+              {' '}
               <picture>
                 <source srcSet={slide3} type="image/webp" />
                 <source srcSet={slide4} type="image/png" />
@@ -71,7 +71,7 @@ const LeftSidebar = () => {
       </div>
       <div>
         <div className="animate lines">
-          {" "}
+          {' '}
           <img src={Line} alt="lines" />
         </div>
         <div className="animate tringle">

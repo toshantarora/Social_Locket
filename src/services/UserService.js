@@ -1,8 +1,8 @@
-import { in200s } from "../helpers";
-import { API } from "./ApiClient";
+import { in200s } from '../helpers';
+import { API } from './ApiClient';
 
 function supportRequest(data) {
-  return API.post("support-requests", data)
+  return API.post('support-requests', data)
     .then((response) => {
       if (in200s(response.status)) {
         return response.data;
@@ -23,7 +23,7 @@ function getUserProfile(userId) {
     .catch((error) => error.response);
 }
 function getAllUserProfile() {
-  return API.get("users")
+  return API.get('users')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;

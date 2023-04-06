@@ -1,8 +1,8 @@
-import { useState } from "react";
-import "./tagInputStyles.css";
+import { useState } from 'react';
+import './tagInputStyles.css';
 
 const TagInputField = ({ tags, setTags }) => {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   //   const [tags, setTags] = useState([]);
   const [isKeyReleased, setIsKeyReleased] = useState(false);
   const onChange = (e) => {
@@ -14,22 +14,22 @@ const TagInputField = ({ tags, setTags }) => {
     const { key } = e;
     const trimmedInput = input.trim();
 
-    if (key === "," && trimmedInput.length && !tags.includes(trimmedInput)) {
+    if (key === ',' && trimmedInput.length && !tags.includes(trimmedInput)) {
       e.preventDefault();
       setTags((prevState) => [...prevState, trimmedInput]);
-      setInput("");
+      setInput('');
     }
 
     if (
-      key === "Enter" &&
-      trimmedInput.length &&
-      !tags.includes(trimmedInput)
+      key === 'Enter'
+      && trimmedInput.length
+      && !tags.includes(trimmedInput)
     ) {
       e.preventDefault();
       setTags((prevState) => [...prevState, trimmedInput]);
-      setInput("");
+      setInput('');
     }
-    if (key === "Backspace" && !input.length && tags.length && isKeyReleased) {
+    if (key === 'Backspace' && !input.length && tags.length && isKeyReleased) {
       const tagsCopy = [...tags];
       const poppedTag = tagsCopy.pop();
       e.preventDefault();
@@ -39,7 +39,7 @@ const TagInputField = ({ tags, setTags }) => {
 
     setIsKeyReleased(false);
   };
-  console.log("input", tags);
+  console.log('input', tags);
   const onKeyUp = () => {
     setIsKeyReleased(true);
   };

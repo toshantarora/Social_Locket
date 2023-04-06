@@ -73,7 +73,7 @@ export function clear() {
  */
 export function hasUserDetails() {
   try {
-    const user = loadString("userDetails");
+    const user = loadString('userDetails');
     if (user) {
       return true;
     }
@@ -89,7 +89,7 @@ export function hasUserDetails() {
  */
 export function getUserId() {
   try {
-    const user = loadString("userDetails");
+    const user = loadString('userDetails');
     if (user) {
       const userData = JSON.parse(user);
       return userData?.id;
@@ -106,7 +106,7 @@ export function getUserId() {
  */
 export function getUserProfileImage() {
   try {
-    const user = loadString("userDetails");
+    const user = loadString('userDetails');
     if (user) {
       const userData = JSON.parse(user);
       return userData?.profile_image;
@@ -123,7 +123,7 @@ export function getUserProfileImage() {
  */
 export function getUserFullName() {
   try {
-    const user = loadString("userDetails");
+    const user = loadString('userDetails');
     if (user) {
       const userData = JSON.parse(user);
       return `${userData?.forename} ${userData?.surname}`;
@@ -140,7 +140,7 @@ export function getUserFullName() {
  */
 export function getUserBio() {
   try {
-    const user = loadString("userDetails");
+    const user = loadString('userDetails');
     if (user) {
       const userData = JSON.parse(user);
       return userData?.bio;

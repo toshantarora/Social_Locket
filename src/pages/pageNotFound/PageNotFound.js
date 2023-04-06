@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import ErrorImage from "../../assets/images/error.png";
+import { Link } from 'react-router-dom';
+import ErrorImage from '../../assets/images/error.png';
 
 const PageNotFound = () => {
   return (

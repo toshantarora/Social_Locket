@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import { userService } from "../../../services/UserService";
+import { useQuery } from 'react-query';
+import { userService } from '../../../services/UserService';
 
 const getUserTypesId = async (userId) => {
   const res = await userService.getUserTypes(userId);
@@ -11,6 +11,6 @@ const getUserTypesId = async (userId) => {
 };
 
 export default function useUsersById(id) {
-  const result = useQuery(["users-types", id], () => getUserTypesId(id));
+  const result = useQuery(['users-types', id], () => getUserTypesId(id));
   return result;
 }

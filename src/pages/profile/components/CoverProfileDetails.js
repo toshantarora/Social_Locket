@@ -1,7 +1,7 @@
 // import React from "react";
 
-import { Link } from "react-router-dom";
-import { getInitials, isNonEmptyString } from "../../../helpers";
+import { Link } from 'react-router-dom';
+import { getInitials, isNonEmptyString } from '../../../helpers';
 
 const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
   return (
@@ -10,9 +10,9 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
         className="cover-photo"
         style={{
           backgroundImage: `url(${
-            userDetailsData?.banner != null ? userDetailsData?.banner : ""
+            userDetailsData?.banner != null ? userDetailsData?.banner : ''
           })`,
-          backgroundRepeat: "no-repeat",
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <span>
@@ -23,12 +23,12 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
         <figure>
           {userDetailsData?.profile_image === null ? (
             <span className="text-uppercase">
-              {isNonEmptyString(userDetailsData?.forename) &&
-              isNonEmptyString(userDetailsData?.surname)
+              {isNonEmptyString(userDetailsData?.forename)
+              && isNonEmptyString(userDetailsData?.surname)
                 ? getInitials(
-                    `${userDetailsData?.forename}  ${userDetailsData?.surname}`,
-                  )
-                : ""}
+                  `${userDetailsData?.forename}  ${userDetailsData?.surname}`,
+                )
+                : ''}
             </span>
           ) : (
             <picture>
@@ -56,16 +56,16 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
         <figcaption>
           <div>
             <h4 className="mb-0 mt-2">
-              {userDetailsData &&
-              isNonEmptyString(userDetailsData?.forename) &&
-              isNonEmptyString(userDetailsData?.surname)
+              {userDetailsData
+              && isNonEmptyString(userDetailsData?.forename)
+              && isNonEmptyString(userDetailsData?.surname)
                 ? `${userDetailsData?.forename}  ${userDetailsData?.surname}`
-                : ""}
+                : ''}
             </h4>
             <p className="mb-0">
               {isNonEmptyString(userDetailsData?.bio)
                 ? `${userDetailsData?.bio}`
-                : ""}
+                : ''}
             </p>
             {/* <p className="mb-0">Birmingham, UK</p> */}
           </div>
@@ -96,14 +96,14 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
             <button
               type="button"
               className="btn btn-common btn-follow px-3 "
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             >
               Follow
             </button>
             <button
               type="button"
               className="btn btn-common btn-follow px-3 "
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
             >
               Message
             </button>

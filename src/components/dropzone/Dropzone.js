@@ -46,21 +46,21 @@
 
 // export default Dropzone;
 
-import { useDropzone } from "react-dropzone";
+import { useDropzone } from 'react-dropzone';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const getColor = (props) => {
   if (props.isDragAccept) {
-    return "#00e676";
+    return '#00e676';
   }
   if (props.isDragReject) {
-    return "#ff1744";
+    return '#ff1744';
   }
   if (props.isFocused) {
-    return "#2196f3";
+    return '#2196f3';
   }
-  return "#eeeeee";
+  return '#eeeeee';
 };
 
 const Container = styled.div`
@@ -95,7 +95,7 @@ const Dropzone = ({ onDrop }) => {
     isFocused,
     isDragReject,
   } = useDropzone({
-    accept: "image/*",
+    accept: 'image/*',
     onDrop,
     noClick: true,
     noKeyboard: true,
@@ -109,7 +109,7 @@ const Dropzone = ({ onDrop }) => {
 
   return (
     <>
-      {" "}
+      {' '}
       <section className="dropbox">
         <Container
           className="dropbox"

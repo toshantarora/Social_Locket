@@ -1,10 +1,10 @@
-import { in200s } from "../helpers";
-import { API } from "./ApiClient";
+import { in200s } from '../helpers';
+import { API } from './ApiClient';
 
 function getPosts() {
-  return API.get("posts")
+  return API.get('posts')
     .then((response) => {
-      console.log("response ***** ", response);
+      console.log('response ***** ', response);
       if (in200s(response.status)) {
         // console.log(response.data);
         return response.data?.result;
@@ -17,7 +17,7 @@ function getPosts() {
 async function getPostsById(id) {
   return API.get(`posts/${id}`)
     .then((response) => {
-      console.log("response ***** ", response);
+      console.log('response ***** ', response);
       if (in200s(response.status)) {
         // console.log(response.data);
         return response.data?.result;

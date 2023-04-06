@@ -1,36 +1,38 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useContext, useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
-import { Multiselect } from "multiselect-react-dropdown";
-import "react-datepicker/dist/react-datepicker.css";
-import Swal from "sweetalert2";
-import { Controller, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
-import { getSelectedValues } from "../../../helpers";
-import { API } from "../../../services/ApiClient";
-import { AuthContext } from "../../../context/authContext";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useContext, useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import { Multiselect } from 'multiselect-react-dropdown';
+import 'react-datepicker/dist/react-datepicker.css';
+import Swal from 'sweetalert2';
+import { Controller, useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
+import { getSelectedValues } from '../../../helpers';
+import { API } from '../../../services/ApiClient';
+import { AuthContext } from '../../../context/authContext';
 
 const schema = yup.object().shape({
-  forename: yup.string().required("First Name is required"),
-  surname: yup.string().required("Last Name is required"),
+  forename: yup.string().required('First Name is required'),
+  surname: yup.string().required('Last Name is required'),
 });
 const options = [
-  "buyer",
-  "seller",
-  "finance",
-  "legal",
-  "agent",
-  "accountant",
-  "other",
+  'buyer',
+  'seller',
+  'finance',
+  'legal',
+  'agent',
+  'accountant',
+  'other',
 ];
 const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   const [user, setUser] = useState(null);
   const { auth } = useContext(AuthContext);
-  const { register, handleSubmit, control, reset, watch } = useForm({
+  const {
+    register, handleSubmit, control, reset, watch,
+  } = useForm({
     resolver: yupResolver(schema),
   });
-  const UserType = watch("user_type");
+  const UserType = watch('user_type');
   // console.log("preloadedValues", preloadedValues);
   const objectWithOnes = userSelectedTypesData ? userSelectedTypesData[0] : {};
 
@@ -40,19 +42,18 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   useEffect(() => {
     // simulate async api call with set timeout
     setTimeout(
-      () =>
-        setUser({
-          forename: preloadedValues?.forename,
-          surname: preloadedValues?.surname,
-          email: preloadedValues?.email,
-          bio: preloadedValues?.bio,
-          mobile: preloadedValues?.mobile,
-          gender: preloadedValues?.gender,
-          city: preloadedValues?.city,
-          main_user_type: preloadedValues?.main_user_type,
-          user_type: selectedOptions,
-          // dob: preloadedValues?.dob,
-        }),
+      () => setUser({
+        forename: preloadedValues?.forename,
+        surname: preloadedValues?.surname,
+        email: preloadedValues?.email,
+        bio: preloadedValues?.bio,
+        mobile: preloadedValues?.mobile,
+        gender: preloadedValues?.gender,
+        city: preloadedValues?.city,
+        main_user_type: preloadedValues?.main_user_type,
+        user_type: selectedOptions,
+        // dob: preloadedValues?.dob,
+      }),
       100,
     );
   }, [preloadedValues]);
@@ -77,7 +78,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
     {
       onSuccess: (data) => {
         if (data) {
-          queryClient.invalidateQueries(["users-types"]);
+          queryClient.invalidateQueries(['users-types']);
         }
       },
     },
@@ -95,7 +96,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
     {
       onSuccess: (data) => {
         if (data) {
-          queryClient.invalidateQueries(["users"]);
+          queryClient.invalidateQueries(['users']);
         }
       },
     },
@@ -104,10 +105,10 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
   useEffect(() => {
     if (updateDetails.isSuccess && updateUserTypes.isSuccess) {
       Swal.fire({
-        title: "Success",
-        text: "Updated Successfully",
-        icon: "success",
-        confirmButtonText: "Ok",
+        title: 'Success',
+        text: 'Updated Successfully',
+        icon: 'success',
+        confirmButtonText: 'Ok',
       });
     }
   }, [updateDetails.isSuccess, updateUserTypes.isSuccess]);
@@ -123,25 +124,25 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
       mobile: data?.mobile,
       email: data?.email,
       main_user_type: data?.main_user_type,
-      seller: UserType && UserType.includes("seller") ? "1" : "0",
-      buyer: UserType && UserType.includes("buyer") ? "1" : "0",
-      finance: UserType && UserType.includes("finance") ? "1" : "0",
-      legal: UserType && UserType.includes("legal") ? "1" : "0",
-      status: "",
-      agent: UserType && UserType.includes("agent") ? "1" : "0",
-      other: UserType && UserType.includes("other") ? "1" : "0",
-      accountant: UserType && UserType.includes("accountant") ? "1" : "0",
+      seller: UserType && UserType.includes('seller') ? '1' : '0',
+      buyer: UserType && UserType.includes('buyer') ? '1' : '0',
+      finance: UserType && UserType.includes('finance') ? '1' : '0',
+      legal: UserType && UserType.includes('legal') ? '1' : '0',
+      status: '',
+      agent: UserType && UserType.includes('agent') ? '1' : '0',
+      other: UserType && UserType.includes('other') ? '1' : '0',
+      accountant: UserType && UserType.includes('accountant') ? '1' : '0',
     };
     const userTypesUpdateData = {
       id: preloadedValues?.id,
       user_id: auth?.userId,
-      seller: UserType && UserType.includes("seller") ? "1" : "0",
-      buyer: UserType && UserType.includes("buyer") ? "1" : "0",
-      finance: UserType && UserType.includes("finance") ? "1" : "0",
-      legal: UserType && UserType.includes("legal") ? "1" : "0",
-      agent: UserType && UserType.includes("agent") ? "1" : "0",
-      other: UserType && UserType.includes("other") ? "1" : "0",
-      accountant: UserType && UserType.includes("accountant") ? "1" : "0",
+      seller: UserType && UserType.includes('seller') ? '1' : '0',
+      buyer: UserType && UserType.includes('buyer') ? '1' : '0',
+      finance: UserType && UserType.includes('finance') ? '1' : '0',
+      legal: UserType && UserType.includes('legal') ? '1' : '0',
+      agent: UserType && UserType.includes('agent') ? '1' : '0',
+      other: UserType && UserType.includes('other') ? '1' : '0',
+      accountant: UserType && UserType.includes('accountant') ? '1' : '0',
     };
     await updateDetails.mutateAsync(userDetails);
     await updateUserTypes.mutateAsync(userTypesUpdateData);
@@ -161,7 +162,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             id="forename"
             name="forename"
             placeholder="Lettie"
-            {...register("forename")}
+            {...register('forename')}
           />
         </div>
         <div className="col-md-6">
@@ -174,7 +175,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             id="surname"
             name="surname"
             placeholder="Christen"
-            {...register("surname")}
+            {...register('surname')}
           />
         </div>
         <div className="col-md-6">
@@ -187,7 +188,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             id="bio"
             name="bio"
             placeholder="Content Creator"
-            {...register("bio")}
+            {...register('bio')}
           />
         </div>
         <div className="col-md-6">
@@ -197,7 +198,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
           <select
             className="form-control"
             name="gender"
-            {...register("gender")}
+            {...register('gender')}
           >
             <option value=""> Select a gender </option>
             <option value="male">Male</option>
@@ -232,7 +233,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             id="mobile"
             name="mobile"
             placeholder="+92 9887673456"
-            {...register("mobile")}
+            {...register('mobile')}
           />
         </div>
 
@@ -247,7 +248,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             name="email"
             placeholder="lyhxr@example.com"
             disabled
-            {...register("email")}
+            {...register('email')}
           />
         </div>
         <div className="col-md-6">
@@ -260,7 +261,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             id="city"
             name="city"
             placeholder="Birmingham"
-            {...register("city")}
+            {...register('city')}
           />
         </div>
         <div className="mb-2">
@@ -292,22 +293,22 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
           </label>
           <div className="col-md-12">
             <select
-              {...register("main_user_type")}
+              {...register('main_user_type')}
               className="form-select"
               id="main_user_type"
               name="main_user_type"
               style={{
-                height: "48px",
+                height: '48px',
               }}
             >
               <option value="">Select a type</option>
               {UserType
                 ? UserType.map((item, idx) => (
-                    <option key={idx} value={item}>
-                      {item}
-                    </option>
-                  ))
-                : ""}
+                  <option key={idx} value={item}>
+                    {item}
+                  </option>
+                ))
+                : ''}
             </select>
           </div>
         </div>

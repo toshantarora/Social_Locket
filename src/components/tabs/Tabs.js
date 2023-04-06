@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 const Tabs = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -14,7 +14,7 @@ const Tabs = (props) => {
           <li key={tab.title}>
             <button
               // className="nav-link active"
-              className={`nav-link ${activeIndex === index ? "active" : ""}`}
+              className={`nav-link ${activeIndex === index ? 'active' : ''}`}
               onClick={() => handleTabClick(index)}
               id="nav-bio-tab"
               data-bs-toggle="tab"
@@ -32,7 +32,7 @@ const Tabs = (props) => {
       <div className="tab-content" id="nav-tabContent">
         <div
           className={`tab-pane fade ${
-            props.tabs[activeIndex] ? "show active" : ""
+            props.tabs[activeIndex] ? 'show active' : ''
           }`}
           id="nav-bio"
           role="tabpanel"

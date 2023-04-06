@@ -80,6 +80,12 @@
     "eslint no-nested-ternary": "off",
     "no-restricted-syntax": [
       "off"
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 2000
+      }
     ]
   }
 }

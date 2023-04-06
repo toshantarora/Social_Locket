@@ -1,8 +1,8 @@
-import { in200s } from "../helpers";
-import { API } from "./ApiClient";
+import { in200s } from '../helpers';
+import { API } from './ApiClient';
 
 function GetCountryCodes() {
-  return API.get("country")
+  return API.get('country')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;

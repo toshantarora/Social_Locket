@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import { postsService } from "../../../services/PostApi";
+import { useQuery } from 'react-query';
+import { postsService } from '../../../services/PostApi';
 
 const getPosts = async () => {
   const res = await postsService.getPosts();
@@ -11,5 +11,5 @@ const getPosts = async () => {
 };
 
 export default function usePosts(options = {}) {
-  return useQuery("posts", getPosts, options);
+  return useQuery('posts', getPosts, options);
 }

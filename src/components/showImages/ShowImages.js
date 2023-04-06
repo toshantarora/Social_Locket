@@ -1,5 +1,5 @@
 // import Image from './Image';
-import "./showImagesStyles.css";
+import './showImagesStyles.css';
 
 const Image = ({ image }) => {
   return (
