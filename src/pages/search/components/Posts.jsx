@@ -1,13 +1,17 @@
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import SearchImage from "../../../assets/images/search-form.png";
-import { searchService } from "../../../services/SearchService";
+import {
+  Tab, TabList, TabPanel, Tabs,
+} from 'react-tabs';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+import SearchImage from '../../../assets/images/search-form.png';
+import { searchService } from '../../../services/SearchService';
+import { removeWhitespaces } from '../../../helpers';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     searchService
@@ -20,8 +24,8 @@ const Posts = () => {
 
   const filteredPosts = posts.filter((post) => {
     return (
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.location.toLowerCase().includes(searchTerm.toLowerCase())
+      post.title.toLowerCase().includes(searchTerm.toLowerCase())
+      || post.location.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -41,7 +45,7 @@ const Posts = () => {
         </form>
         <div className="search-filter">
           <div className="filter-value">
-            <select className="form-select" style={{ border: "none" }}>
+            <select className="form-select" style={{ border: 'none' }}>
               <option selected="" disabled="">
                 Location
               </option>
@@ -51,7 +55,7 @@ const Posts = () => {
               <option>Birmingham</option>
             </select>
 
-            <select className="form-select" style={{ border: "none" }}>
+            <select className="form-select" style={{ border: 'none' }}>
               <option selected="" disabled="">
                 5 Miles
               </option>
@@ -60,7 +64,7 @@ const Posts = () => {
               <option>15 miles</option>
             </select>
 
-            <select className="form-select" style={{ border: "none" }}>
+            <select className="form-select" style={{ border: 'none' }}>
               <option selected="" disabled="">
                 2 Pages
               </option>
@@ -70,7 +74,7 @@ const Posts = () => {
               <option>6 Pages</option>
             </select>
 
-            <select className="form-select" style={{ border: "none" }}>
+            <select className="form-select" style={{ border: 'none' }}>
               <option selected="" disabled="">
                 Price
               </option>
@@ -80,7 +84,7 @@ const Posts = () => {
               <option>$ 400</option>
             </select>
 
-            <select className="form-select" style={{ border: "none" }}>
+            <select className="form-select" style={{ border: 'none' }}>
               <option selected="" disabled="">
                 Stakeholders
               </option>
@@ -122,7 +126,7 @@ const Posts = () => {
             >
               <div className="map-view">
                 <iframe
-                  style={{ height: "100vh" }}
+                  style={{ height: '100vh' }}
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d310918.2090576783!2d-2.3452549153972435!3d52.49636149776565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870942d1b417173%3A0xca81fef0aeee7998!2sBirmingham%2C%20UK!5e0!3m2!1sen!2sin!4v1671098987512!5m2!1sen!2sin"
                   width="100%"
                   height="500px"
@@ -226,10 +230,11 @@ const Posts = () => {
                       <div className="post-profile">
                         <figcaption>
                           <h5 className="mb-0">
-                            <a href="/profile/">{post.title}</a>
+                            <Link to={`${post.id}_${removeWhitespaces(post.title)}`}>{post.title}</Link>
                           </h5>
                           <span>
-                            <FontAwesomeIcon icon={faMapMarkerAlt} />{" "}
+                            <FontAwesomeIcon icon={faMapMarkerAlt} />
+                            {' '}
                             {post.location}
                           </span>
                           {/* <span>
