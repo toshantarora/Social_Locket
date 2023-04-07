@@ -13,7 +13,7 @@ function GetUsers() {
 }
 
 function GetUserAddress() {
-  return API.get('search/tabs/users')
+  return API.get('search/tabs/usersaddress')
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;

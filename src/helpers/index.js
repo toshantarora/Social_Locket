@@ -102,6 +102,13 @@ export const removeWhitespaces = (str) => {
     .replace(/\s/g, '');
 };
 
+export const getAddress = (street, address1, address2, city, country, postalcode) => {
+  const addressComponents = [street, address1, address2, city, country, postalcode];
+  const address = addressComponents.filter((component) => component !== null && component !== undefined).join(', ');
+  return address;
+}
+
+
 export function getIdValue(str) {
   if (str) {
     const val = Object.values(str);
@@ -121,6 +128,7 @@ export function getAfterUnderScoreValue(str) {
   }
   return '';
 }
+
 
 export function getSelectedValues(objectWithOnes) {
   // const keysWithOnes = [];

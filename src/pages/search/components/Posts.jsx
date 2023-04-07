@@ -8,13 +8,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import SearchImage from '../../../assets/images/search-form.png';
 import { searchService } from '../../../services/SearchService';
 import { removeWhitespaces } from '../../../helpers';
-import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [markers, setMarkers] = useState([]);
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyCNvROXqDQ9kDgUF5ErbXREjLXkJFUcC54",
+    libraries: ["places"]
+  });
 
   const navigate = useNavigate();
   const handleTabClick = (index) => {
@@ -48,7 +53,6 @@ const Posts = () => {
       })
     );
     setMarkers(newMarkers);
-    console.log("Markets", newMarkers);
   };
 
   const handleFilterChange = (event) => {
@@ -169,7 +173,7 @@ const Posts = () => {
           </TabList>
           <TabPanel>
             <div className="map-view pt-5">
-              <GoogleMap
+              {isLoaded && (<GoogleMap
                 mapContainerStyle={{ width: "100%", height: "420px" }}
                 center={center}
                 zoom={2}
@@ -182,7 +186,10 @@ const Posts = () => {
                   >
                   </Marker>
                 ))}
-              </GoogleMap>
+              </GoogleMap>)}
+
+              {!isLoaded && (<div>Loading Google Maps API...</div>)}
+
             </div>
           </TabPanel>
           <TabPanel className="tab-content">
