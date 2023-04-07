@@ -7,8 +7,8 @@ const UserPosts = ({ usersPost }) => {
   return (
     <div className="post-grid">
       <ul className="box-container three-cols">
-        {usersPost.length > 0 ? (
-          usersPost.map((item, idx) => parseStringArray(item.images).map((imag) => (
+        {usersPost?.length > 0 ? (
+          usersPost?.map((item, idx) => parseStringArray(item?.images)?.map((imag) => (
             <li key={idx} className="box show">
               <div className="inner">
                 <a
