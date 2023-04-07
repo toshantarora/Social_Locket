@@ -20,6 +20,7 @@ import {
   getIdValue,
   getInitials,
   isNonEmptyArray,
+  isNumber,
   removeWhitespaces,
   // parseStringArray,
 } from '../../helpers';
@@ -106,7 +107,8 @@ const SideBar = () => {
           height={24}
         />
       </form>
-      {isNonEmptyArray(postsDetailsData) ? (
+      {
+        isNumber(id) && isNonEmptyArray(postsDetailsData) ? (
         postsDetailsData.map((item, idx) => {
           return (
             <div key={idx} className="post-details-list py-3">

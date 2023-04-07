@@ -14,14 +14,17 @@ import {
   parseStringArray,
 } from '../../helpers';
 import '../../styles/globalStyles.css';
+import Comments from '../home/components/Comments';
+import { useState } from 'react';
 
 const PostDetails = () => {
   const params = useParams();
+   const [commentOpen, setCommentOpen] = useState(true);
   const id = getIdValue(params);
    const {
      state
    } = useLocation();
-
+   console.log("state", state, params)
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,
@@ -168,7 +171,7 @@ const PostDetails = () => {
                           </span>
                         </span>
                       </button>
-                      <button type="button">
+                      <button type="button" onClick={() => setCommentOpen(!commentOpen)}>
                         <span className="comment-count">
                           <i className="fa fa-message" />
                           {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}
@@ -187,81 +190,7 @@ const PostDetails = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="comment-section">
-                    <div className="comment-posted">
-                      <figure>
-                        <span>DR</span>
-                        <picture>
-                          <source
-                            srcSet="../../assets/images/user-img.webp"
-                            type="image/webp"
-                          />
-                          <source
-                            srcSet="../../assets/images/user-img.png"
-                            type="image/png"
-                          />
-                          <img
-                            loading="lazy"
-                            src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                            data-src="../../assets/images/user-img.png"
-                            alt="user-img"
-                            className="img-fluid"
-                            width={55}
-                            height={55}
-                          />
-                        </picture>
-                      </figure>
-                      <figcaption>
-                        <h6>
-                          <strong>Dorenshie Ree</strong>
-                        </h6>
-                        <p>
-                          Create a blog brief using our hassle-free, guided
-                          flow. Get a preliminary quote and estimated
-                          delivery...
-                          <a href="/">See More</a>
-                        </p>
-                      </figcaption>
-                    </div>
-                    <div className="share-comment">
-                      <figure>
-                        <span
-                          className="text-uppercase  text-white"
-                          hidden={userProfilePic}
-                        >
-                          {userProfileText}
-                        </span>
-                        <picture>
-                          <source srcSet={userProfilePic} type="image/webp" />
-                          <source srcSet={userProfilePic} type="image/png" />
-                          <img
-                            loading="lazy"
-                            src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                            data-src={userProfilePic}
-                            alt="user-img"
-                            className="img-fluid"
-                            width={50}
-                            height={50}
-                          />
-                        </picture>
-                      </figure>
-                      <span>
-                        <input
-                          type="text"
-                          name=""
-                          placeholder="Write your comment...."
-                        />
-                        <button type="button">
-                          <img
-                            src={ShareCommentImage}
-                            alt="share"
-                            width={24}
-                            height={24}
-                          />
-                        </button>
-                      </span>
-                    </div>
-                  </div>
+                 {commentOpen && < Comments postId = {id} />}
                 </li>
               </ul>
             </div>
