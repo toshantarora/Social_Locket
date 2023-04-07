@@ -6,9 +6,13 @@ const UserPosts = ({ usersPost }) => {
   console.log('usersPost', usersPost);
   return (
     <div className="post-grid">
+      
       <ul className="box-container three-cols">
-        {usersPost?.length > 0 ? (
-          usersPost?.map((item, idx) => parseStringArray(item?.images)?.map((imag) => (
+        {
+          usersPost !== null ? (
+          usersPost?.map((item, idx) => item?.images !== null ?
+          parseStringArray(item?.images)?.map((imag) => (
+
             <li key={idx} className="box show">
               <div className="inner">
                 <a
@@ -19,7 +23,9 @@ const UserPosts = ({ usersPost }) => {
                 </a>
               </div>
             </li>
-          )))
+          ))
+           : < p > No Posts </p>
+          )  
         ) : (
           <p>No Posts</p>
         )}

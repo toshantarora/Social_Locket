@@ -35,7 +35,7 @@ const Profile = () => {
     {
       title: "Post",
       content: (
-        <UserPosts usersPost={isNonEmptyArray(usersPost) ? usersPost : []} />
+        <UserPosts usersPost={usersPost} />
       ),
     },
   ];
