@@ -11,6 +11,6 @@ const getPostsBy = async (postId) => {
 };
 
 export default function usePostsById(id) {
-  const result = useQuery(['posts', id], () => getPostsBy(id));
+  const result = useQuery(['posts-id', id], () => getPostsBy(id));
   return result;
 }

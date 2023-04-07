@@ -14,13 +14,13 @@ function getPosts() {
     })
     .catch((error) => error.response);
 }
-async function getPostsById(id) {
-  return API.get(`posts/${id}`)
+function getPostsById(id) {
+  return  API.get(`posts/${id}`)
     .then((response) => {
-      console.log('response ***** ', response);
+      console.log('response =================== ', response);
       if (in200s(response.status)) {
         // console.log(response.data);
-        return response.data?.result;
+        return response?.data?.result;
       }
 
       return null;

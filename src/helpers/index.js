@@ -112,9 +112,9 @@ export const getAddress = (street, address1, address2, city, country, postalcode
 export function getIdValue(str) {
   if (str) {
     const val = Object.values(str);
-    const index = val[0].indexOf('');
-    const result = val[0].substr(index);
-    return result.charAt(0);
+    const valInStr = val.toString();
+    const index = valInStr.split("_")[0];
+    return index;
   }
   return '';
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import OwlCarousel from 'react-owl-carousel';
 import usePostsById from '../../hooks/query/Posts/usePostsById';
@@ -9,6 +9,7 @@ import {
   formatDate,
   getIdValue,
   getInitials,
+  isNonEmptyArray,
   isNonEmptyString,
   parseStringArray,
 } from '../../helpers';
@@ -17,6 +18,10 @@ import '../../styles/globalStyles.css';
 const PostDetails = () => {
   const params = useParams();
   const id = getIdValue(params);
+   const {
+     state
+   } = useLocation();
+   console.log("state", state, params)
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,
@@ -25,10 +30,10 @@ const PostDetails = () => {
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
-  console.log(postsDetailsLoading, postsDetailsError, postsDetailsData);
+  console.log(postsDetailsLoading, postsDetailsError);
   return (
     <>
-      {postsDetailsData
+      {isNonEmptyArray(postsDetailsData)
         ? postsDetailsData.map((item, idx) => (
           <main id="layoutSidenav_content">
             <div key={idx} className="post">

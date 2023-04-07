@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import '../../styles/globalStyles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,6 +17,7 @@ import {
 } from '../../utils/Storage';
 import {
   formatOnlyDate,
+  getIdValue,
   getInitials,
   isNonEmptyArray,
   removeWhitespaces,
@@ -24,6 +25,7 @@ import {
 } from '../../helpers';
 import { AuthContext } from '../../context/authContext';
 import usePostsById from '../../hooks/query/Posts/usePostsById';
+// import { useQueryClient } from 'react-query';
 
 const SideBar = () => {
   const userProfilePic = getUserProfileImage();
@@ -35,9 +37,12 @@ const SideBar = () => {
   const userId = auth?.userId ? auth?.userId.toString() : '';
   const userProfileUrl = UserFullName ? UserFullName.concat('_', userId) : '';
   const { state } = useLocation();
+   const params = useParams();
+   const id = getIdValue(params);
 
-  const { data: postsDetailsData } = usePostsById(state?.id);
-
+  const {
+    data: postsDetailsData
+  } = usePostsById(state?.id ? state?.id : id);
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
