@@ -4,11 +4,11 @@ import {
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchImage from '../../../assets/images/search-form.png';
 import { searchService } from '../../../services/SearchService';
 import { removeWhitespaces } from '../../../helpers';
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -16,6 +16,7 @@ const Posts = () => {
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [markers, setMarkers] = useState([]);
 
+  const navigate = useNavigate();
   const handleTabClick = (index) => {
     if (index == 0) {
       fetchData(filteredPosts);
@@ -39,35 +40,16 @@ const Posts = () => {
       posts.map(async post => {
         const { lat, lng } = await fetchLatLng(post.location);
         return {
-          lat,
-          lng,
+          id: post.id,
+          position: { lat, lng },
           title: `${post.title}`,
-          description: post.location,
+          location: post.location,
         };
       })
     );
     setMarkers(newMarkers);
     console.log("Markets", newMarkers);
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const newMarkers = await Promise.all(
-  //       filteredPosts.map(async post => {
-  //         const { lat, lng } = await fetchLatLng(post.location);
-  //         return {
-  //           lat,
-  //           lng,
-  //           title: `${post.title}`,
-  //           description: post.location,
-  //         };
-  //       })
-  //     );
-  //     setMarkers(newMarkers);
-  //     console.log("Markets", newMarkers);
-  //   };
-  //   fetchData();
-  // }, [filteredPosts]);
 
   const handleFilterChange = (event) => {
     const { value } = event.target;
@@ -93,7 +75,10 @@ const Posts = () => {
       throw new Error(`Error fetching latitude and longitude for address: ${address}`);
     }
   }
-
+  const handleMarkerClick = (event, marker) => {
+    const url = `/postDetails/${marker.id}_${removeWhitespaces(marker.title)}`;
+    navigate(url, { replace: true });
+  }
 
   return (
     <>
@@ -189,8 +174,13 @@ const Posts = () => {
                 center={center}
                 zoom={2}
               >
-                {markers.map(({ lat, lng, title }) => (
-                  <Marker key={title} position={{ lat, lng }} title={title} />
+                {markers.map((marker, index) => (
+                  <Marker
+                    key={index} position={marker.position}
+                    title={marker.title}
+                    onClick={(event) => handleMarkerClick(event, marker)}
+                  >
+                  </Marker>
                 ))}
               </GoogleMap>
             </div>
@@ -209,7 +199,7 @@ const Posts = () => {
                       <div className="post-profile">
                         <figcaption>
                           <h5 className="mb-0">
-                            <Link to={`${post.id}_${removeWhitespaces(post.title)}`}>{post.title}</Link>
+                            <Link to={`/postDetails/${post.id}_${removeWhitespaces(post.title)}`}>{post.title}</Link>
                           </h5>
                           <span>
                             <FontAwesomeIcon icon={faMapMarkerAlt} />
