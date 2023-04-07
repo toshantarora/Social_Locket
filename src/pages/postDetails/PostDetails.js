@@ -21,7 +21,7 @@ const PostDetails = () => {
    const {
      state
    } = useLocation();
-   console.log("state", state, params)
+
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,

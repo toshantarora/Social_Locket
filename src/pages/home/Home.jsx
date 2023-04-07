@@ -11,6 +11,7 @@ import {
 } from "../../utils/Storage";
 import Posts from "./components/Posts";
 import { getInitials } from "../../helpers";
+import usePostComments from "../../hooks/query/Posts/usePostComments";
 // import useAllUserProfile from "../../hooks/query/AllUserProfile/useAllUserProfile";
 
 const Home = () => {
@@ -19,6 +20,17 @@ const Home = () => {
     error: postsError,
     data: postsData,
   } = usePosts();
+
+  const {
+    isLoading: isallCommentsLLoading,
+    error: allCommentsError,
+    data: allCommentsData,
+  } = usePostComments();
+  console.log({
+  isallCommentsLLoading,
+  allCommentsError,
+ allCommentsData,
+  });
 
   const [postTitle, setPostTitle] = useState("");
   const userProfilePic = getUserProfileImage();

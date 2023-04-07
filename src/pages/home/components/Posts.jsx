@@ -12,21 +12,18 @@ import {
   parseStringArray,
   removeWhitespaces,
 } from "../../../helpers";
-import ShareCommentImage from "../../../assets/images/share-icon.png";
-import { getUserFullName, getUserProfileImage } from "../../../utils/Storage";
 import { API } from "../../../services/ApiClient";
 import { AuthContext } from "../../../context/authContext";
+import Comments from "./Comments";
 
 const MAX_LENGTH = 60;
 
 const Posts = (props) => {
-  const userProfilePic = getUserProfileImage();
-  const UserFullName = getUserFullName();
-  const userProfileText = getInitials(UserFullName);
   const postId = props?.post?.id ? props?.post?.id.toString() : "";
   const userId = props?.post?.user_id ? props?.post?.user_id.toString() : "";
   const { auth } = useContext(AuthContext);
   const [isLiked, setIsLiked] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(false);
   // user_id
   const userTitle = props?.post?.title ? props?.post?.title : "";
   const titleLink = postId.concat("_", userTitle);
@@ -211,8 +208,7 @@ const Posts = (props) => {
             <div className="user-post">
               <Link
                 to={`/profile/${removeWhitespaces(userProfileUrl)}`}
-                className="post-profile"
-              >
+                className="post-profile">
                 <figure>
                   {isNonEmptyString(props?.post?.profile_image) ? (
                     <picture>
@@ -239,9 +235,9 @@ const Posts = (props) => {
                       {isNonEmptyString(props?.post?.forename) &&
                       isNonEmptyString(props?.post?.surname)
                         ? getInitials(
-                            `${props?.post?.forename}  ${props?.post?.surname}`,
+                            `${props?.post?.forename}  ${props?.post?.surname}`
                           )
-                        : ""}
+                        : ''}
                     </span>
                   )}
                 </figure>
@@ -250,12 +246,12 @@ const Posts = (props) => {
                     {isNonEmptyString(props?.post?.forename) &&
                     isNonEmptyString(props?.post?.surname)
                       ? `${props?.post?.forename}  ${props?.post?.surname}`
-                      : "User"}
+                      : 'User'}
                   </h5>
                   <span>
                     {isNonEmptyString(props?.post?.created)
                       ? formatDate(props?.post?.created)
-                      : ""}
+                      : ''}
                   </span>
                 </figcaption>
               </Link>
@@ -276,7 +272,7 @@ const Posts = (props) => {
                     dangerouslySetInnerHTML={{
                       __html: `${props?.post?.description.substring(
                         0,
-                        MAX_LENGTH,
+                        MAX_LENGTH
                       )}...`,
                     }}
                   />
@@ -284,13 +280,12 @@ const Posts = (props) => {
                   <p>
                     {props?.post?.description
                       ? parse(props?.post?.description)
-                      : ""}
+                      : ''}
                   </p>
                 )}
                 <Link
                   to={`postDetails/${removeWhitespaces(titleLink)}`}
-                  state={{ id: props?.post?.id }}
-                >
+                  state={{ id: props?.post?.id }}>
                   Read this article
                 </Link>
               </div>
@@ -302,8 +297,7 @@ const Posts = (props) => {
                     autoplay
                     className="owl-carousel owl-theme post-slider"
                     dots={false}
-                    loop
-                  >
+                    loop>
                     {parseStringArray(props?.post.images).map(
                       (imgItem, idx) => (
                         <div key={idx} className="item">
@@ -320,11 +314,11 @@ const Posts = (props) => {
                             />
                           </picture>
                         </div>
-                      ),
+                      )
                     )}
                   </OwlCarousel>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
             </div>
@@ -337,18 +331,20 @@ const Posts = (props) => {
                   <span>
                     {props?.post.total_likes == null
                       ? 0
-                      : props?.post.total_likes}{" "}
-                    {isLiked ? "Unlike" : "Likes"}
+                      : props?.post.total_likes}{' '}
+                    {isLiked ? 'Unlike' : 'Likes'}
                   </span>
                 </span>
               </button>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() => setCommentOpen(!commentOpen)}>
                 <span className="comment-count">
                   <i className="fa fa-message" />
-                  {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{" "}
+                  {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{' '}
                   {/* <span>12k Comments</span> */}
                   {props?.post?.total_comments == null ? (
-                    "Be First to Comment"
+                    'Be First to Comment'
                   ) : (
                     <span>{props?.post?.total_comments} Comments</span>
                   )}
@@ -356,80 +352,7 @@ const Posts = (props) => {
               </button>
             </div>
           </div>
-          <div className="comment-section" style={{ display: "none" }}>
-            <div className="comment-posted">
-              <figure>
-                <span>DR</span>
-                <picture>
-                  <source
-                    srcSet="../../assets/images/user-img.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcSet="../../assets/images/user-img.png"
-                    type="image/png"
-                  />
-                  <img
-                    loading="lazy"
-                    src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                    data-src="../../assets/images/user-img.png"
-                    alt="user-img"
-                    className="img-fluid"
-                    width={55}
-                    height={55}
-                  />
-                </picture>
-              </figure>
-              <figcaption>
-                <h6>
-                  <strong>Dorenshie Ree</strong>
-                </h6>
-                <p>
-                  Create a blog brief using our hassle-free, guided flow. Get a
-                  preliminary quote and estimated delivery...
-                  <a href="/">See More</a>
-                </p>
-              </figcaption>
-            </div>
-            <div className="share-comment">
-              <figure>
-                <span
-                  className="text-uppercase  text-white"
-                  hidden={userProfilePic}
-                >
-                  {userProfileText}
-                </span>
-                <picture>
-                  <source srcSet={userProfilePic} type="image/webp" />
-                  <source srcSet={userProfilePic} type="image/png" />
-                  <img
-                    loading="lazy"
-                    src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                    data-src={userProfilePic}
-                    alt="user-img"
-                    className="img-fluid"
-                    width={50}
-                    height={50}
-                  />
-                </picture>
-              </figure>
-              <span>
-                <input
-                  type="text"
-                  name=""
-                  placeholder="Write your comment...."
-                />
-                <button type="button">
-                  <img
-                    src={ShareCommentImage}
-                    alt="share"
-                    width={24}
-                    height={24}
-                  />
-                </button>
-              </span>
-            </div>
-          </div>
+          {commentOpen && <Comments postId={props?.post?.id} />}
         </li>
       </ul>
     </div>
