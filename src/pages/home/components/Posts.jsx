@@ -9,6 +9,7 @@ import {
   formatDate,
   getInitials,
   isNonEmptyString,
+  isNumber,
   parseStringArray,
   removeWhitespaces,
 } from "../../../helpers";
@@ -338,6 +339,7 @@ const Posts = (props) => {
               </button>
               <button
                 type="button"
+                // disabled={!isNumber(auth?.userId)}
                 onClick={() => setCommentOpen(!commentOpen)}>
                 <span className="comment-count">
                   <i className="fa fa-message" />

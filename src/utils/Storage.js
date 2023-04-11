@@ -150,3 +150,16 @@ export function getUserBio() {
   }
   return null;
 }
+
+export function getUserEmail() {
+  try {
+    const user = loadString('userDetails');
+    if (user) {
+      const userData = JSON.parse(user);
+      return userData?.email;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
+}

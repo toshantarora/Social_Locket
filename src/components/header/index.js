@@ -6,23 +6,32 @@ import Dropdown from 'react-bootstrap/Dropdown';
 // import "font-awesome/6.3.0/css/all.min.css";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/logo.webp';
 import LogoImage from '../../assets/images/logo.png';
 import SearchImage from '../../assets/images/search-form.png';
 import {
+  getUserEmail,
   getUserFullName,
   getUserProfileImage,
   hasUserDetails,
 } from '../../utils/Storage';
-import { getInitials } from '../../helpers';
+import { getInitials, isNonEmptyString, isNumber } from '../../helpers';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext';
 
 const Header = () => {
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
+  const userEmail = getUserEmail();
   const hasUserData = hasUserDetails();
   const userProfileText = getInitials(UserFullName);
-
+  const value = useContext(AuthContext);
+    const navigate = useNavigate();
+    const logOut = () => {
+      value?.logout();
+      navigate("/login");
+    };
   return (
     <header>
       {/* Top-header */}
@@ -106,7 +115,9 @@ const Header = () => {
               </NavLink>
             </li>
 
-            <Dropdown>
+{
+  isNumber(value?.auth?.userId) ?
+<Dropdown>
               <Dropdown.Toggle
                 id="Profile-dropdown-button"
                 variant="white"
@@ -155,16 +166,22 @@ const Header = () => {
                     </figure>
                     <div className="dropdown-user-details">
                       <div className="dropdown-user-details-name">
-                        Valerie Luna
+                        {
+                          isNonEmptyString(UserFullName)
+                          ? UserFullName : ""
+                        }
                       </div>
                       <div className="dropdown-user-details-email">
-                        vluna@aol.com
+                       {
+                         isNonEmptyString(userEmail)
+                         ? userEmail :""
+                       }
                       </div>
                     </div>
                   </h6>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href="#!" className="py-2 px-2">
+                <Dropdown.Item href="/setting" className="py-2 px-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -180,9 +197,10 @@ const Header = () => {
                     <circle cx={12} cy={12} r={3} />
                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                   </svg>
+                  {""}
                   <span>Account</span>
                 </Dropdown.Item>
-                <Dropdown.Item href="#!" className="py-2 px-2">
+                <Dropdown.Item onClick={logOut} className="py-2 px-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -202,7 +220,10 @@ const Header = () => {
                   <span>Logout</span>
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> 
+            :""
+}
+            
           </ul>
         </nav>
       </div>

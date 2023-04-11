@@ -142,12 +142,18 @@ export function getSelectedValues(objectWithOnes) {
   // }
   const keysWithOnes = [];
   // const obj = Object.keys(objectWithOnes);
+  if (typeof objectWithOnes !== 'undefined' && objectWithOnes !== null) {
   for (const key of Object.keys(objectWithOnes)) {
     if (objectWithOnes[key] === '1') {
       keysWithOnes.push(key);
     }
   }
   return keysWithOnes;
+}
+else 
+{
+  return null;
+}
   // if (keysWithOnes.length > 0) {
   //   return keysWithOnes;
   // }
