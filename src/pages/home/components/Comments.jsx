@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { API } from '../../../services/ApiClient';
 import { AuthContext } from '../../../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_LENGTH = 50;
 const Comments = ({ postId }) => {
@@ -16,7 +17,8 @@ const Comments = ({ postId }) => {
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
   const { data: commentsData, error, isLoading } = usePostCommentsById(postId);
-
+  const navigate = useNavigate();
+    
     const {
       register,
       handleSubmit,
@@ -45,8 +47,16 @@ const Comments = ({ postId }) => {
          post_id: postId,
          comment: data.comment,
        };
-      mutation.mutate(commentPayload);
-      setValue('comment', '');
+       if(auth?.userId)
+       {
+         mutation.mutate(commentPayload);
+          setValue('comment', '');
+       }
+       else
+       {
+          navigate('/login');
+       }
+     
     };
 
     if(error)

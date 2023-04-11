@@ -39,13 +39,13 @@ function getAllPostComments() {
     .catch((error) => error.response);
 }
 
-function getCommentsById(id) {
-  return API.get(`post-comments/${id}`)
+function getCommentsById(post_id) {
+  return API.get(`posts/:id/post-comments/${post_id}`)
     .then((response) => {
       console.log('response 000000000000000000 ', response);
       if (in200s(response.status)) {
         // console.log(response.data);
-        return response?.data?.result;
+        return response?.data;
       }
 
       return null;
