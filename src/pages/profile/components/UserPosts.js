@@ -1,9 +1,20 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 
-import { parseStringArray } from '../../../helpers';
+import { Link } from 'react-router-dom';
+import { parseStringArray, removeWhitespaces } from '../../../helpers';
 
 const UserPosts = ({ usersPost }) => {
-  console.log('usersPost', usersPost);
+  // console.log('usersPost', usersPost);
+  // const navigate = useNavigate();
+  //  const userTitle = props?.post?.title? props?.post?.title : "";
+  //  const titleLink = postId.concat("_", userTitle);
+  // const onImageClick = (postId, title) => {
+  //   console.log(postId, title);
+  //   const id = postId.toString();
+  //   const userTitle= title;
+  //    const titleLink = id.concat("_", userTitle);
+  //     navigate(`/postDetails/${removeWhitespaces(titleLink)}`);
+  // }
   return (
     <div className="post-grid">
       
@@ -15,16 +26,20 @@ const UserPosts = ({ usersPost }) => {
 
             <li key={idx} className="box show">
               <div className="inner">
-                <a
-                  href="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg"
+                <Link
+                to = {
+                  `/postDetails/${removeWhitespaces(item?.id?.toString()?.concat("_", item?.title))}`
+                }
+                // onClick={() => onImageClick(item?.id, item?.title)}
                   className="glightbox"
                 >
                   <img src={imag} alt="isdage" width="" height="" />
-                </a>
+                </Link>
+                <p>{ item?.title ?  item?.title : ""}</p>
               </div>
             </li>
           ))
-           : < p > No Posts </p>
+           : <p> No Posts </p>
           )  
         ) : (
           <p>No Posts</p>

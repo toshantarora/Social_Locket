@@ -70,7 +70,7 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
             {/* <p className="mb-0">Birmingham, UK</p> */}
           </div>
           <div className="post-count justify-content-center">
-            <div className="post">
+            <div className="post" style={{display:"none"}}>
               <strong>121</strong>
               <span>Posts</span>
             </div>

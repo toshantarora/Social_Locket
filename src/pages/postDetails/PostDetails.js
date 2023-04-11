@@ -96,7 +96,7 @@ const PostDetails = () => {
                           type="button"
                           className="btn btn-outline-success"
                         >
-                          {item?.price ? item.price : ''}
+                          {item?.price ? `$ ${item.price}` : ''}
                         </button>
                       </div>
                       {/* <div class="flex-shrink-0 dropdown">

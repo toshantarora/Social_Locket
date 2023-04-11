@@ -117,9 +117,9 @@ const Comments = ({ postId }) => {
                     </h6>
                     {isNonEmptyString(comment?.comment) ? (
                       <p>
-                        {`${comment?.comment.substring(0, MAX_LENGTH)}...`}
+                        {`${comment?.comment.substring(0, MAX_LENGTH)}`}
 
-                        <a href="/">See More</a>
+                        {/* <a href="/">See More</a> */}
                       </p>
                     ) : (
                       'No comment'

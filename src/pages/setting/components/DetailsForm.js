@@ -251,7 +251,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             {...register('email')}
           />
         </div>
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <label htmlFor="city" className="form-label">
             City
           </label>
@@ -263,7 +263,7 @@ const DetailsForm = ({ preloadedValues, userSelectedTypesData }) => {
             placeholder="Birmingham"
             {...register('city')}
           />
-        </div>
+        </div> */}
         <div className="mb-2">
           <label htmlFor="search_input" className="form-label">
             Select User Types

@@ -20,6 +20,7 @@ const Profile = () => {
     data: userDetailsData,
   } = useUsersById(id);
   const { data: usersPost } = useUserPosts(id);
+  console.log('usersPost', usersPost);
 
   const tabs = [
     {

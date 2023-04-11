@@ -71,9 +71,9 @@ const UserDetailForm = (props) => {
       navigate("/", { replace: true });
     }
   }, [value?.auth?.isAuthenticated]);
-  const handleFileInput = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
+  // const handleFileInput = (e) => {
+  //   setSelectedFile(e.target.files[0]);
+  // };
   console.log(profileImage);
   const onClose = () => {
     setImageCrop(null);
@@ -92,7 +92,7 @@ const UserDetailForm = (props) => {
       formData.append("cloud_name", "dzs0eyrnl");
       const response = await postsService.uploadProfile(formData);
       setProfileImage(response?.url);
-      //   return response.data;
+        return response.data;
     } catch (err) {
       console.log(err);
     }
@@ -127,8 +127,8 @@ const UserDetailForm = (props) => {
       user_session_id: "",
       title: data?.title,
       gender: data.gender,
-      // profile_image: profileImage,
-      profile_image: selectedFile?.name,
+      profile_image: profileImage,
+      // profile_image: selectedFile?.name,
       banner: "no banner upload",
       dob: data?.dob,
       main_user_type: data?.main_user_type,
@@ -282,9 +282,9 @@ const UserDetailForm = (props) => {
 
             <form className="row g-3 mt-4">
               <div className="col-md-12">
-                <div className="input-group mb-3">
+                {/* <div className="input-group mb-3">
                   <input type="file" name="file" onChange={handleFileInput} />
-                </div>
+                </div> */}
                 {errors?.forename?.message ? (
                   <div style={{ color: "red" }}>
                     {errors?.forename?.message}

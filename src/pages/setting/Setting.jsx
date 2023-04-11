@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // import Select from "react-select";
 import { AuthContext } from "../../context/authContext";
 import {
@@ -7,7 +7,7 @@ import {
   getUserFullName,
   getUserProfileImage,
 } from "../../utils/Storage";
-import { getInitials, isNonEmptyString } from "../../helpers";
+import { getInitials, isNonEmptyString, removeWhitespaces } from "../../helpers";
 import ProfileBannerImage from "../../assets/images/profile-banner.jpg";
 import useUsersById from "../../hooks/query/AllUserProfile/useUserById";
 import DetailsForm from "./components/DetailsForm";
@@ -20,6 +20,9 @@ const Setting = () => {
   const userProfileText = getInitials(userFullName);
   const value = useContext(AuthContext);
   // const Id = value?.auth?.userId;
+    // const { auth } = useContext(AuthContext);
+    const userId = value?.auth?.userId ? value?.auth?.userId.toString() : '';
+    const userProfileUrl = userFullName ? userFullName.concat('_', userId) : '';
   const navigate = useNavigate();
   const logOut = () => {
     value?.logout();
@@ -77,11 +80,11 @@ const Setting = () => {
                         {isNonEmptyString(userDetailsData?.forename) &&
                         isNonEmptyString(userDetailsData?.surname)
                           ? `${userDetailsData?.forename}  ${userDetailsData?.surname}`
-                          : ""}
+                          : ''}
                       </h4>
                       <p className="mb-0 text-center">{userBIO}</p>
                     </div>
-                    <div className="setting-post">
+                    <div className="setting-post" style={{ display: 'none' }}>
                       <a href="/" className="">
                         <span>Posts</span>
                         <strong>121</strong>
@@ -101,8 +104,7 @@ const Setting = () => {
                   <button
                     type="button"
                     onClick={logOut}
-                    className="btn btn-common w-100"
-                  >
+                    className="btn btn-common w-100">
                     Logout
                   </button>
                 </div>
@@ -115,9 +117,11 @@ const Setting = () => {
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="/profile">
+                    <NavLink
+                      className="nav-link"
+                      to={`/profile/${removeWhitespaces(userProfileUrl)}`}>
                       Profile
-                    </a>
+                    </NavLink>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/notifications">
@@ -140,8 +144,7 @@ const Setting = () => {
                     className="tab-pane fade show active"
                     id="home"
                     role="tabpanel"
-                    aria-labelledby="home-tab"
-                  >
+                    aria-labelledby="home-tab">
                     <DetailsForm
                       preloadedValues={userDetailsData}
                       userSelectedTypesData={userSelectedTypesData}
@@ -151,16 +154,14 @@ const Setting = () => {
                     className="tab-pane fade"
                     id="profile"
                     role="tabpanel"
-                    aria-labelledby="profile-tab"
-                  >
+                    aria-labelledby="profile-tab">
                     ...
                   </div>
                   <div
                     className="tab-pane fade"
                     id="contact"
                     role="tabpanel"
-                    aria-labelledby="contact-tab"
-                  >
+                    aria-labelledby="contact-tab">
                     ...
                   </div>
                 </div>

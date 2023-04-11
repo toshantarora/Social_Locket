@@ -21,6 +21,7 @@ import {
   getInitials,
   isNonEmptyArray,
   isNumber,
+  parseStringArray,
   removeWhitespaces,
   // parseStringArray,
 } from '../../helpers';
@@ -135,16 +136,16 @@ const SideBar = () => {
                     {item?.created ? formatOnlyDate(item?.created) : ''}
                   </span>
                 </li>
-                <li className="d-flex flex-column border-bottom py-3 px-2">
+                {/* <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>keywords</h5>
                   <span>
-                    {/* {item?.keywords
+                    {item?.keywords
                       ? parseStringArray(item?.keywords).map((tag) => (
                           <span className="badge bg-primary me-1">{tag}</span>
                         ))
-                      : ""} */}
+                      : ""}
                   </span>
-                </li>
+                </li> */}
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Status</h5>
                   <span>{item?.status ? item?.status : 'Available'}</span>

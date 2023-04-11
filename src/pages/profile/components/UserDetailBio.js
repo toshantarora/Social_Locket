@@ -65,7 +65,7 @@ const UserBio = ({
                 : ''}
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>Age</td>
             <td>
               {' '}
@@ -73,7 +73,7 @@ const UserBio = ({
                 ? `${userDetailsData?.age}`
                 : ''}
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <td>Contant No.</td>
             <td>
@@ -93,10 +93,6 @@ const UserBio = ({
             </td>
           </tr>
           {/* <tr>
-                        <td>Stakeholder Type</td>
-                        <td>Reader</td>
-                      </tr> */}
-          <tr>
             <td>Country</td>
             <td>
               {' '}
@@ -128,7 +124,7 @@ const UserBio = ({
                 ? `${userDetailsData?.postal_code}`
                 : ''}
             </td>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </div>

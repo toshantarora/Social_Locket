@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import OwlCarousel from "react-owl-carousel";
 import parse from "html-react-parser";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { useQuery } from "react-query";
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -35,6 +35,7 @@ const Posts = (props) => {
       : "";
   const userProfileUrl = FullName.concat("_", userId);
   const queryClient = useQueryClient();
+   const navigate = useNavigate();
   // const { data: PostLikes } = useQuery(["likes", props?.post?.id], () =>
   //   API.get(`post-likes/${props?.post?.id}`).then((res) => {
   //     return res.data;
@@ -200,6 +201,9 @@ const Posts = (props) => {
     }
     // setIsLiked(!isLiked);
   };
+  const onCommentsClick = () => {
+       navigate(`postDetails/${removeWhitespaces(titleLink)}`);
+  }
 
   return (
     <div className="post">
@@ -299,24 +303,25 @@ const Posts = (props) => {
                     className="owl-carousel owl-theme post-slider"
                     dots={false}
                     loop>
-                    {parseStringArray(props?.post.images).map(
-                      (imgItem, idx) => (
-                        <div key={idx} className="item">
-                          <picture>
-                            <source srcSet={imgItem} type="image/webp" />
-                            <source srcSet={imgItem} type="image/png" />
-                            <img
-                              loading="lazy"
-                              srcSet={imgItem}
-                              alt="post"
-                              className="img-fluid"
-                              width="670"
-                              height="440"
-                            />
-                          </picture>
-                        </div>
-                      )
-                    )}
+                    {props?.post?.images &&
+                      parseStringArray(props?.post?.images)?.map(
+                        (imgItem, idx) => (
+                          <div key={idx} className="item">
+                            <picture>
+                              <source srcSet={imgItem} type="image/webp" />
+                              <source srcSet={imgItem} type="image/png" />
+                              <img
+                                loading="lazy"
+                                srcSet={imgItem}
+                                alt="post"
+                                className="img-fluid"
+                                width="670"
+                                height="440"
+                              />
+                            </picture>
+                          </div>
+                        )
+                      )}
                   </OwlCarousel>
                 ) : (
                   ''
@@ -340,7 +345,7 @@ const Posts = (props) => {
               <button
                 type="button"
                 // disabled={!isNumber(auth?.userId)}
-                onClick={() => setCommentOpen(!commentOpen)}>
+                onClick={onCommentsClick}>
                 <span className="comment-count">
                   <i className="fa fa-message" />
                   {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{' '}
