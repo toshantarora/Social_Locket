@@ -64,6 +64,7 @@ const Users = () => {
               position: { lat, lng },
               title: `${user.forename} ${user.surname}`,
               location: addr,
+              profile_image: user.profile_image
             };
           }));
           return markers;
@@ -78,11 +79,15 @@ const Users = () => {
 
   const handleFilterChange = (event) => {
     const { value } = event.target;
+
+    const ids = userAdrress.filter((resp)=>resp.main_user_type?.toLowerCase()?.includes(value.toLowerCase()) && resp?.user_id != null )?.map((x)=>x.user_id);
+    console.log('ids',ids);
     const filtered = users.filter(
       (user) =>
         user.forename.toLowerCase().includes(value.toLowerCase()) ||
         user.surname.toLowerCase().includes(value.toLowerCase()) ||
-        user.email.toLowerCase().includes(value.toLowerCase())
+        user.email.toLowerCase().includes(value.toLowerCase()) ||
+        ids.includes(user.id)
     );
     setFilteredUsers(filtered);
     fetchData(filtered, userAdrress);
@@ -106,6 +111,35 @@ const Users = () => {
     const url = `/profile/${removeWhitespaces(marker.title)}_${marker.id}`;
     navigate(url, { replace: true });
   }
+  const iconOptions = {
+    scale: 0.1,
+    anchor: { x: 15, y: 30 }
+  };
+  const getMarkerIcon = (data) => {
+    const icon = document.createElement('div');
+    const initials = getInitials(data?.title);
+    const imgSrc = data?.profile_image;
+    const imgTag = `<img loading="lazy" src="${imgSrc}" data-src="${imgSrc}" alt="${data?.title}" class="img-fluid" width="70" height="70" />`;
+
+    icon.innerHTML = `<div class="post-profile"><figure>${imgSrc ? `<picture><source srcset="${imgSrc}" type="image/webp"><source srcset="${imgSrc}" type="image/png">${imgTag}</picture>` : `<span>${initials}</span>`}</figure></div>`;
+
+    const svgString = encodeURIComponent(
+      `<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
+    );
+
+    //console.log(svgString)
+    const markerIcon = new window.google.maps.MarkerImage(
+      `data:image/svg+xml;charset=UTF-8,${svgString}`,
+      null,
+      null,
+      null,
+      new window.google.maps.Size(30, 30)
+    );
+    //console.log(markerIcon);
+
+    return markerIcon;
+  }
+
 
   return (
     <>
@@ -199,8 +233,11 @@ const Users = () => {
               >
                 {markers.map((marker, index) => (
                   <Marker
-                    key={index} position={marker.position}
+                    key={index}
+                    position={marker.position}
+                    icon={getMarkerIcon(marker)}
                     title={marker.title}
+                    className={'hello'}
                     onClick={(event) => handleMarkerClick(event, marker)}
                   >
                   </Marker>
