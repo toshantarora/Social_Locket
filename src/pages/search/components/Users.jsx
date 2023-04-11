@@ -81,7 +81,7 @@ const Users = () => {
     const { value } = event.target;
 
     const ids = userAdrress.filter((resp)=>resp.main_user_type?.toLowerCase()?.includes(value.toLowerCase()) && resp?.user_id != null )?.map((x)=>x.user_id);
-    console.log('ids',ids);
+    //console.log('ids',ids);
     const filtered = users.filter(
       (user) =>
         user.forename.toLowerCase().includes(value.toLowerCase()) ||
