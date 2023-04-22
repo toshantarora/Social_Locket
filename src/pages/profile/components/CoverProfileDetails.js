@@ -98,7 +98,7 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
               className="btn btn-common btn-follow px-3 "
               style={{ display: 'none' }}
             >
-              Follow
+              Connect
             </button>
             <button
               type="button"

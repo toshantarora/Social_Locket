@@ -81,7 +81,7 @@ const Header = () => {
           </a>
           {/* Navbar Search Input */}
           <form
-            className="w-100 mx-5 search-form position-relative"
+            className="w-50 mx-5 ms-auto search-form position-relative"
             role="search"
           >
             <input
@@ -93,7 +93,7 @@ const Header = () => {
             <img src={SearchImage} alt="search" width={24} height={24} />
           </form>
           {/* Navbar Items */}
-          <ul className="navbar-nav align-items-center ms-auto">
+          <ul className="navbar-nav align-items-center">
             <li className="bell-icon">
               <a href="/notifications">
                 <i className="fa-solid fa-bell">
@@ -144,7 +144,7 @@ const Header = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu variant="light" className="p-0 m-0">
-                <Dropdown.Item href="#!" className="py-3 px-2">
+                <Dropdown.Item href="#!" className="py-3 px-3">
                   <h6 className="dropdown-header d-flex align-items-center header-profile p-0">
                     <figure className="me-3">
                       <span className="text-uppercase" hidden={userProfilePic}>
@@ -181,7 +181,7 @@ const Header = () => {
                   </h6>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href="/setting" className="py-2 px-2">
+                <Dropdown.Item href="/setting" className="py-3 px-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}
@@ -200,7 +200,7 @@ const Header = () => {
                   {""}
                   <span>Account</span>
                 </Dropdown.Item>
-                <Dropdown.Item onClick={logOut} className="py-2 px-2">
+                <Dropdown.Item onClick={logOut} className="py-3 px-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={24}

@@ -127,6 +127,40 @@ const UserBio = ({
           </tr> */}
         </tbody>
       </table>
+      <div class="addrssess my-4">
+        <h4>Primary Address <span><i class="fa fa-check"></i></span></h4>
+        <div class="card">
+          <div class="card-body">
+          <p class="mb-1"><strong>Street: </strong>  84 Wrexham Rd</p> 
+          <p class="mb-1"><strong>City: </strong>  Framingham Earl </p> 
+          <p class="mb-1"><strong>Phone number: </strong>  838 5552 4383</p>
+          <p class="mb-1"><strong>Zip code: </strong>  HR6 6WU</p>
+          <p class="mb-1"><strong>Country calling code: </strong>  +44</p> 
+          <p class="mb-1"><strong>Country: </strong>  United Kingdom</p>
+          </div>
+        </div>
+      </div>
+      <div class="addrssess my-4">
+        <h4>Secondary Address</h4>
+        <div class="card">
+          <div class="card-body">
+          <p class="mb-1"><strong>Street: </strong>  84 Wrexham Rd</p> 
+          <p class="mb-1"><strong>City: </strong>  Framingham Earl </p> 
+          <p class="mb-1"><strong>Phone number: </strong>  838 5552 4383</p>
+          <p class="mb-1"><strong>Zip code: </strong>  HR6 6WU</p>
+          <p class="mb-1"><strong>Country calling code: </strong>  +44</p> 
+          <p class="mb-1"><strong>Country: </strong>  United Kingdom</p>
+          </div>
+          <div class="card-body">
+          <p class="mb-1"><strong>Street: </strong>  84 Wrexham Rd</p> 
+          <p class="mb-1"><strong>City: </strong>  Framingham Earl </p> 
+          <p class="mb-1"><strong>Phone number: </strong>  838 5552 4383</p>
+          <p class="mb-1"><strong>Zip code: </strong>  HR6 6WU</p>
+          <p class="mb-1"><strong>Country calling code: </strong>  +44</p> 
+          <p class="mb-1"><strong>Country: </strong>  United Kingdom</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

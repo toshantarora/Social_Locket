@@ -3,6 +3,8 @@ import slide1 from '../../assets/images/login-banner.webp';
 import slide2 from '../../assets/images/login-banner.png';
 import slide3 from '../../assets/images/register-slider.png';
 import slide4 from '../../assets/images/register-slider.webp';
+import slide5 from '../../assets/images/login-banner-2.webp';
+import slide6 from '../../assets/images/login-banner-2.png';
 import Line from '../../assets/images/lines.png';
 import Triangle from '../../assets/images/tringle.png';
 import circle from '../../assets/images/circle.png';
@@ -43,7 +45,7 @@ const LeftSidebar = () => {
                 <img
                   loading="lazy"
                   src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                  srcSet="assets/images/login-banner.png"
+                  srcSet="assets/images/register-slider.png"
                   className="img-fluid"
                   alt="slider"
                   width="680"
@@ -53,12 +55,12 @@ const LeftSidebar = () => {
             </div>
             <div className="item">
               <picture>
-                <source srcSet={slide1} type="image/webp" />
-                <source srcSet={slide2} type="image/png" />
+                <source srcSet={slide5} type="image/webp" />
+                <source srcSet={slide6} type="image/png" />
                 <img
                   loading="lazy"
                   src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-                  srcSet="assets/images/login-banner.png"
+                  srcSet="assets/images/login-banner-2.png"
                   className="img-fluid"
                   alt="slider"
                   width="680"
