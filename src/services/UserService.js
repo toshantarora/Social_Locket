@@ -54,6 +54,16 @@ function getUserPosts(userId) {
     .catch((error) => error.response);
 }
 
+function getUserAddress(userId) {
+  return API.get(`address/${userId}`)
+    .then((response) => {
+      if (in200s(response.status)) {
+        return response.data;
+      }
+      return null;
+    })
+    .catch((error) => error.response);
+}
 // http://ec2-52-56-131-124.eu-west-2.compute.amazonaws.com/api/v1/users/:id
 // http://ec2-52-56-131-124.eu-west-2.compute.amazonaws.com/api/v1/users/:id/posts?id=1&user_id=13
 export const userService = {
@@ -62,4 +72,5 @@ export const userService = {
   getAllUserProfile,
   getUserTypes,
   getUserPosts,
+  getUserAddress,
 };

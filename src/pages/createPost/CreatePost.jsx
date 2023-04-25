@@ -18,7 +18,11 @@ import ShowImage from "../../components/showImages/ShowImages";
 import TagInputField from "../../components/tagInputField/TagInputField";
 import { API } from "../../services/ApiClient";
 import { AuthContext } from "../../context/authContext";
+import axios from "axios";
 
+const CLOUDINARY_UPLOAD_PRESET = 'social_locket';
+const CLOUDINARY_UPLOAD_URL =
+  'https://api.cloudinary.com/v1_1/dzs0eyrnl/image/upload';
 const schema = yup.object().shape({
   title: yup.string().required(),
   type: yup.string().nullable().required("Please select type"),
@@ -26,8 +30,9 @@ const schema = yup.object().shape({
 });
 const CreatePost = () => {
   //   const [text] = useState("");
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [imagesUrl, setImagesUrl] = useState([]);
+  // const [selectedImages, setSelectedImages] = useState([]);
+   const [images, setImages] = useState([]);
+   const [uploadStatus, setUploadStatus] = useState('idle');
   const userProfilePic = getUserProfileImage();
   const userFullName = getUserFullName();
   const { state } = useLocation();
@@ -52,31 +57,49 @@ const CreatePost = () => {
     register("description");
   });
 
-  const onDrop = useCallback((acceptedFiles) => {
-    // Do something with the files
+   const uploadToCloudinary = async (file) => {
+     const formData = new FormData();
+     formData.append('file', file);
+     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+     formData.append('folder', 'my_folder');
 
-    setSelectedImages(
-      acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      ),
-    );
-  }, []);
+     try {
+       const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
+       return response.data.secure_url;
+     } catch (error) {
+       console.log('Error uploading to Cloudinary: ', error);
+       throw new Error('Error uploading to Cloudinary');
+     }
+   };
+  // const onDrop = useCallback((acceptedFiles) => {
+  //   // Do something with the files
 
-  //   const onUpload = async () => {
-  //     selectedImages.forEach((file) => {
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-  //       formData.append("upload_preset", "social_locket");
-  //       formData.append("cloud_name", "dzs0eyrnl");
-  //       postsService
-  //         .uploadProfile(formData)
-  //         .then((res) => setImagesUrl((prevState) => [...prevState, res?.url]))
-  //         .catch((err) => console.log(err));
-  //     });
-  //   };
-  console.log("imagesUrl--------", imagesUrl);
+  //   setSelectedImages(
+  //     acceptedFiles.map((file) =>
+  //       Object.assign(file, {
+  //         preview: URL.createObjectURL(file),
+  //       }),
+  //     ),
+  //   );
+  // }, []);
+
+  const { mutateAsync, isLoading } = useMutation(uploadToCloudinary);
+  const onDrop = async (acceptedFiles) => {
+      setUploadStatus('uploading');
+
+      try {
+        const uploadedImages = await Promise.all(
+          acceptedFiles.map((file) => mutateAsync(file))
+        );
+        setImages([...images, ...uploadedImages]);
+        setUploadStatus('success');
+      } catch (error) {
+        console.log('Error uploading images: ', error);
+        setUploadStatus('error');
+      }
+    };
+
+
   //   const onDrop = useCallback((acceptedFiles) => {
   //     acceptedFiles.forEach((file) => {
   //       const reader = new FileReader();
@@ -86,10 +109,8 @@ const CreatePost = () => {
   //       reader.readAsDataURL(file);
   //     });
   //   }, []);
-  console.log(selectedImages);
-  //   const handleChange = (event) => {
-  //     setSelectValue({ selectValue: event.target.value });
-  //   };
+
+
 
   const { mutate: savePost, isLoading: isPostLoading } = useMutation(
     async (payload) => {
@@ -124,30 +145,7 @@ const CreatePost = () => {
   console.log(watch(), tags);
   const onSubmit = async (data) => {
     // e.preventDefault();
-    console.log(data, selectedImages);
     const tagsString = `['${tags.join("','")}']`;
-    // const formData = new FormData();
-    // formData.append("file", selectedImages[0].file);
-    // formData.append("upload_preset", "social_locket");
-    // formData.append("cloud_name", "dzs0eyrnl");
-    // postsService
-    //   .uploadProfile(formData)
-    //   .then((res) => {
-    //     savePost({
-    //       title: data?.title,
-    //       description: data.description,
-    //       type: data.type,
-    //       keywords: tagsString,
-    //       user_id: auth?.userId,
-    //       images: null,
-    //       pages: data?.pages,
-    //       price: data?.price,
-    //       customer_user_id: "",
-    //       location: data?.location,
-    //     });
-    //   })
-    //   .catch((err) => console.log(err));
-
     savePost({
       title: data?.title,
       description: data.description,
@@ -157,31 +155,13 @@ const CreatePost = () => {
       //   status: "AVAILABLE",
       user_id: auth?.userId.toString(),
       pages: data?.pages.toString(),
-      images: null,
-      keywords: tagsString,
+      images: images ? JSON.stringify(images) : JSON.stringify([]),
+      keywords: JSON.stringify(tagsString),
       //   available: "24/04/2023",
       offer_price: data?.price.toString(),
-      purchased_price: "",
+      purchased_price: '',
       customer_user_id: 2,
     });
-    // await onUpload().then((res) => {
-    //   savePost({
-    //     title: data?.title,
-    //     description: data.description,
-    //     type: data.type,
-    //     keywords: tagsString,
-    //     user_id: auth?.userId,
-    //     images: `['${imagesUrl.join("','")}']`,
-    //     pages: data?.pages,
-    //     price: data?.price,
-    //     customer_user_id: "",
-    //     location: data?.location,
-    //   });
-    // });
-    // const imagesUrlString = `['${imagesUrl.join("','")}']`;
-    // if (isNonEmptyArray(imagesUrl)) {
-
-    // }
   };
   //   {
   //     "title": "Create A new Post",
@@ -226,7 +206,7 @@ const CreatePost = () => {
                     />
                   </picture>
                 ) : (
-                  <span>{userFullName ? getInitials(userFullName) : ""}</span>
+                  <span>{userFullName ? getInitials(userFullName) : ''}</span>
                 )}
               </figure>
               <figcaption>
@@ -249,12 +229,12 @@ const CreatePost = () => {
                   className="form-control"
                   placeholder="Post title"
                   name="title"
-                  {...register("title")}
+                  {...register('title')}
                 />
                 {errors?.title?.message ? (
-                  <div style={{ color: "red" }}>{errors?.title?.message}</div>
+                  <div style={{ color: 'red' }}>{errors?.title?.message}</div>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
               <div className="mb-3">
@@ -272,7 +252,7 @@ const CreatePost = () => {
                   //   }}
                   onChange={(event, editor) => {
                     const data = editor.getData();
-                    setValue("description", data);
+                    setValue('description', data);
                   }}
                 />
                 {/* <p>{parse(text)}</p> */}
@@ -282,7 +262,7 @@ const CreatePost = () => {
               </div>
               <div className="mb-3">
                 <Dropzone onDrop={onDrop} />
-                <ShowImage images={selectedImages} />
+                <ShowImage images={images} uploadStatus={uploadStatus} />
               </div>
               {/* <div className="mb-3 add-to-post">
                 <h6 className="mb-0">Add to your post</h6>
@@ -306,14 +286,14 @@ const CreatePost = () => {
                   placeholder="Pages"
                   name="pages"
                   type="number"
-                  {...register("pages", {
+                  {...register('pages', {
                     valueAsNumber: true,
                   })}
                 />
                 {errors?.pages?.message ? (
-                  <div style={{ color: "red" }}>{errors?.pages?.message}</div>
+                  <div style={{ color: 'red' }}>{errors?.pages?.message}</div>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
               <div className="mb-3">
@@ -322,16 +302,16 @@ const CreatePost = () => {
                   className="form-control"
                   placeholder="address"
                   name="location"
-                  {...register("location", {
-                    required: "Please enter your address.",
+                  {...register('location', {
+                    required: 'Please enter your address.',
                   })}
                 />
                 {errors?.location?.message ? (
-                  <div style={{ color: "red" }}>
+                  <div style={{ color: 'red' }}>
                     {errors?.location?.message}
                   </div>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
               <div>
@@ -342,15 +322,14 @@ const CreatePost = () => {
                 <select
                   type="select"
                   name="type"
-                  {...register("type")}
-                  className="form-select"
-                >
+                  {...register('type')}
+                  className="form-select">
                   <option value="">Select type</option>
                   <option value="blog">Blog</option>
                   <option value="article">Article</option>
                 </select>
                 {errors.type && (
-                  <div style={{ color: "red" }}> {errors.type.message}</div>
+                  <div style={{ color: 'red' }}> {errors.type.message}</div>
                 )}
               </div>
               <InputGroup className="mb-3">
@@ -361,7 +340,7 @@ const CreatePost = () => {
                   aria-describedby="basic-addon1"
                   type="number"
                   name="price"
-                  {...register("price", {
+                  {...register('price', {
                     valueAsNumber: true,
                   })}
                 />
@@ -371,8 +350,7 @@ const CreatePost = () => {
                   type="button"
                   onClick={handleSubmit(onSubmit)}
                   className="btn btn-common"
-                  disabled={isPostLoading}
-                >
+                  disabled={isPostLoading}>
                   Post
                 </button>
               </div>

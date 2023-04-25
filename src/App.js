@@ -5,6 +5,7 @@ import 'owl.carousel/dist/assets/owl.carousel.css';
 import './styles/globalStyles.css';
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
   // Route,
   // Outlet,
@@ -27,8 +28,21 @@ import ForgotPassword from './pages/forgotPassword/ForgotPassword';
 import CreatePassword from './pages/createPassword/CreatePassword';
 import CreatePost from './pages/createPost/CreatePost';
 import PostDetails from './pages/postDetails/PostDetails';
+import { useContext } from 'react';
+import { AuthContext } from './context/authContext';
+
 
 const App = () => {
+   const {auth} = useContext(AuthContext);
+   console.log("--------------",auth?.isAuthenticated)
+
+    const ProtectedRoute = ({ children }) => {
+      if (!auth?.isAuthenticated) {
+        return <Navigate to="/login" />;
+      }
+
+      return children;
+    };
   const router = createBrowserRouter([
     {
       path: '/',
@@ -52,7 +66,11 @@ const App = () => {
         },
         {
           path: '/setting',
-          element: <Setting />,
+          element: (
+            <ProtectedRoute>
+              <Setting />
+            </ProtectedRoute>
+          ),
         },
         {
           path: '/notifications',
