@@ -1,19 +1,21 @@
-import { is, curryN, gte } from 'ramda';
+import { is, curryN, gte } from "ramda";
 
 export const isNonEmptyArray = (arr) => {
-  if (typeof arr === 'object' && arr instanceof Array && arr?.length > 0) { return true; }
+  if (typeof arr === "object" && arr instanceof Array && arr?.length > 0) {
+    return true;
+  }
 
   return false;
 };
 
 export const isArray = (arr) => {
-  if (typeof arr === 'object' && arr instanceof Array) return true;
+  if (typeof arr === "object" && arr instanceof Array) return true;
 
   return false;
 };
 
 export const isNonEmptyString = (str) => {
-  if (typeof str === 'string' && str?.length > 0) return true;
+  if (typeof str === "string" && str?.length > 0) return true;
 
   return false;
 };
@@ -21,11 +23,11 @@ export const isNonEmptyString = (str) => {
 const isWithin = curryN(3, (min, max, value) => {
   const isNumber = is(Number);
   return (
-    isNumber(min)
-    && isNumber(max)
-    && isNumber(value)
-    && gte(value, min)
-    && gte(max, value)
+    isNumber(min) &&
+    isNumber(max) &&
+    isNumber(value) &&
+    gte(value, min) &&
+    gte(max, value)
   );
 });
 export const in200s = isWithin(200, 299);
@@ -33,36 +35,36 @@ export const in200s = isWithin(200, 299);
 export const formatDate = (timestamp) => {
   const localZone = Intl.DateTimeFormat().resolvedOptions();
   const empDate = new Date(timestamp);
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat("en-US", {
     timeZone: localZone.timeZone,
-    hourCycle: 'h12',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    hourCycle: "h12",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(empDate);
 };
 
 export const formatOnlyDate = (timestamp) => {
   const localZone = Intl.DateTimeFormat().resolvedOptions();
   const empDate = new Date(timestamp);
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat("en-US", {
     timeZone: localZone.timeZone,
-    hourCycle: 'h12',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+    hourCycle: "h12",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   }).format(empDate);
 };
 
 export const getInitials = (string) => {
   if (string) {
     const initials = string
-      .split(' ')
+      .split(" ")
       .map(([firstLetter]) => firstLetter)
       .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .join('')
+      .join("")
       .toUpperCase();
     return initials;
   }
@@ -71,10 +73,10 @@ export const getInitials = (string) => {
 
 export const isNumber = (num) => {
   if (
-    (typeof num === 'string'
-      && num?.length > 0
-      && !Number.isNaN(Number(num)))
-    || (typeof num === 'number' && !Number.isNaN(num))
+    (typeof num === "string" &&
+      num?.length > 0 &&
+      !Number.isNaN(Number(num))) ||
+    (typeof num === "number" && !Number.isNaN(num))
   ) {
     return true;
   }
@@ -99,15 +101,30 @@ export const removeWhitespaces = (str) => {
     .replace(/\w\S*/g, (txt) => {
       return txt.charAt(0).toUpperCase() + txt.substr(1);
     })
-    .replace(/\s/g, '');
+    .replace(/\s/g, "");
 };
 
-export const getAddress = (street, address1, address2, city, country, postalcode) => {
-  const addressComponents = [street, address1, address2, city, country, postalcode];
-  const address = addressComponents.filter((component) => component !== null && component !== undefined).join(', ');
+export const getAddress = (
+  street,
+  address1,
+  address2,
+  city,
+  country,
+  postalcode
+) => {
+  const addressComponents = [
+    street,
+    address1,
+    address2,
+    city,
+    country,
+    postalcode,
+  ];
+  const address = addressComponents
+    .filter((component) => component !== null && component !== undefined)
+    .join(", ");
   return address;
-}
-
+};
 
 export function getIdValue(str) {
   if (str) {
@@ -116,19 +133,18 @@ export function getIdValue(str) {
     const index = valInStr.split("_")[0];
     return index;
   }
-  return '';
+  return "";
 }
 
 export function getAfterUnderScoreValue(str) {
   if (str) {
     const val = Object.values(str);
-    const index = val[0].lastIndexOf('_');
+    const index = val[0].lastIndexOf("_");
     const result = val[0].substr(index + 1);
     return result;
   }
-  return '';
+  return "";
 }
-
 
 export function getSelectedValues(objectWithOnes) {
   // const keysWithOnes = [];
@@ -142,18 +158,16 @@ export function getSelectedValues(objectWithOnes) {
   // }
   const keysWithOnes = [];
   // const obj = Object.keys(objectWithOnes);
-  if (typeof objectWithOnes !== 'undefined' && objectWithOnes !== null) {
-  for (const key of Object.keys(objectWithOnes)) {
-    if (objectWithOnes[key] === '1') {
-      keysWithOnes.push(key);
+  if (typeof objectWithOnes !== "undefined" && objectWithOnes !== null) {
+    for (const key of Object.keys(objectWithOnes)) {
+      if (objectWithOnes[key] === "1") {
+        keysWithOnes.push(key);
+      }
     }
+    return keysWithOnes;
+  } else {
+    return null;
   }
-  return keysWithOnes;
-}
-else 
-{
-  return null;
-}
   // if (keysWithOnes.length > 0) {
   //   return keysWithOnes;
   // }
