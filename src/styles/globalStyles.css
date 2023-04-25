@@ -2335,9 +2335,23 @@ table>:not(caption)>*>* {
  .cover-photo:after{ content: ""; width: 100%; height: 100%; display: flex; background: url(../assets/images/profile-banner.jpg);}
 
 
+<<<<<<< HEAD
 /* no-need */
 .post-section .post-image p{ display: none; }
 
+=======
+ /* Rishabh */
+ .new-post .tag-container{ border: 1px solid #ced4da; padding: 0px; padding: 0.5rem 1rem; overflow-y: hidden;}
+
+.tag-container::-webkit-scrollbar { height: 5px;  }
+.tag-container::-webkit-scrollbar-track { background: #f1f1f1;}
+.tag-container::-webkit-scrollbar-thumb { background: #888;}
+.tag-container::-webkit-scrollbar-thumb:hover { background: #555;}
+
+.tag-container .tag{ border: 1px solid var(--brand-color); background-color: var(--brand-color);}
+.tag-container .tag button{ padding-top: 0px; padding-bottom: 0px; }
+ /* Rishabh */
+>>>>>>> 3728bf31b5df1bd95fa7bd726e2e70db145d589e
 
 
 /*Responsive*/
