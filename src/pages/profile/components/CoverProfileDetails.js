@@ -2,8 +2,14 @@
 
 import { Link } from 'react-router-dom';
 import { getInitials, isNonEmptyString } from '../../../helpers';
+import { useState } from 'react';
+import ModalComponent from '../../../components/modalComponent/ModalComponent';
+import ConnectionList from './ConnectionList';
 
 const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
+
+  const [isModalOpen, setIsModal]= useState(false);
+
   return (
     <>
       <div
@@ -13,8 +19,7 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
             userDetailsData?.banner != null ? userDetailsData?.banner : ''
           })`,
           backgroundRepeat: 'no-repeat',
-        }}
-      >
+        }}>
         <span>
           <i className="fa fa-camera" />
         </span>
@@ -23,11 +28,11 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
         <figure>
           {userDetailsData?.profile_image === null ? (
             <span className="text-uppercase">
-              {isNonEmptyString(userDetailsData?.forename)
-              && isNonEmptyString(userDetailsData?.surname)
+              {isNonEmptyString(userDetailsData?.forename) &&
+              isNonEmptyString(userDetailsData?.surname)
                 ? getInitials(
-                  `${userDetailsData?.forename}  ${userDetailsData?.surname}`,
-                )
+                    `${userDetailsData?.forename}  ${userDetailsData?.surname}`
+                  )
                 : ''}
             </span>
           ) : (
@@ -56,9 +61,9 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
         <figcaption>
           <div>
             <h4 className="mb-0 mt-2">
-              {userDetailsData
-              && isNonEmptyString(userDetailsData?.forename)
-              && isNonEmptyString(userDetailsData?.surname)
+              {userDetailsData &&
+              isNonEmptyString(userDetailsData?.forename) &&
+              isNonEmptyString(userDetailsData?.surname)
                 ? `${userDetailsData?.forename}  ${userDetailsData?.surname}`
                 : ''}
             </h4>
@@ -70,7 +75,7 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
             {/* <p className="mb-0">Birmingham, UK</p> */}
           </div>
           <div className="post-count justify-content-center">
-            <div className="post" style={{display:"none"}}>
+            <div className="post" style={{ display: 'none' }}>
               <strong>121</strong>
               <span>Posts</span>
             </div>
@@ -83,33 +88,40 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
               <span>Following</span>
             </div> */}
           </div>
-          <div className="edit-btn">
-            {currentUserId === userDetailsData?.id ? (
+          {currentUserId === userDetailsData?.id ? (
+            <div className="edit-btn">
               <Link
                 to="/setting"
                 state={userDetailsData || null}
-                className="btn btn-common px-3"
-              >
+                className="btn btn-common px-3">
                 Edit profile
               </Link>
-            ) : null}
-            <button
-              type="button"
-              className="btn btn-common btn-follow px-3 "
-              style={{ display: 'none' }}
-            >
-              Connect
-            </button>
-            <button
-              type="button"
-              className="btn btn-common btn-follow px-3 "
-              style={{ display: 'none' }}
-            >
-              Message
-            </button>
-          </div>
+
+              <button
+                type="button"
+                className="btn btn-common btn-follow px-3 "
+                // style={{ display: 'none' }}
+                onClick={() => setIsModal(!isModalOpen)}>
+                Connect
+              </button>
+              <button
+                type="button"
+                className="btn btn-common btn-follow px-3 "
+                // style={{ display: 'none' }}
+              >
+                Message
+              </button>
+            </div>
+          ) : null}
         </figcaption>
       </div>
+      <ModalComponent
+        show={isModalOpen}
+        onHide={() => setIsModal(false)}
+        heading="Connected User"
+        size="xs">
+        <ConnectionList userId={currentUserId}></ConnectionList>
+      </ModalComponent>
     </>
   );
 };
