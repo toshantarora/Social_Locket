@@ -17,7 +17,7 @@ import { API } from "../../../services/ApiClient";
 import { AuthContext } from "../../../context/authContext";
 import Comments from "./Comments";
 
-const MAX_LENGTH = 60;
+const MAX_LENGTH = 150;
 
 const Posts = (props) => {
   const postId = props?.post?.id ? props?.post?.id.toString() : "";

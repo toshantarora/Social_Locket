@@ -1254,7 +1254,7 @@ picture {
     justify-content: center;
     align-items: center;
     color: #fff;
-    margin-left: 0.5rem;}
+    margin-right: 0.5rem;}
 
 .post-grid .box img {
     width: calc(100% + 50px);
@@ -1533,8 +1533,7 @@ div#listview {
 .search-filter {
     flex: 4;
 }
-.map-view div[role=button] { background-color: var(--white); border-radius: 50%;width: 50px !important;
-    height: 50px !important;}
+
 /*Search css*/
 
 /*Setting*/
@@ -2334,12 +2333,6 @@ table>:not(caption)>*>* {
  .cover-photo{ position: relative;}
  .cover-photo:after{ content: ""; width: 100%; height: 100%; display: flex; background: url(../assets/images/profile-banner.jpg);}
 
-
-<<<<<<< HEAD
-/* no-need */
-.post-section .post-image p{ display: none; }
-
-=======
  /* Rishabh */
  .new-post .tag-container{ border: 1px solid #ced4da; padding: 0px; padding: 0.5rem 1rem; overflow-y: hidden;}
 
@@ -2350,9 +2343,11 @@ table>:not(caption)>*>* {
 
 .tag-container .tag{ border: 1px solid var(--brand-color); background-color: var(--brand-color);}
 .tag-container .tag button{ padding-top: 0px; padding-bottom: 0px; }
- /* Rishabh */
->>>>>>> 3728bf31b5df1bd95fa7bd726e2e70db145d589e
 
+.post-section-inner-page{ width: 100%; }
+.post-section-inner-page .post-slider{ margin-bottom: 2rem; }
+.inner-page-content>img{ width: auto; max-width: 100%; margin-bottom: 1rem;}
+ /* Rishabh */
 
 /*Responsive*/
 @media (max-width: 1330px){

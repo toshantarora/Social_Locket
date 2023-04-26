@@ -1,20 +1,20 @@
-import { NavLink, useLocation, useParams } from 'react-router-dom';
-import '../../styles/globalStyles.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink, useLocation, useParams } from "react-router-dom";
+import "../../styles/globalStyles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
   faHeadset,
   faLink,
   faGear,
-} from '@fortawesome/free-solid-svg-icons';
+} from "@fortawesome/free-solid-svg-icons";
 
-import { useContext } from 'react';
+import { useContext } from "react";
 import {
   getUserBio,
   getUserFullName,
   getUserProfileImage,
   hasUserDetails,
-} from '../../utils/Storage';
+} from "../../utils/Storage";
 import {
   formatOnlyDate,
   getIdValue,
@@ -24,9 +24,9 @@ import {
   parseStringArray,
   removeWhitespaces,
   // parseStringArray,
-} from '../../helpers';
-import { AuthContext } from '../../context/authContext';
-import usePostsById from '../../hooks/query/Posts/usePostsById';
+} from "../../helpers";
+import { AuthContext } from "../../context/authContext";
+import usePostsById from "../../hooks/query/Posts/usePostsById";
 // import { useQueryClient } from 'react-query';
 
 const SideBar = () => {
@@ -36,15 +36,13 @@ const SideBar = () => {
   const userProfileText = getInitials(UserFullName);
   const hasUserData = hasUserDetails();
   const { auth } = useContext(AuthContext);
-  const userId = auth?.userId ? auth?.userId.toString() : '';
-  const userProfileUrl = UserFullName ? UserFullName.concat('_', userId) : '';
+  const userId = auth?.userId ? auth?.userId.toString() : "";
+  const userProfileUrl = UserFullName ? UserFullName.concat("_", userId) : "";
   const { state } = useLocation();
-   const params = useParams();
-   const id = getIdValue(params);
+  const params = useParams();
+  const id = getIdValue(params);
 
-  const {
-    data: postsDetailsData
-  } = usePostsById(state?.id ? state?.id : id);
+  const { data: postsDetailsData } = usePostsById(state?.id ? state?.id : id);
   return (
     <aside id="layoutSidenav_nav">
       <div className="mobile-logo mb-3">
@@ -108,35 +106,34 @@ const SideBar = () => {
           height={24}
         />
       </form>
-      {
-        isNumber(id) && isNonEmptyArray(postsDetailsData) ? (
+      {isNumber(id) && isNonEmptyArray(postsDetailsData) ? (
         postsDetailsData.map((item, idx) => {
           return (
             <div key={idx} className="post-details-list py-3">
               <ul className="d-flex flex-column">
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Address</h5>
-                  <span>{item?.location ? item?.location : ''}</span>
+                  <span>{item?.location ? item?.location : ""}</span>
                 </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Type</h5>
-                  <span>{item?.type ? item?.type : ''}</span>
+                  <span>{item?.type ? item?.type : ""}</span>
                 </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Pages</h5>
-                  <span>{item?.pages ? item?.pages : ''}</span>
+                  <span>{item?.pages ? item?.pages : ""}</span>
                 </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Price</h5>
-                  <span>{item?.price ? `$${item?.price}` : ''}</span>
+                  <span>{item?.price ? `$${item?.price}` : ""}</span>
                 </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Available</h5>
                   <span>
-                    {item?.created ? formatOnlyDate(item?.created) : ''}
+                    {item?.created ? formatOnlyDate(item?.created) : ""}
                   </span>
                 </li>
-                {/* <li className="d-flex flex-column border-bottom py-3 px-2">
+                <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>keywords</h5>
                   <span>
                     {item?.keywords
@@ -145,10 +142,10 @@ const SideBar = () => {
                         ))
                       : ""}
                   </span>
-                </li> */}
+                </li>
                 <li className="d-flex flex-column border-bottom py-3 px-2">
                   <h5>Status</h5>
-                  <span>{item?.status ? item?.status : 'Available'}</span>
+                  <span>{item?.status ? item?.status : "Available"}</span>
                 </li>
               </ul>
             </div>
@@ -158,17 +155,14 @@ const SideBar = () => {
         <ul>
           <li>
             <NavLink activeclassname="active" to="/">
-              <i className="fa fa-home" />
-              {' '}
-              Home
+              <i className="fa fa-home" /> Home
             </NavLink>
           </li>
           <li>
             <NavLink activeclassname="active" to="/Search">
               <i>
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </i>
-              {' '}
+              </i>{" "}
               Search
             </NavLink>
           </li>
@@ -176,8 +170,7 @@ const SideBar = () => {
             <NavLink activeclassname="active" to="/Support">
               <i>
                 <FontAwesomeIcon icon={faHeadset} />
-              </i>
-              {' '}
+              </i>{" "}
               Support
             </NavLink>
           </li>
@@ -185,8 +178,7 @@ const SideBar = () => {
             <NavLink activeclassname="active" to="/Connect">
               <i>
                 <FontAwesomeIcon icon={faLink} />
-              </i>
-              {' '}
+              </i>{" "}
               Connect
             </NavLink>
           </li>
@@ -194,8 +186,7 @@ const SideBar = () => {
             <NavLink activeclassname="active" to="/Setting">
               <i>
                 <FontAwesomeIcon icon={faGear} />
-              </i>
-              {' '}
+              </i>{" "}
               Setting
             </NavLink>
           </li>
