@@ -1,6 +1,5 @@
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import slide1 from '../../assets/images/suport-image.jpg';
-import slide2 from '../../assets/images/suport-image.webp';
 import Line from '../../assets/images/lines.png';
 import Triangle from '../../assets/images/tringle.png';
 import circle from '../../assets/images/circle.png';
@@ -153,9 +152,8 @@ const Support = () => {
           </div>
           <div class="support-right">
             <picture>
-              <source srcset={slide1} type="image/webp" />
-                <source srcset={slide2} type="image/jpg" />
-                  <img loading="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" srcset="assets/images/suport-image.jpg" class="img-fluid" alt="slider" width="300" height="300" />
+                <source srcset={slide1} type="image/jpg" />
+                <img loading="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" srcset={slide1} class="img-fluid" alt="slider" />
             </picture>
             <div>
             <div className="animate lines">

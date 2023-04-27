@@ -2345,7 +2345,7 @@ table>:not(caption)>*>* {
 .tag-container .tag button{ padding-top: 0px; padding-bottom: 0px; }
 
 .post-section-inner-page{ width: 100%; }
-.post-section-inner-page .post-slider{ margin-bottom: 2rem; }
+.post-section-inner-page>.post-slider{ margin-bottom: 2rem; }
 .inner-page-content>img{ width: auto; max-width: 100%; margin-bottom: 1rem;}
 
 .edit-profile figcaption h4 i{ font-size: 20px; color: var(--brand-color); margin-left: 0.5rem; }

@@ -114,7 +114,7 @@ const CoverProfileDetails = ({ userDetailsData, currentUserId }) => {
                 // style={{ display: 'none' }}
                 onClick={() => setIsModal(!isModalOpen)}
               >
-                <i class="fa-regular fa-user"></i> Connect
+                <i class="fa-regular fa-user"></i> Connections
               </button>
               <button
                 type="button"

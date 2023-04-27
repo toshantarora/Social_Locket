@@ -162,7 +162,7 @@ const Users = () => {
 
     const svgString = encodeURIComponent(
       // `<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
-      `<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%" style="background-color:#00c8c8; color:#fff; font-family: Roboto; border-radius:50%; font-size:50px;"><div style="width:100%; height:100%;" xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
+      `<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%" style="background-color:#00c8c8; color:#fff; font-family: Roboto; border-radius:50%; font-size:50px; border: 3px solid #fff;"><div style="width:100%; height:100%;" xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
     
       );
 
