@@ -59,15 +59,15 @@ const UserBio = ({
                 : ""}
             </td>
           </tr>
-          {/* <tr>
+          <tr>
             <td>Age</td>
             <td>
-              {' '}
+              {" "}
               {isNonEmptyString(userDetailsData?.age)
                 ? `${userDetailsData?.age}`
-                : ''}
+                : ""}
             </td>
-          </tr> */}
+          </tr>
           <tr>
             <td>Contant No.</td>
             <td>
@@ -86,39 +86,6 @@ const UserBio = ({
                 : ""}
             </td>
           </tr>
-          {/* <tr>
-            <td>Country</td>
-            <td>
-              {' '}
-              {isNonEmptyString(userDetailsData?.country)
-                ? `${userDetailsData?.country}`
-                : ''}
-            </td>
-          </tr>
-          <tr>
-            <td>Address</td>
-            <td>
-              {isNonEmptyString(userDetailsData?.address)
-                ? `${userDetailsData?.address}`
-                : ''}
-            </td>
-          </tr>
-          <tr>
-            <td>City</td>
-            <td>
-              {isNonEmptyString(userDetailsData?.city)
-                ? `${userDetailsData?.city}`
-                : ''}
-            </td>
-          </tr>
-          <tr>
-            <td>Postal Code</td>
-            <td>
-              {isNonEmptyString(userDetailsData?.postal_code)
-                ? `${userDetailsData?.postal_code}`
-                : ''}
-            </td>
-          </tr> */}
         </tbody>
       </table>
       <div class="addrssess my-4">

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 
-import { Link } from 'react-router-dom';
-import { parseStringArray, removeWhitespaces } from '../../../helpers';
+import { Link } from "react-router-dom";
+import { parseStringArray, removeWhitespaces } from "../../../helpers";
 
 const UserPosts = ({ usersPost }) => {
   // console.log('usersPost', usersPost);
@@ -17,30 +17,36 @@ const UserPosts = ({ usersPost }) => {
   // }
   return (
     <div className="post-grid">
-      
       <ul className="box-container three-cols">
-        {
-          usersPost !== null ? (
-          usersPost?.map((item, idx) => item?.images !== null ?
-          parseStringArray(item?.images)?.map((imag) => (
-
-            <li key={idx} className="box show">
-              <div className="inner">
-                <Link
-                to = {
-                  `/postDetails/${removeWhitespaces(item?.id?.toString()?.concat("_", item?.title))}`
-                }
-                // onClick={() => onImageClick(item?.id, item?.title)}
-                  className="glightbox"
-                >
-                  <img src={imag} alt="isdage" width="" height="" />
-                </Link>
-                <p>{ item?.title ?  item?.title : ""}</p>
-              </div>
-            </li>
-          ))
-           : <p> No Posts </p>
-          )  
+        {usersPost !== null ? (
+          usersPost?.map((item, idx) =>
+            item?.images !== null ? (
+              parseStringArray(item?.images)?.map((imag) => (
+                <li key={idx} className="box show">
+                  <div className="inner">
+                    <Link
+                      to={`/postDetails/${removeWhitespaces(
+                        item?.id?.toString()?.concat("_", item?.title)
+                      )}`}
+                      // onClick={() => onImageClick(item?.id, item?.title)}
+                      className="glightbox"
+                    >
+                      <img
+                        className="mb-2"
+                        src={imag}
+                        alt="isdage"
+                        width=""
+                        height=""
+                      />
+                      <h5>{item?.title ? item?.title : ""}</h5>
+                    </Link>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <span></span>
+            )
+          )
         ) : (
           <p>No Posts</p>
         )}

@@ -2347,10 +2347,29 @@ table>:not(caption)>*>* {
 .post-section-inner-page{ width: 100%; }
 .post-section-inner-page .post-slider{ margin-bottom: 2rem; }
 .inner-page-content>img{ width: auto; max-width: 100%; margin-bottom: 1rem;}
+
+.edit-profile figcaption h4 i{ font-size: 20px; color: var(--brand-color); margin-left: 0.5rem; }
+
+.post-grid li.show{ padding: 0px; }
+
+.post-grid .box a{ border-radius: 0.5rem; }
+.post-grid .box h5{ color: var(--black);}
+.post-grid .box a::before{ display: none;}
+
+.connected-user{ list-style: none; padding: 0px; margin: 0px;}
+.connected-user li{ margin-bottom: 0.8rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);}
+
+.follow button{ padding: 0.2rem 0.6rem; border-radius: 6px;}
+.follow-btn{background-color: #ebffff; border: 1px solid var(--brand-color); color: var(--brand-color);}
+.unfollow-btn{ background-color: #ffebe9; border: 1px solid #F44336; color: #F44336;}
+
+.follow button:hover{ color: var(--white); }
+.follow-btn:hover{background-color: var(--brand-color); }
+.unfollow-btn:hover{ background-color: #F44336; }
  /* Rishabh */
 
 /*Responsive*/
-@media (max-width: 1330px){
+@media (max-width: 1350px){
     .dashboard .container{width: 98%; max-width:inherits;}
     .filter-option{padding: .5rem;}
 }
@@ -2437,6 +2456,14 @@ table>:not(caption)>*>* {
     }
 }
 
+@media (max-width: 1230px) {
+    .cover-photo{ height: 250px;}
+    .cover-photo:after{ background-size: cover;}
+    .setting-profile .edit-profile{ flex: 0 100%; max-width: 100%; position: relative; top: 0px;}
+    .setting-right{ margin: 0px; margin-top: 2rem;}
+    .post-grid .three-cols .box{ width: 50%;}
+}
+
 @media (min-width: 992px) {
     #sidebarToggle {
         display: none;
@@ -2444,7 +2471,6 @@ table>:not(caption)>*>* {
 }
 
 @media (min-width: 991px) and (max-width: 1330px) {
-    aside { flex: 0 220px; max-width: 220px; }
     main{padding: 2rem 0 2rem 1.5rem;}
 }
 

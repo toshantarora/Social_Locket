@@ -152,27 +152,29 @@ const Users = () => {
     const icon = document.createElement('div');
     const initials = getInitials(data?.title);
     const imgSrc = data?.profile_image;
-    const imgTag = `<img loading="lazy" src="${imgSrc}" data-src="${imgSrc}" alt="${data?.title}" class="img-fluid" width="70" height="70" />`;
+    const imgTag = `<img loading="lazy" src="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" data-src="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" alt="${data?.title}" class="img-fluid" width="70" height="70" />`;
 
-    icon.innerHTML = `<div class="post-profile"><figure>${
+    icon.innerHTML = `<div class="post-profile" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><figure style=" margin: 0px; display: flex; align-items: center;">${
       imgSrc
-        ? `<picture><source srcset="${imgSrc}" type="image/webp"><source srcset="${imgSrc}" type="image/png">${imgTag}</picture>`
-        : `<span>${initials}</span>`
+        ? `<picture><source srcset="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" type="image/webp"><source srcset="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" type="image/png">${imgTag}</picture>`
+        : `<span style="font-size:100%;">${initials}</span>`
     }</figure></div>`;
 
     const svgString = encodeURIComponent(
-      `<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
-    );
+      // `<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
+      `<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%" style="background-color:#00c8c8; color:#fff; font-family: Roboto; border-radius:50%; font-size:50px;"><div style="width:100%; height:100%;" xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
+    
+      );
 
-    //console.log(svgString)
+    console.log(svgString)
     const markerIcon = new window.google.maps.MarkerImage(
       `data:image/svg+xml;charset=UTF-8,${svgString}`,
       null,
       null,
       null,
-      new window.google.maps.Size(30, 30)
+      new window.google.maps.Size(40, 40)
     );
-    //console.log(markerIcon);
+    console.log(markerIcon);
 
     return markerIcon;
   };
@@ -328,9 +330,9 @@ const Users = () => {
             <div className="map-view pt-5">
               {isLoaded && (
                 <GoogleMap
-                  mapContainerStyle={{ width: '100%', height: '400px' }}
+                  mapContainerStyle={{ width: '100%', height: '600px' }}
                   center={center}
-                  zoom={2}>
+                  zoom={3}>
                   {markers.map((marker, index) => (
                     <Marker
                       key={index}
@@ -396,23 +398,24 @@ const Users = () => {
                             </h5>
                             <span>{user.bio}</span>
                             {/* <span>
-                                                        <i className="fa fa-users" /> 200 followers
-                                                    </span> */}
+                              <i className="fa fa-users" /> 200 followers
+                            </span> */}
                           </figcaption>
                         </div>
-                        <div className="add-user">
+                        <div className="follow">
                           {console.log(user)}
                           <button
                             type="button"
+                            className="follow-btn"
                             onClick={(e) => onConnectClick(e, user.id)}
-                            disabled={
-                              isConnectLoading ||
-                              connectedUserListData.filter(
-                                (user) => user.user_id === user.id
-                              )
-                            }
-                            className="btn btn-add">
-                            <i className="fa-solid fa-user-plus" />
+                            // disabled={
+                            //   isConnectLoading ||
+                            //   connectedUserListData.filter(
+                            //     (user) => user.users_members_id === user.id
+                            //   )
+                            // }
+                            >
+                            Follow
                           </button>
                         </div>
                       </div>
