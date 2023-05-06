@@ -85,11 +85,22 @@ export const isNumber = (num) => {
 };
 
 export const parseStringArray = (arr) => {
-  let convertedArr = [];
   if (arr) {
-    convertedArr = arr.replace(/'/g, '"');
-    convertedArr = JSON.parse(convertedArr);
-    return convertedArr;
+    try {
+      const str = JSON.parse(arr);
+      if (typeof str === "string") {
+        const jsonStr = str.replace(/'/g, '"'); // replace single quotes with double quotes
+        const convertedArr = JSON.parse(jsonStr);
+        return convertedArr;
+      }
+
+      return str;
+    } catch (e) {
+      console.error("Invalid JSON string");
+      const jsonStr = arr.replace(/'/g, '"'); // replace single quotes with double quotes
+      const convertedArr = JSON.parse(jsonStr);
+      return convertedArr;
+    }
   }
   return null;
   // services = services.replace(/'/g, '"'); //replacing all ' with "

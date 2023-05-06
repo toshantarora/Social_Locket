@@ -20,23 +20,31 @@ import { API } from "../../services/ApiClient";
 import { AuthContext } from "../../context/authContext";
 import axios from "axios";
 
-const CLOUDINARY_UPLOAD_PRESET = 'social_locket';
+const CLOUDINARY_UPLOAD_PRESET = "social_locket";
 const CLOUDINARY_UPLOAD_URL =
-  'https://api.cloudinary.com/v1_1/dzs0eyrnl/image/upload';
+  "https://api.cloudinary.com/v1_1/dzs0eyrnl/image/upload";
 const schema = yup.object().shape({
   title: yup.string().required(),
   type: yup.string().nullable().required("Please select type"),
   pages: yup.string().required(),
+  // price: yup.number().positive("Price must be greater than zero").typeError(""),
+  // price: yup.number().positive().label("seats").required("pls enter").min(1),
+  price: yup
+    .mixed()
+    .test("positiveOrNaN", "Price must be greater than zero", (value) => {
+      return typeof value === "number" && (value > 0 || Number.isNaN(value));
+    }),
 });
 const CreatePost = () => {
   //   const [text] = useState("");
   // const [selectedImages, setSelectedImages] = useState([]);
-   const [images, setImages] = useState([]);
-   const [uploadStatus, setUploadStatus] = useState('idle');
+  const [images, setImages] = useState([]);
+  const [uploadStatus, setUploadStatus] = useState("idle");
   const userProfilePic = getUserProfileImage();
   const userFullName = getUserFullName();
   const { state } = useLocation();
   const [tags, setTags] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState("$");
   const preloadedValues = {
     title: state?.title,
   };
@@ -46,6 +54,7 @@ const CreatePost = () => {
     setValue,
     watch,
     formState: { errors },
+    getValues,
   } = useForm({
     defaultValues: preloadedValues,
     resolver: yupResolver(schema),
@@ -57,20 +66,22 @@ const CreatePost = () => {
     register("description");
   });
 
-   const uploadToCloudinary = async (file) => {
-     const formData = new FormData();
-     formData.append('file', file);
-     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-     formData.append('folder', 'my_folder');
+  console.log({ errors, values: getValues() });
 
-     try {
-       const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
-       return response.data.secure_url;
-     } catch (error) {
-       console.log('Error uploading to Cloudinary: ', error);
-       throw new Error('Error uploading to Cloudinary');
-     }
-   };
+  const uploadToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("folder", "my_folder");
+
+    try {
+      const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
+      return response.data.secure_url;
+    } catch (error) {
+      console.log("Error uploading to Cloudinary: ", error);
+      throw new Error("Error uploading to Cloudinary");
+    }
+  };
   // const onDrop = useCallback((acceptedFiles) => {
   //   // Do something with the files
 
@@ -85,20 +96,19 @@ const CreatePost = () => {
 
   const { mutateAsync, isLoading } = useMutation(uploadToCloudinary);
   const onDrop = async (acceptedFiles) => {
-      setUploadStatus('uploading');
+    setUploadStatus("uploading");
 
-      try {
-        const uploadedImages = await Promise.all(
-          acceptedFiles.map((file) => mutateAsync(file))
-        );
-        setImages([...images, ...uploadedImages]);
-        setUploadStatus('success');
-      } catch (error) {
-        console.log('Error uploading images: ', error);
-        setUploadStatus('error');
-      }
-    };
-
+    try {
+      const uploadedImages = await Promise.all(
+        acceptedFiles.map((file) => mutateAsync(file))
+      );
+      setImages([...images, ...uploadedImages]);
+      setUploadStatus("success");
+    } catch (error) {
+      console.log("Error uploading images: ", error);
+      setUploadStatus("error");
+    }
+  };
 
   //   const onDrop = useCallback((acceptedFiles) => {
   //     acceptedFiles.forEach((file) => {
@@ -110,15 +120,9 @@ const CreatePost = () => {
   //     });
   //   }, []);
 
-
-
   const { mutate: savePost, isLoading: isPostLoading } = useMutation(
     async (payload) => {
       const res = await API.post("/posts", payload);
-      console.log(res);
-      //   if (res) {
-      //     return res;
-      //   }
 
       if (isNonEmptyString(res?.data?.message)) {
         Swal.fire({
@@ -140,18 +144,18 @@ const CreatePost = () => {
           queryClient.invalidateQueries(["posts"]);
         }
       },
-    },
+    }
   );
-  console.log(watch(), tags);
   const onSubmit = async (data) => {
     // e.preventDefault();
+    console.log({ data });
     const tagsString = `['${tags.join("','")}']`;
     savePost({
       title: data?.title,
       description: data.description,
       type: data.type,
       location: data?.location,
-      price: data?.price.toString(),
+      price: `${selectedCurrency} ${data?.price.toString()}`,
       //   status: "AVAILABLE",
       user_id: auth?.userId.toString(),
       pages: data?.pages.toString(),
@@ -159,7 +163,7 @@ const CreatePost = () => {
       keywords: JSON.stringify(tagsString),
       //   available: "24/04/2023",
       offer_price: data?.price.toString(),
-      purchased_price: '',
+      purchased_price: "",
       customer_user_id: 2,
     });
   };
@@ -206,7 +210,7 @@ const CreatePost = () => {
                     />
                   </picture>
                 ) : (
-                  <span>{userFullName ? getInitials(userFullName) : ''}</span>
+                  <span>{userFullName ? getInitials(userFullName) : ""}</span>
                 )}
               </figure>
               <figcaption>
@@ -229,12 +233,12 @@ const CreatePost = () => {
                   className="form-control"
                   placeholder="Post title"
                   name="title"
-                  {...register('title')}
+                  {...register("title")}
                 />
                 {errors?.title?.message ? (
-                  <div style={{ color: 'red' }}>{errors?.title?.message}</div>
+                  <div style={{ color: "red" }}>{errors?.title?.message}</div>
                 ) : (
-                  ''
+                  ""
                 )}
               </div>
               <div className="mb-3">
@@ -252,7 +256,7 @@ const CreatePost = () => {
                   //   }}
                   onChange={(event, editor) => {
                     const data = editor.getData();
-                    setValue('description', data);
+                    setValue("description", data);
                   }}
                 />
                 {/* <p>{parse(text)}</p> */}
@@ -286,14 +290,14 @@ const CreatePost = () => {
                   placeholder="Pages"
                   name="pages"
                   type="number"
-                  {...register('pages', {
+                  {...register("pages", {
                     valueAsNumber: true,
                   })}
                 />
                 {errors?.pages?.message ? (
-                  <div style={{ color: 'red' }}>{errors?.pages?.message}</div>
+                  <div style={{ color: "red" }}>{errors?.pages?.message}</div>
                 ) : (
-                  ''
+                  ""
                 )}
               </div>
               <div className="mb-3">
@@ -302,16 +306,16 @@ const CreatePost = () => {
                   className="form-control"
                   placeholder="address"
                   name="location"
-                  {...register('location', {
-                    required: 'Please enter your address.',
+                  {...register("location", {
+                    required: "Please enter your address.",
                   })}
                 />
                 {errors?.location?.message ? (
-                  <div style={{ color: 'red' }}>
+                  <div style={{ color: "red" }}>
                     {errors?.location?.message}
                   </div>
                 ) : (
-                  ''
+                  ""
                 )}
               </div>
               <div>
@@ -322,35 +326,59 @@ const CreatePost = () => {
                 <select
                   type="select"
                   name="type"
-                  {...register('type')}
-                  className="form-select">
+                  {...register("type")}
+                  className="form-select"
+                >
                   <option value="">Select type</option>
                   <option value="blog">Blog</option>
                   <option value="article">Article</option>
                 </select>
                 {errors.type && (
-                  <div style={{ color: 'red' }}> {errors.type.message}</div>
+                  <div style={{ color: "red" }}> {errors.type.message}</div>
                 )}
               </div>
               <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
+                {/* <InputGroup.Text id="basic-addon1">$</InputGroup.Text> */}
+                <Form.Select
+                  style={{ flex: 0.1 }}
+                  id="basic-addon1"
+                  aria-label="Default select example"
+                  value={selectedCurrency}
+                  onChange={(event) => {
+                    const { value } = event.target;
+                    setSelectedCurrency(value);
+                  }}
+                >
+                  <option disabled>Select Currency</option>
+                  <option value="$" defaultChecked>
+                    $
+                  </option>
+                  <option value="£">£</option>
+                  <option value="	د.إ;"> د.إ;</option>
+                </Form.Select>
                 <Form.Control
                   placeholder="Price"
                   aria-label="Price"
                   aria-describedby="basic-addon1"
                   type="number"
                   name="price"
-                  {...register('price', {
+                  {...register("price", {
                     valueAsNumber: true,
                   })}
                 />
               </InputGroup>
+              {errors?.price?.message ? (
+                <div style={{ color: "red" }}>{errors?.price?.message}</div>
+              ) : (
+                ""
+              )}
               <div className="mb-3 text-end">
                 <button
                   type="button"
                   onClick={handleSubmit(onSubmit)}
                   className="btn btn-common"
-                  disabled={isPostLoading}>
+                  disabled={isPostLoading}
+                >
                   Post
                 </button>
               </div>

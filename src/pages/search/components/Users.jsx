@@ -1,26 +1,27 @@
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import SearchImage from "../../../assets/images/search-form.png";
 import React, { useEffect, useState } from "react";
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { searchService } from "../../../services/SearchService";
 import { getAddress, getInitials, isNonEmptyString } from "../../../helpers";
 import { Link, useNavigate } from "react-router-dom";
-import { removeWhitespaces } from '../../../helpers';
+import { removeWhitespaces } from "../../../helpers";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useMutation, useQueryClient } from "react-query";
 import { API } from "../../../services/ApiClient";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import useConnectedUsers from "../../../hooks/query/AllUserProfile/useAllConnectedUsersList";
+import { userService } from "../../../services/UserService";
 //  import 'react-toastify/dist/ReactToastify.css';
 
 const Users = () => {
   const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: 'AIzaSyCNvROXqDQ9kDgUF5ErbXREjLXkJFUcC54',
-    libraries: ['places'],
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyCNvROXqDQ9kDgUF5ErbXREjLXkJFUcC54",
+    libraries: ["places"],
   });
   const [users, setUsers] = useState([]);
   const [userAdrress, setUserAddress] = useState([]);
@@ -36,10 +37,8 @@ const Users = () => {
     }
   };
 
-   const {
-     data: connectedUserListData,
-   } = useConnectedUsers(auth?.userId);
-   console.log('connectedUserListData', connectedUserListData);
+  const { data: connectedUserListData } = useConnectedUsers(auth?.userId);
+
   useEffect(() => {
     const fetchInitials = async () => {
       try {
@@ -71,7 +70,7 @@ const Users = () => {
         const userAddresses = addresses.filter((x) => x.id === user.id);
         if (
           userAddresses &&
-          typeof userAddresses !== 'undefined' &&
+          typeof userAddresses !== "undefined" &&
           userAddresses.length > 0
         ) {
           const markers = await Promise.all(
@@ -114,7 +113,6 @@ const Users = () => {
           resp?.user_id != null
       )
       ?.map((x) => x.user_id);
-    //console.log('ids',ids);
     const filtered = users.filter(
       (user) =>
         user.forename.toLowerCase().includes(value.toLowerCase()) ||
@@ -131,7 +129,7 @@ const Users = () => {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=AIzaSyCNvROXqDQ9kDgUF5ErbXREjLXkJFUcC54`;
     const response = await fetch(url);
     const data = await response.json();
-    if (data.status === 'OK') {
+    if (data.status === "OK") {
       return data.results[0].geometry.location;
     } else {
       throw new Error(
@@ -149,7 +147,7 @@ const Users = () => {
     anchor: { x: 15, y: 30 },
   };
   const getMarkerIcon = (data) => {
-    const icon = document.createElement('div');
+    const icon = document.createElement("div");
     const initials = getInitials(data?.title);
     const imgSrc = data?.profile_image;
     const imgTag = `<img loading="lazy" src="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" data-src="https://img.freepik.com/free-photo/happy-excited-tourist-shooting-landmarks_1262-18852.jpg" alt="${data?.title}" class="img-fluid" width="70" height="70" />`;
@@ -163,10 +161,8 @@ const Users = () => {
     const svgString = encodeURIComponent(
       // `<svg fill="#f00" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
       `<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><foreignObject width="100%" height="100%" style="background-color:#00c8c8; color:#fff; font-family: Roboto; border-radius:50%; font-size:50px; border: 3px solid #fff;"><div style="width:100%; height:100%;" xmlns="http://www.w3.org/1999/xhtml">${icon.innerHTML}</div></foreignObject></svg>`
-    
-      );
+    );
 
-    console.log(svgString)
     const markerIcon = new window.google.maps.MarkerImage(
       `data:image/svg+xml;charset=UTF-8,${svgString}`,
       null,
@@ -174,7 +170,6 @@ const Users = () => {
       null,
       new window.google.maps.Size(40, 40)
     );
-    console.log(markerIcon);
 
     return markerIcon;
   };
@@ -185,59 +180,107 @@ const Users = () => {
 
   //https://green.app.sociallocket.com/api/v1/users-members
 
-      const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-      
   const { mutate, isLoading: isConnectLoading } = useMutation(
     async (payload) => {
-      const res = await API.post('users-members', payload);
-      console.log('ress------', res);
- toast.success('🦄 Wow so easy!', {
-   position: 'top-right',
-   autoClose: 5000,
-   hideProgressBar: false,
-   closeOnClick: true,
-   pauseOnHover: true,
-   draggable: true,
-   progress: undefined,
-   theme: 'light',
- });
+      const res = await API.post("users-members", payload);
+      toast.success("🦄 Wow so easy!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (isNonEmptyString(res?.data?.message)) {
-       toast.success('connected Successfully', {
-         position: 'top-right',
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-         theme: 'light',
-       });
+        toast.success("connected Successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
-      return null;
+
+      return res;
     },
     {
       onSuccess: (data) => {
         if (data) {
-          queryClient.invalidateQueries(['users-member']);
+          queryClient.invalidateQueries(["users-member"]);
+          queryClient.invalidateQueries(["connect-user"]);
         }
       },
     }
   );
-     
 
-      const onConnectClick = async (e, id) => {
-        e.preventDefault();
-        const connectPayload = {
-          user_id: auth?.userId,
-          users_members_id: id,
-        };
-        if (auth?.userId) {
-          mutate(connectPayload);
-        } else {
-          navigate('/login');
-        }
-      };
+  const handleDeleteUserMembers = async (item) => {
+    try {
+      await userService.deleteUserMembers({
+        userId: auth?.userId,
+        data: {
+          id: item?.id,
+          user_id: item?.user_id,
+          users_members_id: item?.users_members_id,
+        },
+      });
+      await queryClient.invalidateQueries(["connect-user"]);
+    } catch (error) {}
+  };
+
+  const onConnectClick = async (e, id) => {
+    e.preventDefault();
+    const connectPayload = {
+      user_id: auth?.userId,
+      users_members_id: id,
+    };
+    if (auth?.userId) {
+      mutate(connectPayload);
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const followButton = (user) => {
+    let followUser = connectedUserListData?.find(
+      (row) => row?.users_members_id === user?.id
+    );
+    return !!!followUser ? (
+      <button
+        type="button"
+        className="follow-btn"
+        onClick={(e) => onConnectClick(e, user.id)}
+        // disabled={
+        //   isConnectLoading ||
+        //   connectedUserListData.filter(
+        //     (user) => user.users_members_id === user.id
+        //   )
+        // }
+      >
+        Add
+      </button>
+    ) : (
+      <button
+        type="button"
+        className="unfollow-btn"
+        onClick={(e) => handleDeleteUserMembers(followUser)}
+        // disabled={
+        //   isConnectLoading ||
+        //   connectedUserListData.filter(
+        //     (user) => user.users_members_id === user.id
+        //   )
+        // }
+      >
+        Remove
+      </button>
+    );
+  };
   return (
     <>
       <div className="box-shadow filter-option">
@@ -251,9 +294,23 @@ const Users = () => {
           />
           <img src={SearchImage} alt="search" width={24} height={24} />
         </form>
-        <div className="search-filter">
+        <div className="filter-button">
+          <button
+            type="button"
+            className="btn"
+            //data-bs-toggle="modal"
+            //href="/filter_modal"
+            //   role="button"
+            title="Filter"
+            variant="primary"
+            onClick={handleShow}
+          >
+            <i className="fa-solid fa-sliders" />
+          </button>
+        </div>
+        {/* <div className="search-filter">
           <div className="filter-value">
-            <select className="form-select" style={{ border: 'none' }}>
+            <select className="form-select" style={{ border: "none" }}>
               <option selected="" disabled="">
                 Location
               </option>
@@ -263,7 +320,7 @@ const Users = () => {
               <option>Birmingham</option>
             </select>
 
-            <select className="form-select" style={{ border: 'none' }}>
+            <select className="form-select" style={{ border: "none" }}>
               <option selected="" disabled="">
                 5 Miles
               </option>
@@ -272,7 +329,7 @@ const Users = () => {
               <option>15 miles</option>
             </select>
 
-            <select className="form-select" style={{ border: 'none' }}>
+            <select className="form-select" style={{ border: "none" }}>
               <option selected="" disabled="">
                 2 Pages
               </option>
@@ -282,7 +339,7 @@ const Users = () => {
               <option>6 Pages</option>
             </select>
 
-            <select className="form-select" style={{ border: 'none' }}>
+            <select className="form-select" style={{ border: "none" }}>
               <option selected="" disabled="">
                 Price
               </option>
@@ -292,7 +349,7 @@ const Users = () => {
               <option>$ 400</option>
             </select>
 
-            <select className="form-select" style={{ border: 'none' }}>
+            <select className="form-select" style={{ border: "none" }}>
               <option selected="" disabled="">
                 Stakeholders
               </option>
@@ -310,19 +367,20 @@ const Users = () => {
               //   role="button"
               title="Filter"
               variant="primary"
-              onClick={handleShow}>
+              onClick={handleShow}
+            >
               <i className="fa-solid fa-sliders" />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="box-shadow p-0">
         <Tabs onSelect={handleTabClick} className="search common-tab">
-          <TabList className={'nav nav-tabs'}>
-            <Tab className={'nav-link'} selectedClassName="active">
+          <TabList className={"nav nav-tabs"}>
+            <Tab className={"nav-link"} selectedClassName="active">
               Map View
             </Tab>
-            <Tab className={'nav-link'} selectedClassName="active">
+            <Tab className={"nav-link"} selectedClassName="active">
               List View
             </Tab>
           </TabList>
@@ -330,97 +388,89 @@ const Users = () => {
             <div className="map-view pt-5">
               {isLoaded && (
                 <GoogleMap
-                  mapContainerStyle={{ width: '100%', height: '600px' }}
+                  mapContainerStyle={{ width: "100%", height: "600px" }}
                   center={center}
-                  zoom={3}>
+                  zoom={3}
+                >
                   {markers.map((marker, index) => (
                     <Marker
                       key={index}
                       position={marker.position}
                       icon={getMarkerIcon(marker)}
                       title={marker.title}
-                      className={'hello'}
-                      onClick={(event) =>
-                        handleMarkerClick(event, marker)
-                      }></Marker>
+                      className={"hello"}
+                      onClick={(event) => handleMarkerClick(event, marker)}
+                    ></Marker>
                   ))}
                 </GoogleMap>
               )}
               {!isLoaded && <div>Loading Google Maps API...</div>}
             </div>
           </TabPanel>
-          <TabPanel className={'tab-content'}>
+          <TabPanel className={"tab-content"}>
             <div
               className="tab-pane fade show active"
               id="listview"
               role="tabpanel"
-              aria-labelledby="listview-tab">
+              aria-labelledby="listview-tab"
+            >
+              {console.log({ filteredUsers })}
               <ul>
                 {filteredUsers &&
                   filteredUsers.length > 0 &&
-                  filteredUsers.map((user) => (
-                    <li key={user.id}>
-                      <div className="user-post search-user">
-                        <div className="post-profile">
-                          <figure>
-                            <Link
-                              to={`/profile/${user.forename}${user.surname}_${user.id}`}>
-                              <span hidden={user.profile_image}>
-                                {getInitials(
-                                  `${user.forename} ${user.surname}`
-                                )}
-                              </span>
-                              <picture hidden={!user.profile_image}>
-                                <source
-                                  srcSet={user.profile_image}
-                                  type="image/webp"
-                                />
-                                <source
-                                  srcSet={user.profile_image}
-                                  type="image/png"
-                                />
-                                <img
-                                  loading="lazy"
-                                  src="assets/images/user-img.png"
-                                  data-src="assets/images/user-img.png"
-                                  alt="user-img"
-                                  className="img-fluid"
-                                  width={70}
-                                  height={70}
-                                />
-                              </picture>
-                            </Link>
-                          </figure>
-                          <figcaption>
-                            <h5 className="mb-0">
-                              <Link
-                                to={`/profile/${user.forename}${user.surname}_${user.id}`}>{`${user.forename} ${user.surname}`}</Link>
-                            </h5>
-                            <span>{user.bio}</span>
-                            {/* <span>
+                  filteredUsers.map(
+                    (user) =>
+                      user.id !== auth?.userId && (
+                        <li key={user.id}>
+                          <div className="user-post search-user">
+                            <div className="post-profile">
+                              <figure>
+                                <Link
+                                  to={`/profile/${user.forename}${user.surname}_${user.id}`}
+                                >
+                                  <span hidden={user.profile_image}>
+                                    {getInitials(
+                                      `${user.forename} ${user.surname}`
+                                    )}
+                                  </span>
+                                  <picture hidden={!user.profile_image}>
+                                    <source
+                                      srcSet={user.profile_image}
+                                      type="image/webp"
+                                    />
+                                    <source
+                                      srcSet={user.profile_image}
+                                      type="image/png"
+                                    />
+                                    <img
+                                      loading="lazy"
+                                      src="assets/images/user-img.png"
+                                      data-src="assets/images/user-img.png"
+                                      alt="user-img"
+                                      className="img-fluid"
+                                      width={70}
+                                      height={70}
+                                    />
+                                  </picture>
+                                </Link>
+                              </figure>
+                              <figcaption>
+                                <h5 className="mb-0">
+                                  <Link
+                                    to={`/profile/${user.forename}${user.surname}_${user.id}`}
+                                  >{`${user.forename} ${user.surname}`}</Link>
+                                </h5>
+                                <span>{user.bio}</span>
+                                {/* <span>
                               <i className="fa fa-users" /> 200 followers
                             </span> */}
-                          </figcaption>
-                        </div>
-                        <div className="follow">
-                          {console.log(user)}
-                          <button
-                            type="button"
-                            className="follow-btn"
-                            onClick={(e) => onConnectClick(e, user.id)}
-                            // disabled={
-                            //   isConnectLoading ||
-                            //   connectedUserListData.filter(
-                            //     (user) => user.users_members_id === user.id
-                            //   )
-                            // }
-                            >
-                            Follow
-                          </button>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
+                              </figcaption>
+                            </div>
+                            <div className="follow">{followButton(user)}</div>
+                          </div>
+                        </li>
+                      )
+                  )}
               </ul>
               {/* <div className="people-search">
                                 <nav aria-label="Page navigation example">
@@ -522,7 +572,8 @@ const Users = () => {
                 <select
                   class="form-select"
                   id="floatingSelect"
-                  aria-label="Default select example">
+                  aria-label="Default select example"
+                >
                   <option selected>2 Pages</option>
                   <option value="1">5 pages</option>
                   <option value="2">10 pages</option>
@@ -534,7 +585,8 @@ const Users = () => {
                 <select
                   class="form-select"
                   id="floatingSelect"
-                  aria-label="Default select example">
+                  aria-label="Default select example"
+                >
                   <option selected>4 Pages</option>
                   <option value="1">20 pages</option>
                   <option value="2">30 pages</option>
@@ -551,7 +603,8 @@ const Users = () => {
                 <select
                   class="form-select"
                   id="floatingSelect"
-                  aria-label="Default select example">
+                  aria-label="Default select example"
+                >
                   <option selected>$ 5</option>
                   <option value="1">$ 100</option>
                   <option value="2">$ 200</option>
@@ -563,7 +616,8 @@ const Users = () => {
                 <select
                   class="form-select"
                   id="floatingSelect"
-                  aria-label="Default select example">
+                  aria-label="Default select example"
+                >
                   <option selected>$ 2</option>
                   <option value="1">$ 500</option>
                   <option value="2">$ 800</option>

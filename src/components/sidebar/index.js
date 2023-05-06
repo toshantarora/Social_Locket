@@ -167,7 +167,7 @@ const SideBar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink activeclassname="active" to="/Support">
+            <NavLink activeclassname="active" to="/support">
               <i>
                 <FontAwesomeIcon icon={faHeadset} />
               </i>{" "}

@@ -1,10 +1,8 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useLocation, useParams } from "react-router-dom";
 import parse from "html-react-parser";
+import { useState } from "react";
 import OwlCarousel from "react-owl-carousel";
-import usePostsById from "../../hooks/query/Posts/usePostsById";
-import ShareCommentImage from "../../assets/images/share-icon.png";
-import { getUserProfileImage, getUserFullName } from "../../utils/Storage";
+import { useLocation, useParams } from "react-router-dom";
 import {
   formatDate,
   getIdValue,
@@ -13,16 +11,16 @@ import {
   isNonEmptyString,
   parseStringArray,
 } from "../../helpers";
+import usePostsById from "../../hooks/query/Posts/usePostsById";
 import "../../styles/globalStyles.css";
+import { getUserFullName, getUserProfileImage } from "../../utils/Storage";
 import Comments from "../home/components/Comments";
-import { useState } from "react";
 
 const PostDetails = () => {
   const params = useParams();
   const [commentOpen, setCommentOpen] = useState(true);
   const id = getIdValue(params);
   const { state } = useLocation();
-  console.log("state", state, params);
   const {
     isLoading: postsDetailsLoading,
     error: postsDetailsError,
@@ -31,7 +29,6 @@ const PostDetails = () => {
   const userProfilePic = getUserProfileImage();
   const UserFullName = getUserFullName();
   const userProfileText = getInitials(UserFullName);
-  console.log(postsDetailsLoading, postsDetailsError);
   return (
     <>
       {isNonEmptyArray(postsDetailsData)
@@ -94,7 +91,7 @@ const PostDetails = () => {
                             type="button"
                             className="btn btn-outline-success"
                           >
-                            {item?.price ? `$ ${item.price}` : ""}
+                            {item?.price ? `${item.price}` : ""}
                           </button>
                         </div>
                         {/* <div class="flex-shrink-0 dropdown">
@@ -104,7 +101,7 @@ const PostDetails = () => {
                                         <ul class="dropdown-menu text-small shadow">
                                           <li><a class="dropdown-item" href="#">Edit Post</a></li>
                                           <li><a class="dropdown-item" href="#">Delete</a></li>
-                                          <li><a class="dropdown-item" href="#">Unfollow</a></li>
+                                          <li><a class="dropdown-item" href="#">Remove</a></li>
                                         </ul>
                                       </div> */}
                       </div>

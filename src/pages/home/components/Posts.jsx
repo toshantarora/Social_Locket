@@ -35,7 +35,7 @@ const Posts = (props) => {
       : "";
   const userProfileUrl = FullName.concat("_", userId);
   const queryClient = useQueryClient();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   // const { data: PostLikes } = useQuery(["likes", props?.post?.id], () =>
   //   API.get(`post-likes/${props?.post?.id}`).then((res) => {
   //     return res.data;
@@ -125,7 +125,7 @@ const Posts = (props) => {
   const { data } = useQuery(["post-likes"], () =>
     API.get(`post-likes`).then((res) => {
       return res.data.result;
-    }),
+    })
   );
   console.log("data", data);
   // console.log("PostLikes", PostLikes);
@@ -143,9 +143,10 @@ const Posts = (props) => {
       onSuccess: (data) => {
         if (data) {
           queryClient.invalidateQueries(["posts"]);
+          queryClient.invalidateQueries(["post-likes"]);
         }
       },
-    },
+    }
   );
 
   useEffect(() => {
@@ -153,7 +154,7 @@ const Posts = (props) => {
       data &&
       data.some(
         (like) =>
-          like.user_id === auth?.userId && like.post_id === props?.post?.id,
+          like.user_id === auth?.userId && like.post_id === props?.post?.id
       );
     console.log("userLiked", userLiked);
     setIsLiked(userLiked);
@@ -166,17 +167,20 @@ const Posts = (props) => {
     async (payload) => {
       console.log("payload", payload);
       return API.delete(`post-likes/${payload?.post_id}`, {
-        user_id: payload?.user_id,
-        post_id: payload?.post_id,
+        data: {
+          user_id: payload?.user_id,
+          post_id: payload?.post_id,
+        },
       });
     },
     {
       onSuccess: (data) => {
         if (data) {
           queryClient.invalidateQueries(["posts"]);
+          queryClient.invalidateQueries(["post-likes"]);
         }
       },
-    },
+    }
   );
   const handleLike = (postId) => {
     console.log("props?.postId", postId);
@@ -202,8 +206,8 @@ const Posts = (props) => {
     // setIsLiked(!isLiked);
   };
   const onCommentsClick = () => {
-       navigate(`postDetails/${removeWhitespaces(titleLink)}`);
-  }
+    navigate(`postDetails/${removeWhitespaces(titleLink)}`);
+  };
 
   return (
     <div className="post">
@@ -213,7 +217,8 @@ const Posts = (props) => {
             <div className="user-post">
               <Link
                 to={`/profile/${removeWhitespaces(userProfileUrl)}`}
-                className="post-profile">
+                className="post-profile"
+              >
                 <figure>
                   {isNonEmptyString(props?.post?.profile_image) ? (
                     <picture>
@@ -242,7 +247,7 @@ const Posts = (props) => {
                         ? getInitials(
                             `${props?.post?.forename}  ${props?.post?.surname}`
                           )
-                        : ''}
+                        : ""}
                     </span>
                   )}
                 </figure>
@@ -251,12 +256,12 @@ const Posts = (props) => {
                     {isNonEmptyString(props?.post?.forename) &&
                     isNonEmptyString(props?.post?.surname)
                       ? `${props?.post?.forename}  ${props?.post?.surname}`
-                      : 'User'}
+                      : "User"}
                   </h5>
                   <span>
                     {isNonEmptyString(props?.post?.created)
                       ? formatDate(props?.post?.created)
-                      : ''}
+                      : ""}
                   </span>
                 </figcaption>
               </Link>
@@ -285,12 +290,13 @@ const Posts = (props) => {
                   <p>
                     {props?.post?.description
                       ? parse(props?.post?.description)
-                      : ''}
+                      : ""}
                   </p>
                 )}
                 <Link
                   to={`postDetails/${removeWhitespaces(titleLink)}`}
-                  state={{ id: props?.post?.id }}>
+                  state={{ id: props?.post?.id }}
+                >
                   Read this article
                 </Link>
               </div>
@@ -302,7 +308,8 @@ const Posts = (props) => {
                     autoplay
                     className="owl-carousel owl-theme post-slider"
                     dots={false}
-                    loop>
+                    loop
+                  >
                     {props?.post?.images &&
                       parseStringArray(props?.post?.images)?.map(
                         (imgItem, idx) => (
@@ -324,7 +331,7 @@ const Posts = (props) => {
                       )}
                   </OwlCarousel>
                 ) : (
-                  ''
+                  ""
                 )}
               </div>
             </div>
@@ -337,21 +344,22 @@ const Posts = (props) => {
                   <span>
                     {props?.post.total_likes == null
                       ? 0
-                      : props?.post.total_likes}{' '}
-                    {isLiked ? 'Unlike' : 'Likes'}
+                      : props?.post.total_likes}{" "}
+                    {isLiked ? "Unlike" : "Likes"}
                   </span>
                 </span>
               </button>
               <button
                 type="button"
                 // disabled={!isNumber(auth?.userId)}
-                onClick={onCommentsClick}>
+                onClick={onCommentsClick}
+              >
                 <span className="comment-count">
                   <i className="fa fa-message" />
-                  {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{' '}
+                  {/* <img src="../../assets/images/comment-icon.png" alt="comment" width="20" height="18"> */}{" "}
                   {/* <span>12k Comments</span> */}
                   {props?.post?.total_comments == null ? (
-                    'Be First to Comment'
+                    "Be First to Comment"
                   ) : (
                     <span>{props?.post?.total_comments} Comments</span>
                   )}

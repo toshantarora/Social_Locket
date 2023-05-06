@@ -1,8 +1,8 @@
-import { in200s } from '../helpers';
-import { API } from './ApiClient';
+import { in200s } from "../helpers";
+import { API } from "./ApiClient";
 
 function supportRequest(data) {
-  return API.post('support-requests', data)
+  return API.post("support-requests", data)
     .then((response) => {
       if (in200s(response.status)) {
         return response.data;
@@ -23,7 +23,7 @@ function getUserProfile(userId) {
     .catch((error) => error.response);
 }
 function getAllUserProfile() {
-  return API.get('users')
+  return API.get("users")
     .then((response) => {
       if (in200s(response.status)) {
         return response.data?.result;
@@ -75,6 +75,46 @@ function getUserMembers(userId) {
     .catch((error) => error.response);
 }
 
+function deleteUserMembers({ userId, data }) {
+  return API.delete(`users-members/${userId}`, { data })
+    .then((response) => {
+      if (in200s(response.status)) {
+        return response.data.result;
+      }
+      return null;
+    })
+    .catch((error) => error.response);
+}
+
+const getMessages = ({ data }) => {
+  console.log({ data });
+  return API.get(
+    `messages-participants/${data?.to_user_id}/${data?.from_user_id}`,
+    {
+      params: {
+        ...data,
+      },
+    }
+  )
+    .then((response) => {
+      if (in200s(response.status)) {
+        return response.data.result;
+      }
+      return null;
+    })
+    .catch((error) => error.response);
+};
+
+const createMessages = ({ data }) =>
+  API.post(`messages`, data)
+    .then((response) => {
+      if (in200s(response.status)) {
+        return response.data.result;
+      }
+      return null;
+    })
+    .catch((error) => error.response);
+
 export const userService = {
   supportRequest,
   getUserProfile,
@@ -83,4 +123,7 @@ export const userService = {
   getUserPosts,
   getUserAddress,
   getUserMembers,
+  deleteUserMembers,
+  getMessages,
+  createMessages,
 };

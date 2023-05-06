@@ -9,11 +9,25 @@ const ConnectionList = (props) => {
     error: connectedUserListError,
     data: connectedUserListData,
   } = useConnectedUsers(props?.userId);
-  console.log("connectedUserListData", connectedUserListData);
 
   if (isConnectedUserListLoading) {
     return <p>...Loading</p>;
   }
+
+  // const handleDeleteUserMembers = async (item) => {
+  //   try {
+  //     await userService.deleteUserMembers({
+  //       userId: auth?.userId,
+  //       data: {
+  //         id: item?.id,
+  //         user_id: item?.user_id,
+  //         users_members_id: item?.users_members_id,
+  //       },
+  //     });
+  //     await queryClient.invalidateQueries(["connect-user"]);
+  //   } catch (error) {}
+  // };
+  console.log({ connectedUserListData });
   return (
     <div>
       {connectedUserListError && <p>{connectedUserListError}</p>}
@@ -22,7 +36,12 @@ const ConnectionList = (props) => {
           connectedUserListData.map((user) => (
             <li key={user.id}>
               <div className="user-post search-user">
-                <div className="post-profile">
+                <div
+                  className="post-profile"
+                  onClick={() => {
+                    props?.handleClose && props.handleClose();
+                  }}
+                >
                   <figure>
                     <Link
                       to={`/profile/${user.forename}${user.surname}_${user.id}`}
@@ -55,8 +74,30 @@ const ConnectionList = (props) => {
                   </figcaption>
                 </div>
                 <div className="follow">
-                  <button type="button" className="unfollow-btn" href="#">
-                    Unfollow
+                  <button
+                    type="button"
+                    className="follow-btn me-2"
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      props?.openMessagePopup(user);
+                    }}
+                  >
+                    Message
+                  </button>
+
+                  <button
+                    type="button"
+                    className="unfollow-btn"
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      props?.handleDeleteUserMembers(user);
+                    }}
+                  >
+                    Remove
                   </button>
                 </div>
               </div>

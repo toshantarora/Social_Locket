@@ -1,14 +1,17 @@
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import slide1 from '../../assets/images/suport-image.jpg';
-import Line from '../../assets/images/lines.png';
-import Triangle from '../../assets/images/tringle.png';
-import circle from '../../assets/images/circle.png';
+import slide1 from "../../assets/images/suport-image.jpg";
+import Line from "../../assets/images/lines.png";
+import Triangle from "../../assets/images/tringle.png";
+import circle from "../../assets/images/circle.png";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import "react-phone-number-input/style.css";
 import { useMutation, useQueryClient } from "react-query";
 import { userService } from "../../services/UserService";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import Swal from "sweetalert2";
 
 const schema = yup.object({
   email: yup.string().email().required(),
@@ -25,39 +28,44 @@ const Support = () => {
     reset,
   } = useForm({ resolver: yupResolver(schema) });
   const queryClient = useQueryClient();
-
+  const { auth } = useContext(AuthContext);
   const { mutate: supportRequest, isLoading: isSupportRequestLoading } =
     useMutation(
       async (payload) => {
-        const res = await userService.supportRequest(payload);
-
-        if (res.success || res.ok) {
-          return res;
-        }
-
-        // if (
-        //   res?.data?.success === false &&
-        //   isNonEmptyString(res?.data?.message)
-        // ) {
-        //   showSnackbar({ message: res?.data?.message });
-        // }
-        return null;
+        return await userService.supportRequest(payload);
       },
       {
         onSuccess: () => {
           // Invalidate and refetch
           queryClient.invalidateQueries(["payload"]);
         },
-      },
+      }
     );
 
   const onSave = (data, e) => {
     e.preventDefault();
-    supportRequest(data);
-    e.target.reset();
-    reset("", {
-      keepValues: false,
-    });
+    supportRequest(
+      {
+        ...data,
+        user_id: auth?.userId,
+        type: "Issue with User",
+        task: "Investigate",
+      },
+      {
+        onSuccess: (res) => {
+          Swal.fire({
+            title: "Success",
+            text: res?.message,
+            icon: "success",
+            confirmButtonText: "Ok",
+          });
+          e.target.reset();
+          reset("", {
+            keepValues: false,
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -72,7 +80,7 @@ const Support = () => {
                 <form className="form" onSubmit={handleSubmit(onSave)}>
                   <div className="form-floating mb-3">
                     <input
-                      type="email"  
+                      type="email"
                       className="form-control"
                       id="email"
                       placeholder="name@example.com"
@@ -134,7 +142,9 @@ const Support = () => {
                     />
                     <label htmlFor="description">Enquiry</label>
                     {errors?.description?.message && (
-                      <div className="error">{errors?.description?.message}</div>
+                      <div className="error">
+                        {errors?.description?.message}
+                      </div>
                     )}
                   </div>
                   <div className="text-end">
@@ -152,21 +162,27 @@ const Support = () => {
           </div>
           <div class="support-right">
             <picture>
-                <source srcset={slide1} type="image/jpg" />
-                <img loading="lazy" src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" srcset={slide1} class="img-fluid" alt="slider" />
+              <source srcset={slide1} type="image/jpg" />
+              <img
+                loading="lazy"
+                src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+                srcset={slide1}
+                class="img-fluid"
+                alt="slider"
+              />
             </picture>
             <div>
-            <div className="animate lines">
-              {' '}
-              <img src={Line} alt="lines" />
+              <div className="animate lines">
+                {" "}
+                <img src={Line} alt="lines" />
+              </div>
+              <div className="animate tringle">
+                <img src={Triangle} alt="tringle" width="" height="" />
+              </div>
+              <div className="animate circle">
+                <img src={circle} alt="circle" width="" height="" />
+              </div>
             </div>
-            <div className="animate tringle">
-              <img src={Triangle} alt="tringle" width="" height="" />
-            </div>
-            <div className="animate circle">
-              <img src={circle} alt="circle" width="" height="" />
-            </div>
-          </div>
           </div>
         </div>
       </div>

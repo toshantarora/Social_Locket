@@ -2,7 +2,7 @@
 
 import { Link } from "react-router-dom";
 import { parseStringArray, removeWhitespaces } from "../../../helpers";
-
+import Placeholder from "../../../assets/images/user-img.png";
 const UserPosts = ({ usersPost }) => {
   // console.log('usersPost', usersPost);
   // const navigate = useNavigate();
@@ -19,34 +19,55 @@ const UserPosts = ({ usersPost }) => {
     <div className="post-grid">
       <ul className="box-container three-cols">
         {usersPost !== null ? (
-          usersPost?.map((item, idx) =>
-            item?.images !== null ? (
-              parseStringArray(item?.images)?.map((imag) => (
-                <li key={idx} className="box show">
-                  <div className="inner">
-                    <Link
-                      to={`/postDetails/${removeWhitespaces(
-                        item?.id?.toString()?.concat("_", item?.title)
-                      )}`}
-                      // onClick={() => onImageClick(item?.id, item?.title)}
-                      className="glightbox"
-                    >
-                      <img
-                        className="mb-2"
-                        src={imag}
-                        alt="isdage"
-                        width=""
-                        height=""
-                      />
-                      <h5>{item?.title ? item?.title : ""}</h5>
-                    </Link>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <span></span>
-            )
-          )
+          usersPost?.map((item, idx) => (
+            // item?.images !== null ? (
+            //   parseStringArray(item?.images)?.map((imag) => (
+            //     <li key={idx} className="box show">
+            //       <div className="inner">
+            //         <Link
+            //           to={`/postDetails/${removeWhitespaces(
+            //             item?.id?.toString()?.concat("_", item?.title)
+            //           )}`}
+            //           // onClick={() => onImageClick(item?.id, item?.title)}
+            //           className="glightbox"
+            //         >
+            //           <img
+            //             className="mb-2"
+            //             src={imag}
+            //             alt="isdage"
+            //             width=""
+            //             height=""
+            //           />
+            //           <h5>{item?.title ? item?.title : ""}</h5>
+            //         </Link>
+            //       </div>
+            //     </li>
+            //   ))
+            // ) : (
+            //   <span></span>
+            // )
+
+            <li key={idx} className="box show">
+              <div className="inner">
+                <Link
+                  to={`/postDetails/${removeWhitespaces(
+                    item?.id?.toString()?.concat("_", item?.title)
+                  )}`}
+                  // onClick={() => onImageClick(item?.id, item?.title)}
+                  className="glightbox"
+                >
+                  <img
+                    className="mb-2"
+                    src={parseStringArray(item?.images)?.[0] ?? Placeholder}
+                    alt="isdage"
+                    width=""
+                    height=""
+                  />
+                  <h5>{item?.title ? item?.title : ""}</h5>
+                </Link>
+              </div>
+            </li>
+          ))
         ) : (
           <p>No Posts</p>
         )}
